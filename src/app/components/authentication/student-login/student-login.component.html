@@ -1,0 +1,74 @@
+<div class="container-fluid">
+  <i class="fa fa-arrow-circle-left" (click)="goback()" aria-hidden="true"></i>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5 col-md-12 my-5 px-5">
+        <h1 class="text-center mb-3">Student Login</h1>
+        <div class="alert alert-danger" *ngIf="allAlert">
+          {{ allAlert }}
+        </div>
+        <form [formGroup]="studentLoginForm" (ngSubmit)="onSignin()">
+          <div class="form-group">
+            <div
+              [class.form]="rollNo?.valid || rollNo?.untouched"
+              [class.is-invalid]="rollNo?.invalid && rollNo?.touched"
+            >
+              <label for="rollNo">Roll No</label>
+              <input
+                type="number"
+                class="form-control"
+                [class.is-invalid]="rollNo?.invalid && rollNo?.touched"
+                formControlName="rollNo"
+              />
+            </div>
+            <div *ngIf="rollNo?.invalid && (rollNo?.dirty || rollNo?.touched)">
+              <div class="alert alert-danger" *ngIf="rollNo?.errors?.required">
+                Roll No is required.
+              </div>
+              <!-- <div class="alert alert-danger" *ngIf="rollNo?.errors?.rollNo">
+                  Invalid rollNo Format
+                </div> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <div
+              [class.form]="password?.valid || password?.untouched"
+              [class.is-invalid]="password?.invalid && password?.touched"
+            >
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [class.is-invalid]="password?.invalid && password?.touched"
+                formControlName="password"
+              />
+            </div>
+            <div
+              *ngIf="
+                password?.invalid && (password?.dirty || password?.touched)
+              "
+            >
+              <div
+                class="alert alert-danger"
+                *ngIf="password?.errors?.required"
+              >
+                Password is required.
+              </div>
+              <div class="alert alert-danger" *ngIf="password?.errors?.pattern">
+                Must contain 1 Uppercase, 1 Lowercase, 1 Special Character, 1
+                Number and Minimum 8 characters
+              </div>
+            </div>
+          </div>
+          <a class="forgot" routerLink="/forgotPass" routerLinkActive="active"
+            >Forgot Password?</a
+          >
+          <button type="submit" class="btn btn-block mt-3">Sign In</button>
+        </form>
+      </div>
+      <div class="col-lg-7 col-md-12 my-5">
+        <img src="../../../../assets/login.svg" alt="login" />
+      </div>
+    </div>
+  </div>
+</div>

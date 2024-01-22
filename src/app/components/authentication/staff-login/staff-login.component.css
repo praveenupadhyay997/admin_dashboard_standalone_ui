@@ -1,0 +1,56 @@
+.container-fluid {
+  min-height: 100vh;
+  background-color: #f2d189;
+  padding: 3rem 0;
+}
+.container {
+  /* height: 80vh; */
+  border-radius: 8px;
+  background-color: #fff;
+}
+.row {
+  background: url(../../../../assets/login_wave.svg) no-repeat bottom;
+  background-size: contain;
+}
+img {
+  display: block;
+  margin: auto;
+  width: 80%;
+}
+.forgot {
+  text-decoration: none;
+  color: #f26b35;
+  font-size: 14px;
+  font-weight: 500;
+}
+.btn-block {
+  border: 2px solid #f26b35;
+  color: #f26b35;
+  font-weight: 500;
+}
+.btn-block:hover {
+  background-color: #f26b35;
+  color: #fff;
+}
+
+.fa-arrow-circle-left {
+  font-size: 30px;
+  padding-top: 25px;
+  color: #535461;
+  padding-left: 50px;
+  position: relative;
+  bottom: 35px;
+}
+
+@media screen and (max-width: 768px) 
+{
+  .fa-arrow-circle-left{
+      padding-left: 15px;
+      font-size: 35px;
+  }
+}
+
+.fa-arrow-circle-left:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}

@@ -1,0 +1,46 @@
+.section {
+  background-color: #222222;
+}
+
+img {
+  width: 40%;
+}
+h4 {
+  color: #f2d189;
+  padding-left: 2rem;
+  border-left: 3px solid #f26b35;
+  margin-bottom: 2rem;
+}
+p {
+  font-family: "Roboto Slab", serif;
+  color: #f4f4f4;
+  font-size: 14px;
+  letter-spacing: 0.8px;
+}
+.fa {
+  font-size: 18px;
+  margin-right: 8px;
+  color: #f4f4f4;
+}
+.container-fluid {
+  background-color: #f2d189;
+}
+address a {
+  font-family: "Roboto Slab", serif;
+  color: #f4f4f4;
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  text-decoration: none;
+}
+ul {
+  list-style: none;
+  display: flex;
+}
+ul li a {
+  font-size: 36px;
+  margin: 0px 24px 0px 0px;
+  text-decoration: none;
+}
+ul li a:hover {
+  color: #f2d189;
+}

@@ -1,0 +1,576 @@
+<div class="card mt-3 p-3">
+  <div id="tabs">
+    <ul class="nav nav-tabs">
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#demo"
+          [ngClass]="{ active: activeTab === 'demo' }"
+          (click)="demo('demo')"
+          data-toggle="tab"
+          >Upload Section</a
+        >
+      </li>
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#card"
+          [ngClass]="{ active: activeTab === 'card' }"
+          data-toggle="tab"
+          (click)="card('card')"
+          >Message Section</a
+        >
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div
+        class="tab-pane"
+        id="demo"
+        [ngClass]="{ active: activeTab === 'demo' }"
+      >
+        <app-refresh-button
+          (refreshClick)="refreshCurrentComponent()"
+        ></app-refresh-button>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+              <h1 class="text-center mb-3">Upload Marks</h1>
+              <div class="alert alert-danger" *ngIf="allAlert">
+                {{ allAlert }}
+              </div>
+              <div class="alert alert-success" *ngIf="successAlert">
+                {{ successAlert }}
+              </div>
+              <form [formGroup]="uploadForm" (ngSubmit)="onUpload()">
+                <div class="form-group">
+                  <div
+                    [class.form]="exam_name?.valid || exam_name?.untouched"
+                    [class.is-invalid]="
+                      exam_name?.invalid && exam_name?.touched
+                    "
+                  >
+                    <label for="exam_name">Exam Name</label>
+                    <input
+                      type="exam_name"
+                      class="form-control"
+                      [class.is-invalid]="
+                        exam_name?.invalid && exam_name?.touched
+                      "
+                      formControlName="exam_name"
+                    />
+                  </div>
+                  <div
+                    *ngIf="
+                      exam_name?.invalid &&
+                      (exam_name?.dirty || exam_name?.touched)
+                    "
+                  >
+                    <div
+                      class="alert alert-danger"
+                      *ngIf="exam_name?.errors?.required"
+                    >
+                      Exam Name is required.
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div
+                    [class.form]="batch?.valid || batch?.untouched"
+                    [class.is-invalid]="batch?.invalid && batch?.touched"
+                  >
+                    <label for="batch">Batch</label>
+                    <select
+                      name="batch"
+                      id="batch"
+                      class="custom-select"
+                      formControlName="batch"
+                      [class.is-invalid]="batch?.invalid && batch?.touched"
+                    >
+                      <option *ngFor="let batch of batches" [value]="batch._id">
+                        {{ batch.batch }}
+                      </option>
+                    </select>
+                    <!--  -->
+                  </div>
+                  <div
+                    *ngIf="batch?.invalid && (batch?.dirty || batch?.touched)"
+                  >
+                    <div
+                      class="alert alert-danger"
+                      *ngIf="batch?.errors?.required"
+                    >
+                      Batch is required.
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div
+                    [class.form]="exam_date?.valid || exam_date?.untouched"
+                    [class.is-invalid]="
+                      exam_date?.invalid && exam_date?.touched
+                    "
+                  >
+                    <label for="date">Exam Date</label>
+                    <input
+                      type="date"
+                      class="form-control"
+                      [class.is-invalid]="
+                        exam_date?.invalid && exam_date?.touched
+                      "
+                      formControlName="exam_date"
+                    />
+                  </div>
+                  <div
+                    *ngIf="
+                      exam_date?.invalid &&
+                      (exam_date?.dirty || exam_date?.touched)
+                    "
+                  >
+                    <div
+                      class="alert alert-danger"
+                      *ngIf="exam_date?.errors?.required"
+                    >
+                      Exam Date is required.
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div
+                    class="custom-file mt-3 mb-1"
+                    [class.form]="file?.valid || file?.untouched"
+                    [class.is-invalid]="file?.invalid && file?.touched"
+                  >
+                    <input
+                      type="file"
+                      name
+                      (change)="onFileChange($event)"
+                      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                      [class.is-invalid]="file?.invalid && file?.touched"
+                    />
+                  </div>
+                  <div *ngIf="file?.invalid && (file?.dirty || file?.touched)">
+                    <div
+                      class="mt-2 alert alert-danger"
+                      *ngIf="file?.errors?.required"
+                    >
+                      File is required.
+                    </div>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-block mt-3 upload">
+                  <i class="fa fa-upload mr-2"></i>Upload
+                </button>
+              </form>
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12 bg_image"></div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tab-pane"
+        id="card"
+        [ngClass]="{ active: activeTab === 'card' }"
+      >
+        <div class="alert alert-danger mb-4" *ngIf="deleteErrorAlert">
+          {{ deleteErrorAlert }}
+        </div>
+        <div class="alert alert-success mb-4" *ngIf="deleteSuccessAlert">
+          {{ deleteSuccessAlert }}
+        </div>
+        <div class="card">
+          <div class="container p-3">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="File Search"
+                    [(ngModel)]="filterTerm"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <app-refresh-button
+                  (refreshClick)="refreshCurrentComponent()"
+                ></app-refresh-button>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-12">
+                <button
+                  type="button"
+                  class="btn btn-block btn-outline export"
+                  (click)="export()"
+                >
+                  <i class="fa fa-external-link"></i>
+                  Export to Excel
+                </button>
+              </div>
+            </div>
+            <div class="container mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="
+                    table table-striped table-bordered table-hover table-sm
+                  "
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order === 'examName'"
+                        (click)="setOrder('examName')"
+                      >
+                        Name of Exam<span [hidden]="reverse">▼</span
+                        ><span [hidden]="!reverse">▲</span>
+                      </th>
+                      <th>Date of Exam</th>
+                      <th>Uploaded File</th>
+                      <th>Uploaded Date</th>
+                      <th>Batch</th>
+                      <th>Shoot Message</th>
+                      <!-- <th>Delivery Report</th> -->
+                      <th width="10%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr
+                      *ngFor="
+                        let upload of uploadList
+                          | orderBy: order:reverse
+                          | filter: filterTerm
+                          | paginate
+                            : {
+                                id: 'listing_pagination',
+                                itemsPerPage: 5,
+                                currentPage: page,
+                                totalItems: totalRecords
+                              }
+                      "
+                    >
+                      <td>{{ upload.examName }}</td>
+                      <td>{{ upload.examDate | date: "dd/MM/yyyy" }}</td>
+                      <td>{{ upload.originalName }}</td>
+                      <td>{{ upload.createdAt | date: "dd/MM/yyyy" }}</td>
+                      <td>{{ upload.batch.batch }}</td>
+                      <td>
+                        <button
+                          class="btn btn-outline-danger mr-2 btn-sm"
+                          (click)="sendSms(upload)"
+                        >
+                          <i class="fa fa-envelope-o"></i> Send
+                        </button>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-outline-info mb-2 btn-sm"
+                          (click)="openModal(upload)"
+                        >
+                          <i class="fa fa-edit"></i>
+                          Edit
+                        </button>
+                        <button
+                          class="btn btn-outline-info mb-2 btn-sm"
+                          (click)="detailedInfoModal(upload)"
+                          data-toggle="modal"
+                          data-target="#detailedInfoModal"
+                        >
+                          <i class="fa fa-tasks"></i>
+                          Detail
+                        </button>
+                        <button
+                          class="btn btn-outline-danger ml-0 btn-sm"
+                          (click)="deactivateUpload(upload)"
+                          data-toggle="modal"
+                          
+                        >
+                        <!-- data-target="#exampleModalCenterExamData" -->
+                          <i class="fa fa-trash"></i>
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination"
+                  (pageChange)="page = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal Edit Exam Data-->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: display }">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Exam Data</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onCloseHandled()"
+        >
+          <span class="text-light" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" *ngIf="updateAlert">
+          {{ updateAlert }}
+        </div>
+        <div class="alert alert-success" *ngIf="updateSuccessAlert">
+          {{ updateSuccessAlert }}
+        </div>
+        <form [formGroup]="updateUploadForm" (ngSubmit)="onUpdate()">
+          <div class="form-group">
+            <div
+              [class.form]="
+                update_exam_name?.valid || update_exam_name?.untouched
+              "
+              [class.is-invalid]="
+                update_exam_name?.invalid && update_exam_name?.touched
+              "
+            >
+              <label for="update_exam_name">Exam Name</label>
+              <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="
+                  update_exam_name?.invalid && update_exam_name?.touched
+                "
+                formControlName="update_exam_name"
+              />
+            </div>
+            <div
+              *ngIf="
+                update_exam_name?.invalid &&
+                (update_exam_name?.dirty || update_exam_name?.touched)
+              "
+            >
+              <div
+                class="alert alert-danger"
+                *ngIf="update_exam_name?.errors?.required"
+              >
+                Exam Name is required.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div
+              [class.form]="update_batch?.valid || update_batch?.untouched"
+              [class.is-invalid]="
+                update_batch?.invalid && update_batch?.touched
+              "
+            >
+              <label for="update_batch">Batch</label>
+                    <select
+                      name="batch"
+                      id="batch"
+                      class="custom-select"
+                      formControlName="update_batch"
+                      [class.is-invalid]="update_batch?.invalid && update_batch?.touched"
+                    >
+                      <option *ngFor="let batch of batches" [value]="batch._id">
+                        {{ batch.batch }}
+                      </option>
+                    </select>
+            </div>
+            <div
+              *ngIf="
+                update_batch?.invalid &&
+                (update_batch?.dirty || update_batch?.touched)
+              "
+            >
+              <div
+                class="alert alert-danger"
+                *ngIf="update_batch?.errors?.required"
+              >
+                Batch is required.
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div
+              [class.form]="
+                update_exam_date?.valid || update_exam_date?.untouched
+              "
+              [class.is-invalid]="
+                update_exam_date?.invalid && update_exam_date?.touched
+              "
+            >
+              <label for="date">Exam Date</label>
+              <input
+                type="date"
+                class="form-control"
+                [class.is-invalid]="
+                  update_exam_date?.invalid && update_exam_date?.touched
+                "
+                formControlName="update_exam_date"
+              />
+            </div>
+            <div
+              *ngIf="
+                update_exam_date?.invalid &&
+                (update_exam_date?.dirty || update_exam_date?.touched)
+              "
+            >
+              <div
+                class="alert alert-danger"
+                *ngIf="update_exam_date?.errors?.required"
+              >
+                Exam Date is required.
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-block mt-3 upload">
+            Update
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-default"
+          (click)="onCloseHandled()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detailed Info For Message Modal -->
+
+<div
+  class="modal fade bd-example-modal-lg"
+  id="detailedInfoModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="myLargeModalLabel"
+  aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Message Detailed Status</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal" aria-label="Close"
+        >
+          <span class="text-light" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div
+          class="alert alert-success main_alert mx-0 mb-3"
+          *ngIf="modalSmsSuccess"
+        >
+          {{ modalSmsSuccess }}
+        </div>
+        <div
+          class="alert alert-danger main_alert mx-0 mb-3"
+          *ngIf="modalSmsError"
+        >
+          {{ modalSmsError }}
+        </div>
+        <div class="table-responsive">
+          <table
+            class="
+              table
+              table-striped
+              table-bordered
+              table-hover
+              table-sm
+            "
+          >
+            <thead>
+              <tr class="text-center">
+                <th>Roll No.</th>
+                <th>SMS Contact No.</th>
+                <th>Message</th>
+                <th>Delivery Report</th>
+              </tr>
+            </thead>
+            <tbody class="text-center">
+              <tr *ngFor="let detailedInfoExamStudent of detailedInfoExamStudents">
+                <td>{{detailedInfoExamStudent.rollNo}}</td>
+                <td>{{detailedInfoExamStudent.studentContact}}</td>
+                <td>
+                  <button
+                    class="btn btn-outline-danger mr-2 btn-sm"
+                    (click)="sendDetailedInfoSms(detailedInfoExamStudent)"
+                  >
+                    <i class="fa fa-envelope-o"></i>
+                    Send Message
+                  </button>
+                </td>
+                <td>4</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-default"
+          data-dismiss="modal" aria-label="Close"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+    </div>
+</div>
+
+<!-- Delete Modal For Exam Data in Message Section -->
+<div
+  class="modal fade"
+  id="exampleModalCenterExamData"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are Your Completely Sure, You Want to Delete the selected Exam Data?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary yes-button">
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

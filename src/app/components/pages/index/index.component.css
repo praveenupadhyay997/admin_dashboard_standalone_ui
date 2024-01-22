@@ -1,0 +1,45 @@
+.container-fluid {
+  background-color: #f2d189;
+}
+.section_one {
+  padding-top: 8rem;
+}
+.academy {
+  height: 50vh;
+}
+p {
+  color: rgba(0, 0, 0, 0.4);
+}
+.landing {
+  height: 50vh;
+  background: url("../../../../assets/landing 1.svg") no-repeat top left;
+  background-size: contain;
+}
+.horizontal_row {
+  border: 1px solid #e37d47;
+  margin: 0px 10rem;
+}
+.card {
+  height: 400px;
+  padding: 32px;
+  border-radius: 10%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 24px;
+}
+.card:hover {
+  background-color: #f2d189;
+  transform: scale(1.1);
+}
+.card h4 {
+  color: #e37d47;
+}
+.card:hover {
+  color: #fff;
+}
+.card img {
+  height: 50%;
+}
+.card-body p {
+  text-align: justify;
+}

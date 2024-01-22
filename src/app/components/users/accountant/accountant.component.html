@@ -1,0 +1,1928 @@
+<div class="card mt-3 p-3">
+    <div id="tabs">
+        <ul class="nav nav-tabs">
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#dash" [ngClass]="{ active: activeTab === 'dash' }" (click)="dash('dash')" data-toggle="tab">Dashboard</a>
+            </li>
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#payslip" [ngClass]="{ active: activeTab === 'payslip' }" data-toggle="tab" (click)="payslip('payslip')">Fees Slip</a>
+            </li>
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#generatepayslip" [ngClass]="{ active: activeTab === 'generatepayslip' }" data-toggle="tab" (click)="generatepayslip('generatepayslip')">Generate Fees Slip</a>
+            </li>
+            <!-- <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#feescard"
+          [ngClass]="{ active: activeTab === 'feescard' }"
+          data-toggle="tab"
+          (click)="feescard('feescard')"
+          >Fees Card</a
+        >
+      </li> -->
+
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#feeslogger" [ngClass]="{ active: activeTab === 'feeslogger' }" data-toggle="tab" (click)="feeslogger('feeslogger')">Fees Logger</a>
+            </li>
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#chequeStatus" [ngClass]="{ active: activeTab === 'chequeStatus' }" data-toggle="tab" (click)="chequeStatus('chequeStatus')">Cheque Status Entry</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="alert alert-success main_alert mx-0 mb-3" *ngIf="delAccSuccessAlert">
+                {{ delAccSuccessAlert }}
+            </div>
+            <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="delAccErrorAlert">
+                {{ delAccErrorAlert }}
+            </div>
+            <!-- Dashboard Table -->
+            <div class="tab-pane" id="dash" [ngClass]="{ active: activeTab === 'dash' }">
+                <div class="card">
+                    <div class="container p-3">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <form class="form-inline">
+                                    <input class="form-control mr-sm-2" type="text" placeholder="Roll No. / Student Name" [(ngModel)]="filterTerm_A" name="filter" />
+                                    <button class="btn" type="submit">Search</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12">
+                                <button type="button" class="btn btn-block btn-outline export" (click)="dueFeesStudent()">
+                  <i class="fa fa-eye"></i>
+                  See Student with Fees Dues
+                </button>
+                            </div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <button type="button" class="btn btn-block btn-outline export" (click)="passwd_allAccounts()">
+                  <i class="fa fa-external-link"></i>
+                  Export to Excel
+                  <i class="fa fa-lock fa-lg pl-2" aria-hidden="true"></i>
+                </button>
+                            </div>
+                        </div>
+                        <div class="container mt-3 px-0">
+                            <div class="table-responsive">
+                                <table class="
+                    table table-striped table-bordered table-hover table-sm
+                  ">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th [class.active]="order_A === 'rollNo_A'" (click)="setOrder_A('rollNo_A')">
+                                                <button type="button" class="btn btn btn-block">
+                          Roll No.
+                          <span [hidden]="reverse_A"><i class="fa fa-arrow-down"></i></span><span
+                            [hidden]="!reverse_A"><i class="fa fa-arrow-up"></i></span>
+                        </button>
+                                            </th>
+                                            <th>Student Name</th>
+                                            <th>Batch</th>
+                                            <th>Total Installments</th>
+                                            <th>Pending Installments</th>
+                                            <th>Next Due Date</th>
+                                            <th *ngIf="user.role == 'Admin'">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr *ngFor="
+                        let account of accounts
+                          | filter: filterTerm_A
+                          | orderBy: order_A:reverse_A
+                          | paginate
+                            : {
+                                id: 'listing_pagination_A',
+                                itemsPerPage: 10,
+                                currentPage: page_A,
+                                totalItems: totalRecords_A
+                              }
+                      ">
+                                            <td>{{ account.rollNo }}</td>
+                                            <td>{{ account.student.fullName }}</td>
+                                            <td>{{ account.student.batch.batch }}</td>
+                                            <td>
+                                                {{ account.noOfInstallment }}
+                                                <button class="btn btn-outline-info btn-sm ml-2" (click)="openModal(account)">
+                          Detailed
+                        </button>
+                                            </td>
+                                            <td>{{ pendingInstallments(account) }}</td>
+                                            <td class="editable_date">
+                                                {{ nextDueDate(account) | date: "longDate" }}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-outline-info" (click)="downloadConfirmation(account)">
+                          <i class="fa fa-cloud-download"></i>
+                        </button>
+                                                <!-- <button class="btn btn-outline-info ml-2 btn-sm">
+                          <i class="fa fa-cloud-download"></i>
+                        </button> -->
+                                                <button *ngIf="user.role == 'Admin'" class="btn btn-outline-danger ml-2 btn-sm" (click)="onDelete(account)" data-toggle="modal" data-target="#exampleModalCenterTable_A_Without_DF">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container table_paginations p-0">
+                                <pagination-controls id="listing_pagination_A" (pageChange)="page_A = $event"></pagination-controls>
+                            </div>
+                        </div>
+                        <!-- The Installment Detailed Status Modal -->
+                        <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: display }">
+                            <div class="modal-dialog modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Installment Detailed Status</h4>
+                                        <button type="button" class="close" aria-label="Close" (click)="onCloseHandled()">
+                      <span class="text-light" aria-hidden="true">&times;</span>
+                    </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="alert alert-success main_alert mx-0 mb-3" *ngIf="modalSmsSuccess">
+                                            {{ modalSmsSuccess }}
+                                        </div>
+                                        <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="modalSmsError">
+                                            {{ modalSmsError }}
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="
+                          table
+                          table-striped
+                          table-bordered
+                          table-hover
+                          table-sm
+                        ">
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th>Installment</th>
+                                                        <th>Date</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="text-center">
+                                                    <tr *ngFor="let item of arrayOfInstallments; index as i">
+                                                        <td>{{ i + 1 }}</td>
+                                                        <td>{{ item.date | date: "longDate" }}</td>
+                                                        <td>{{ item.status }}</td>
+                                                        <td>
+                                                            <button class="btn btn-outline-danger mr-2 btn-sm" (click)="sendSms(i)">
+                                <i class="fa fa-envelope-o"></i>
+                                Send Message
+                              </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" (click)="onCloseHandled()">
+                      Close
+                    </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3" *ngIf="dueFeesToggle">
+                    <div class="container p-3">
+                        <h3 class="text-center">Students with Due Fees</h3>
+                        <div class="row">
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <form class="form-inline">
+                                    <input class="form-control mr-sm-2" type="text" placeholder="Roll No. / Student Name" [(ngModel)]="filterTerm" name="filter" />
+                                    <button class="btn" type="submit">Search</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12"></div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <button type="button" class="btn btn-block btn-outline export" (click)="passwd_pendingAccounts()">
+                  <i class="fa fa-external-link"></i>
+                  Export to Excel
+                  <i class="fa fa-lock fa-lg pl-2" aria-hidden="true"></i>
+                </button>
+                            </div>
+                        </div>
+                        <div class="container mt-3 px-0">
+                            <div class="table-responsive">
+                                <table class="
+                    table table-striped table-bordered table-hover table-sm
+                  ">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th [class.active]="order === 'rollNo'" (click)="setOrder('rollNo')">
+                                                <button type="button" class="btn btn btn-block">
+                          Roll No.
+                          <span [hidden]="reverse"><i class="fa fa-arrow-down"></i></span><span [hidden]="!reverse"><i
+                              class="fa fa-arrow-up"></i></span>
+                        </button>
+                                            </th>
+                                            <th>Student Name</th>
+                                            <th>Batch</th>
+                                            <th>Total Installments</th>
+                                            <th>Pending Installments</th>
+                                            <th>Next Due Date</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr *ngFor="
+                        let account of pendingAccounts
+                          | filter: filterTerm
+                          | orderBy: order:reverse
+                          | paginate
+                            : {
+                                id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRecords
+                              }
+                      ">
+                                            <td>{{ account.rollNo }}</td>
+                                            <td>{{ account.student.fullName }}</td>
+                                            <td>{{ account.student.batch.batch }}</td>
+                                            <td>{{ account.noOfInstallment }}</td>
+                                            <td>{{ pendingInstallments(account) }}</td>
+                                            <td class="editable_date">
+                                                {{ nextDueDate(account) | date: "longDate" }}
+                                            </td>
+                                            <td>
+                                                <button class="btn btn-outline-danger mr-2" (click)="sendSms(-1, account)">
+                          <i class="fa fa-envelope"></i>
+                        </button>
+                                                <button class="btn btn-outline-danger" (click)="onDelete(account)" *ngIf="user.role == 'Admin'" data-toggle="modal" data-target="#exampleModalCenterTable_B_With_DF">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container table_paginations p-0">
+                                <pagination-controls id="listing_pagination" (pageChange)="page = $event"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Payslip -->
+            <div class="tab-pane" id="payslip" [ngClass]="{ active: activeTab === 'payslip' }">
+                <ul class="nav nav-pills nav-justified">
+                    <li class="nav-item mr-2">
+                        <a class="nav-link" href="#new" [ngClass]="{ active: activePill === 'new' }" (click)="new('new')" data-toggle="pill">New Account</a>
+                    </li>
+                    <li class="nav-item mr-2">
+                        <a class="nav-link" href="#feeGenSys" [ngClass]="{ active: activePill === 'feeGenSys' }" (click)="feeGenSys('feeGenSys')" data-toggle="pill">Fee Slip Generate System</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user.role == 'Admin'">
+                        <a class="nav-link" href="#update" [ngClass]="{ active: activePill === 'update' }" (click)="update('update')" data-toggle="pill">Update Account</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane" id="new" [ngClass]="{ active: activePill === 'new' }">
+                        <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="paySlipError">
+                            {{ paySlipError }}
+                        </div>
+                        <form [formGroup]="payslipForm" (ngSubmit)="onSubmitPaylip()">
+                            <div class="form-inline three">
+                                <!-- Roll No -->
+                                <div class="form-group">
+                                    <div [class.form]="rollno?.valid || rollno?.untouched" [class.is-invalid]="rollno?.invalid && rollno?.touched">
+                                        <label class="rollno" for="rollno">Roll No</label>
+                                        <input type="number" class="form-control" [class.is-invalid]="rollno?.invalid && rollno?.touched" formControlName="rollno" />
+                                    </div>
+                                    <div *ngIf="
+                                              rollno?.invalid && (rollno?.dirty || rollno?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="rollno?.errors?.required">
+                                            Roll No is required.
+                                        </div>
+                                        <div class="alert alert-danger inner_alert" *ngIf="rollno?.errors?.pattern">
+                                            Reference Id Must be some digit.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Total Amount -->
+                                <div class="form-group">
+                                    <div [class.form]="totalAmount?.valid || totalAmount?.untouched" [class.is-invalid]="
+                                              totalAmount?.invalid && totalAmount?.touched
+                                            ">
+                                        <label class="totalAmount" for="totalAmount">Total Fee Amount (In ₹)</label>
+                                        <input type="number" class="form-control" [class.is-invalid]="
+                                                totalAmount?.invalid && totalAmount?.touched
+                                              " formControlName="totalAmount" />
+                                    </div>
+                                    <div *ngIf="
+                                              totalAmount?.invalid &&
+                                              (totalAmount?.dirty || totalAmount?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="totalAmount?.errors?.required">
+                                            Total Fee Amount No is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Select Board -->
+                                <div class="form-group">
+                                    <div [class.form]="board?.valid || board?.untouched" [class.is-invalid]="board?.invalid && board?.touched">
+                                        <label class="board" for="board">Select Board</label>
+                                        <select name="board" id="board" class="custom-select" formControlName="board" [class.is-invalid]="board?.invalid && board?.touched">
+                            <option value="cbse">CBSE</option>
+                            <option value="rbse">RBSE</option>
+                            <option value="others">Others</option>
+                          </select>
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="board?.invalid && (board?.dirty || board?.touched)">
+                                        Please select your board.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-inline">
+                                <!-- No. of Installments and Upload -->
+                                <div class="form-group">
+                                    <!-- No of Installment -->
+                                    <div [class.form]="
+                                              noOfInstallments?.valid || noOfInstallments?.untouched
+                                            " [class.is-invalid]="
+                                              noOfInstallments?.invalid && noOfInstallments?.touched
+                                            ">
+                                        <label class="noOfInstallments" for="noOfInstallments">No of Installments</label>
+                                        <select name="noOfInstallments" id="noOfInstallments" class="custom-select" formControlName="noOfInstallments" [class.is-invalid]="
+                                                noOfInstallments?.invalid && noOfInstallments?.touched
+                                              ">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="
+                                              noOfInstallments?.invalid &&
+                                              (noOfInstallments?.dirty || noOfInstallments?.touched)
+                                            ">
+                                        Please select your No of Installments.
+                                    </div>
+                                    <!-- Upload File -->
+                                    <div class="custom-file mt-3 mb-1" [class.form]="file?.valid || file?.untouched" [class.is-invalid]="file?.invalid && file?.touched">
+                                        <input type="file" (change)="onFileChange($event)" [class.is-invalid]="file?.invalid && file?.touched" />
+                                    </div>
+                                    <div *ngIf="file?.invalid && (file?.dirty || file?.touched)">
+                                        <div class="mt-2 alert alert-danger" *ngIf="file?.errors?.required">
+                                            File is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Remarks -->
+                                <div class="form-group">
+                                    <div [class.form]="remarks?.valid || remarks?.untouched" [class.is-invalid]="remarks?.invalid && remarks?.touched">
+                                        <label class="remarks" for="remarks">Remarks</label>
+                                        <textarea class="form-control" id="remarks" formControlName="remarks" rows="5" [class.is-invalid]="remarks?.invalid && remarks?.touched"></textarea>
+                                    </div>
+                                    <div *ngIf="
+                                              remarks?.invalid && (remarks?.dirty || remarks?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="remarks?.errors?.required">
+                                            Remarks is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- First Installment + Date -->
+
+                            <div class="form-inline three" *ngIf="
+                                          payslipForm.value.noOfInstallments == 1 ||
+                                          payslipForm.value.noOfInstallments == 2 ||
+                                          payslipForm.value.noOfInstallments == 3 ||
+                                          payslipForm.value.noOfInstallments == 4
+                                        ">
+                                <!-- First Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="installOne?.valid || installOne?.untouched" [class.is-invalid]="
+                                              installOne?.invalid && installOne?.touched
+                                            ">
+                                        <label class="installOne" for="installOne">Installment 1 (In ₹)</label>
+                                        <input type="number" class="form-control" [class.is-invalid]="
+                                                installOne?.invalid && installOne?.touched
+                                              " formControlName="installOne" />
+                                    </div>
+                                    <div *ngIf="
+                                              installOne?.invalid &&
+                                              (installOne?.dirty || installOne?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="installOne?.errors?.required">
+                                            Please fill amount for 1<sup>st</sup> Installment.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Date for First Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstallOne?.valid || dateInstallOne?.untouched
+                                            " [class.is-invalid]="
+                                              dateInstallOne?.invalid && dateInstallOne?.touched
+                                            ">
+                                        <label class="text-left" for="dateInstallOne">1<sup>st</sup> Installment Date</label>
+                                        <input type="date" class="form-control" [class.is-invalid]="
+                                                dateInstallOne?.invalid && dateInstallOne?.touched
+                                              " formControlName="dateInstallOne" />
+                                    </div>
+                                    <div *ngIf="
+                                              dateInstallOne?.invalid &&
+                                              (dateInstallOne?.dirty || dateInstallOne?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="dateInstallOne?.errors?.required">
+                                            Date is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Status -->
+                                <div class="form-group">
+                                    <div [class.form]="statusOne?.valid || statusOne?.untouched" [class.is-invalid]="
+                                              statusOne?.invalid && statusOne?.touched
+                                            ">
+                                        <label class="statusOne" for="statusOne">Status</label>
+                                        <select name="statusOne" class="custom-select" formControlName="statusOne" [class.is-invalid]="
+                                                statusOne?.invalid && statusOne?.touched
+                                              ">
+                            <option value="otp">One Time Payment</option>
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="
+                                              statusOne?.invalid &&
+                                              (statusOne?.dirty || statusOne?.touched)
+                                            ">
+                                        Please select status.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Second Installment + Date -->
+                            <div class="form-inline three" *ngIf="
+                                          payslipForm.value.noOfInstallments == 2 ||
+                                          payslipForm.value.noOfInstallments == 3 ||
+                                          payslipForm.value.noOfInstallments == 4
+                                        ">
+                                <!-- Second Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="installTwo?.valid || installTwo?.untouched">
+                                        <label class="installTwo" for="installTwo">Installment 2 (In ₹)</label>
+                                        <input type="number" class="form-control" formControlName="installTwo" />
+                                    </div>
+                                </div>
+                                <!-- Date for Second Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstallTwo?.valid || dateInstallTwo?.untouched
+                                            ">
+                                        <label class="text-left" for="dateInstallTwo">2<sup>nd</sup> Installment Date</label>
+                                        <input type="date" class="form-control" formControlName="dateInstallTwo" />
+                                    </div>
+                                </div>
+                                <!-- Status of Second Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="statusTwo?.valid || statusTwo?.untouched">
+                                        <label class="statusTwo" for="statusTwo">Status</label>
+                                        <select name="statusTwo" class="custom-select" formControlName="statusTwo">
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Installment + Date -->
+                            <div class="form-inline three" *ngIf="
+                                          payslipForm.value.noOfInstallments == 3 ||
+                                          payslipForm.value.noOfInstallments == 4
+                                        ">
+                                <!-- Third Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              installThree?.valid || installThree?.untouched
+                                            ">
+                                        <label class="installThree" for="installThree">Installment 3 (In ₹)</label>
+                                        <input type="number" class="form-control" formControlName="installThree" />
+                                    </div>
+                                </div>
+                                <!-- Date for Third Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstallThree?.valid || dateInstallThree?.untouched
+                                            ">
+                                        <label class="text-left" for="dateInstallThree">3<sup>rd</sup> Installment Date</label>
+                                        <input type="date" class="form-control" formControlName="dateInstallThree" />
+                                    </div>
+                                </div>
+                                <!-- Status of Third Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="statusThree?.valid || statusThree?.untouched">
+                                        <label class="statusThree" for="statusThree">Status</label>
+                                        <select name="statusThree" class="custom-select" formControlName="statusThree">
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fourth Installment + Date -->
+                            <div class="form-inline three" *ngIf="payslipForm.value.noOfInstallments == 4">
+                                <!-- Fourth Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="installFour?.valid || installFour?.untouched">
+                                        <label class="installFour" for="installFour">Installment 4 (In ₹)</label>
+                                        <input type="number" class="form-control" formControlName="installFour" />
+                                    </div>
+                                </div>
+                                <!-- Date for Fourth Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstallFour?.valid || dateInstallFour?.untouched
+                                            ">
+                                        <label class="text-left" for="dateInstallFour">4<sup>th</sup> Installment Date</label>
+                                        <input type="date" class="form-control" formControlName="dateInstallFour" />
+                                    </div>
+                                </div>
+                                <!-- Status for Fourth Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="statusThree?.valid || statusThree?.untouched">
+                                        <label class="statusThree" for="statusThree">Status</label>
+                                        <select name="statusThree" class="custom-select" formControlName="statusFour">
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn mx-auto d-block export mr-2" type="submit">
+                      Submit
+                    </button>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="feeGenSys" [ngClass]="{ active: activePill === 'feeGenSys' }">
+                        <form [formGroup]="onGenFeePaySlipForm" (ngSubmit)="onGenFeePaySlip()">
+                            <div class="form-inline fetch">
+                                <!-- Roll No -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              genPayslipRollNo?.valid || genPayslipRollNo?.untouched
+                                            " [class.is-invalid]="
+                                              genPayslipRollNo?.invalid && genPayslipRollNo?.touched
+                                            ">
+                                        <label class="genPayslipRollNo" for="genPayslipRollNo">
+                            Enter Roll No
+                            <small> (for which you want generate fees slip)</small>
+                          </label>
+                                        <input type="number" class="form-control" [class.is-invalid]="
+                                                genPayslipRollNo?.invalid && genPayslipRollNo?.touched
+                                              " formControlName="genPayslipRollNo" />
+                                    </div>
+                                    <div *ngIf="
+                                              genPayslipRollNo?.invalid &&
+                                              (genPayslipRollNo?.dirty || genPayslipRollNo?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="genPayslipRollNo?.errors?.required">
+                                            Roll No is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-block">
+                          Fetch Account
+                        </button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr />
+                        <!-- *ngIf="displayGenSysToggle" -->
+                        <div class="displayGenSys" *ngIf="displayGenSysToggle">
+                            <div class="display_data">
+                                <div class="col-md-4 col-sm-12 detail">Name : {{currentAccountData.student.fullName}}</div>
+                                <div class="col-md-4 col-sm-12 detail">Father's Name : {{currentAccountData.student.fatherName}}</div>
+                                <div class="col-md-4 col-sm-12 detail">Batch : {{currentAccountData.student.batch.batch}}</div>
+                            </div>
+                            <div class="table-responsive mt-3">
+                                <table class="
+                                            table table-striped table-bordered table-hover table-sm
+                                          ">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>Installment No</th>
+                                            <th>Installment(As decided)</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr *ngFor="let item of arrayOfInstallments; index as i">
+                                            <td>{{ i + 1 }}</td>
+                                            <td>{{ item.amount | currency:'INR'}}</td>
+                                            <td>{{ item.date | date: "longDate" }}</td>
+                                            <td>{{ item.status }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <hr />
+                            <div class="display_data">
+                                <div class="col-md-4 col-sm-12 detail">Total Amount : {{currentAccountData.totalFeeAmount | currency:'INR'}}</div>
+                                <div class="col-md-4 col-sm-12 detail">Total Received : {{currentAccountData.totalFeeAmountReceived | currency:'INR'}}</div>
+                                <div class="col-md-4 col-sm-12 detail">Total Due : {{calculateStuff() | currency:'INR'}}</div>
+                            </div>
+                            <hr />
+                            <div class="display_data">
+                                <div class="col-md-4 col-sm-12 detail">Roll No : {{currentAccountData.student.rollNo}}</div>
+                                <div class="col-md-4 col-sm-12 detail">Board : {{currentAccountData.student.batch.batch}}</div>
+                                <div class="col-md-4 col-sm-12 detail">Remarks: {{currentAccountData.remarks}}</div>
+                            </div>
+                            <hr />
+                            <h4 class="gensliphere">Generate Fees Slip From Here</h4>
+                            <form [formGroup]="genFeePaySlipSystemForm" (ngSubmit)="onGenFeePaySlipSystem()">
+                                <div class="form-inline">
+                                    <!-- Total Recieved Amount -->
+                                    <div class="col-md-6 col-sm-12 form-group">
+                                        <div [class.form]="
+                                                                            receivedAmount?.valid || receivedAmount?.untouched
+                                                                          " [class.is-invalid]="
+                                                                            receivedAmount?.invalid && receivedAmount?.touched
+                                                                          ">
+                                            <label class="receivedAmount" for="receivedAmount">Received Amount (In ₹)</label>
+                                            <input type="number" class="form-control" [class.is-invalid]="
+                                                                              receivedAmount?.invalid && receivedAmount?.touched
+                                                                            " formControlName="receivedAmount" />
+                                        </div>
+                                        <div *ngIf="
+                                                                            receivedAmount?.invalid &&
+                                                                            (receivedAmount?.dirty || receivedAmount?.touched)
+                                                                          ">
+                                            <div class="alert alert-danger inner_alert" *ngIf="receivedAmount?.errors?.required">
+                                                Total Received Amount No is required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Mode Of Payment-->
+                                    <div class="col-md-6 col-sm-12 form-group">
+                                        <div [class.form]="
+                                                                            modeOfPayment?.valid || modeOfPayment?.untouched
+                                                                          " [class.is-invalid]="
+                                                                            modeOfPayment?.invalid && modeOfPayment?.touched
+                                                                          ">
+                                            <label class="modeOfPayment" for="modeOfPayment">Mode Of Payment</label>
+                                            <select name="modeOfPayment" id="modeOfPayment" class="custom-select" formControlName="modeOfPayment" [class.is-invalid]="
+                                                                              modeOfPayment?.invalid && modeOfPayment?.touched
+                                                                            ">
+                                      <option value="cash">Cash</option>
+                                      <option value="upi">UPI</option>
+                                      <option value="cheque">Cheque</option>
+                                    </select>
+                                        </div>
+                                        <div class="alert alert-danger inner_alert" *ngIf="
+                                                                            modeOfPayment?.invalid &&
+                                                                            (modeOfPayment?.dirty || modeOfPayment?.touched)
+                                                                          ">
+                                            Please select your Mode of Payment.
+                                        </div>
+                                    </div>
+                                    <button class="btn mx-auto d-block export mr-2" type="submit">
+                                  Generate Fees Slip
+                                </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="update" [ngClass]="{ active: activePill === 'update' }">
+                        <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="updatePaySlipError">
+                            {{ updatePaySlipError }}
+                        </div>
+                        <div class="alert alert-success main_alert mx-0 mb-3" *ngIf="updatePaySlipSuccess">
+                            {{ updatePaySlipSuccess }}
+                        </div>
+                        <form [formGroup]="fetchPayslipForm" (ngSubmit)="onFetchPaySlip()">
+                            <div class="form-inline fetch">
+                                <!-- Roll No -->
+                                <div class="form-group">
+                                    <div [class.form]="roll__no?.valid || roll__no?.untouched" [class.is-invalid]="roll__no?.invalid && roll__no?.touched">
+                                        <label class="roll__no" for="roll__no">
+                            Enter Roll No
+                            <small>(which you want to fetch and update)</small>
+                          </label>
+                                        <input type="number" class="form-control" [class.is-invalid]="
+                                                roll__no?.invalid && roll__no?.touched
+                                              " formControlName="roll__no" />
+                                    </div>
+                                    <div *ngIf="
+                                              roll__no?.invalid &&
+                                              (roll__no?.dirty || roll__no?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="roll__no?.errors?.required">
+                                            Roll No is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-block">
+                          Fetch Account
+                        </button>
+                                </div>
+                            </div>
+                        </form>
+                        <hr />
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover table-sm" *ngIf="displayInstallmentToggle">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>Installment</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr *ngFor="let item of arrayOfInstallments; index as i">
+                                        <td>{{ i + 1 }}</td>
+                                        <td>{{ item.date | date: "longDate" }}</td>
+                                        <td>{{ item.status }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <form [formGroup]="updatePayslipForm" (ngSubmit)="onUpdatePaylip()">
+                            <div class="form-inline three">
+                                <!-- Roll No -->
+                                <div class="form-group">
+                                    <div [class.form]="roll_No?.valid || roll_No?.untouched" [class.is-invalid]="roll_No?.invalid && roll_No?.touched">
+                                        <label class="roll_No" for="roll_No">Roll No</label>
+                                        <input type="number" class="form-control" [class.is-invalid]="roll_No?.invalid && roll_No?.touched" formControlName="roll_No" />
+                                    </div>
+                                    <div *ngIf="
+                                              roll_No?.invalid && (roll_No?.dirty || roll_No?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="roll_No?.errors?.required">
+                                            Roll No is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Total Amount -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              total_Amount?.valid || total_Amount?.untouched
+                                            " [class.is-invalid]="
+                                              total_Amount?.invalid && total_Amount?.touched
+                                            ">
+                                        <label class="total_Amount" for="total_Amount">Total Fee Amount (In ₹)</label>
+                                        <input type="number" class="form-control" [class.is-invalid]="
+                                                total_Amount?.invalid && total_Amount?.touched
+                                              " formControlName="total_Amount" />
+                                    </div>
+                                    <div *ngIf="
+                                              total_Amount?.invalid &&
+                                              (total_Amount?.dirty || total_Amount?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="total_Amount?.errors?.required">
+                                            Total Fee Amount No is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Board -->
+                                <div class="form-group">
+                                    <div [class.form]="edu_board?.valid || edu_board?.untouched" [class.is-invalid]="
+                                              edu_board?.invalid && edu_board?.touched
+                                            ">
+                                        <label class="edu_board" for="edu_board">Select Board</label>
+                                        <select name="edu_board" id="edu_board" class="custom-select" formControlName="edu_board" [class.is-invalid]="
+                                                edu_board?.invalid && edu_board?.touched
+                                              ">
+                            <option value="cbse">CBSE</option>
+                            <option value="rbse">RBSE</option>
+                            <option value="others">Others</option>
+                          </select>
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="
+                                              edu_board?.invalid &&
+                                              (edu_board?.dirty || edu_board?.touched)
+                                            ">
+                                        Please select your board.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <!-- No. of Installments -->
+                                    <div [class.form]="
+                                              totalInstallments?.valid || totalInstallments?.untouched
+                                            " [class.is-invalid]="
+                                              totalInstallments?.invalid && totalInstallments?.touched
+                                            ">
+                                        <label class="totalInstallments" for="totalInstallments">No of Installments</label>
+                                        <select name="totalInstallments" id="totalInstallments" class="custom-select" formControlName="totalInstallments" [class.is-invalid]="
+                                                totalInstallments?.invalid && totalInstallments?.touched
+                                              ">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                          </select>
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="
+                                              totalInstallments?.invalid &&
+                                              (totalInstallments?.dirty || totalInstallments?.touched)
+                                            ">
+                                        Please select your No of Installments.
+                                    </div>
+                                    <!-- Upload File -->
+                                    <div class="custom-file mt-3 mb-1" [class.form]="updateFile?.valid || updateFile?.untouched" [class.is-invalid]="
+                                              updateFile?.invalid && updateFile?.touched
+                                            ">
+                                        <input id="fileInput" name="updateFile" type="file" (change)="onUpdatedFileChange($event)" [class.is-invalid]="
+                                                updateFile?.invalid && updateFile?.touched
+                                              " />
+                                    </div>
+                                    <div *ngIf="
+                                              updateFile?.invalid &&
+                                              (updateFile?.dirty || updateFile?.touched)
+                                            ">
+                                        <div class="mt-2 alert alert-danger" *ngIf="updateFile?.errors?.required">
+                                            File is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Remarks -->
+                                <div class="form-group">
+                                    <div [class.form]="remark?.valid || remark?.untouched" [class.is-invalid]="remark?.invalid && remark?.touched">
+                                        <label class="remark" for="remark">Remarks</label>
+                                        <textarea class="form-control" id="remark" formControlName="remark" rows="5" [class.is-invalid]="remark?.invalid && remark?.touched"></textarea>
+                                    </div>
+                                    <div *ngIf="
+                                              remark?.invalid && (remark?.dirty || remark?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="remark?.errors?.required">
+                                            Remarks is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- First Installment + Date -->
+                            <div class="form-inline three" *ngIf="
+                                          updatePayslipForm.value.totalInstallments == 1 ||
+                                          updatePayslipForm.value.totalInstallments == 2 ||
+                                          updatePayslipForm.value.totalInstallments == 3 ||
+                                          updatePayslipForm.value.totalInstallments == 4
+                                        ">
+                                <!-- First Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="install_One?.valid || install_One?.untouched" [class.is-invalid]="
+                                              install_One?.invalid && install_One?.touched
+                                            ">
+                                        <label class="install_One" for="install_One">Installment 1 (In ₹)</label>
+                                        <input type="number" class="form-control" [class.is-invalid]="
+                                                install_One?.invalid && install_One?.touched
+                                              " formControlName="install_One" />
+                                    </div>
+                                    <div *ngIf="
+                                              install_One?.invalid &&
+                                              (install_One?.dirty || install_One?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="install_One?.errors?.required">
+                                            Please fill amount for 1<sup>st</sup> Installment.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Date for First Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstall_One?.valid || dateInstall_One?.untouched
+                                            " [class.is-invalid]="
+                                              dateInstall_One?.invalid && dateInstall_One?.touched
+                                            ">
+                                        <label class="text-left" for="dateInstall_One">1<sup>st</sup> Installment Date</label>
+                                        <input type="date" class="form-control" [class.is-invalid]="
+                                                dateInstall_One?.invalid && dateInstall_One?.touched
+                                              " formControlName="dateInstall_One" />
+                                    </div>
+                                    <div *ngIf="
+                                              dateInstall_One?.invalid &&
+                                              (dateInstall_One?.dirty || dateInstall_One?.touched)
+                                            ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="dateInstall_One?.errors?.required">
+                                            Date is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Status -->
+                                <div class="form-group">
+                                    <div [class.form]="status_One?.valid || status_One?.untouched" [class.is-invalid]="
+                                              status_One?.invalid && status_One?.touched
+                                            ">
+                                        <label class="status_One" for="status_One">Status</label>
+                                        <select name="status_One" class="custom-select" formControlName="status_One" [class.is-invalid]="
+                                                status_One?.invalid && status_One?.touched
+                                              ">
+                            <option value="otp">One Time Payment</option>
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="
+                                              status_One?.invalid &&
+                                              (status_One?.dirty || status_One?.touched)
+                                            ">
+                                        Please select status.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Second Installment + Date -->
+                            <div class="form-inline three" *ngIf="
+                                          updatePayslipForm.value.totalInstallments == 2 ||
+                                          updatePayslipForm.value.totalInstallments == 3 ||
+                                          updatePayslipForm.value.totalInstallments == 4
+                                        ">
+                                <!-- Second Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="install_Two?.valid || install_Two?.untouched">
+                                        <label class="install_Two" for="install_Two">Installment 2 (In ₹)</label>
+                                        <input type="number" class="form-control" formControlName="install_Two" />
+                                    </div>
+                                </div>
+                                <!-- Date for Second Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstall_Two?.valid || dateInstall_Two?.untouched
+                                            ">
+                                        <label class="text-left" for="dateInstall_Two">2<sup>nd</sup> Installment Date</label>
+                                        <input type="date" class="form-control" formControlName="dateInstall_Two" />
+                                    </div>
+                                </div>
+                                <!-- Status of Second Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="status_Two?.valid || status_Two?.untouched">
+                                        <label class="status_Two" for="status_Two">Status</label>
+                                        <select name="status_Two" class="custom-select" formControlName="status_Two">
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Third Installment + Date -->
+                            <div class="form-inline three" *ngIf="
+                                          updatePayslipForm.value.totalInstallments == 3 ||
+                                          updatePayslipForm.value.totalInstallments == 4
+                                        ">
+                                <!-- Third Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              install_Three?.valid || install_Three?.untouched
+                                            ">
+                                        <label class="install_Three" for="install_Three">Installment 3 (In ₹)</label>
+                                        <input type="number" class="form-control" formControlName="install_Three" />
+                                    </div>
+                                </div>
+                                <!-- Date for Third Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstall_Three?.valid || dateInstall_Three?.untouched
+                                            ">
+                                        <label class="text-left" for="dateInstall_Three">3<sup>rd</sup> Installment Date</label>
+                                        <input type="date" class="form-control" formControlName="dateInstall_Three" />
+                                    </div>
+                                </div>
+                                <!-- Status of Third Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              status_Three?.valid || status_Three?.untouched
+                                            ">
+                                        <label class="status_Three" for="status_Three">Status</label>
+                                        <select name="status_Three" class="custom-select" formControlName="status_Three">
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fourth Installment + Date -->
+                            <div class="form-inline three" *ngIf="updatePayslipForm.value.totalInstallments == 4">
+                                <!-- Fourth Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              install_Four?.valid || install_Four?.untouched
+                                            ">
+                                        <label class="install_Four" for="install_Four">Installment 4 (In ₹)</label>
+                                        <input type="number" class="form-control" formControlName="install_Four" />
+                                    </div>
+                                </div>
+                                <!-- Date for Fourth Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="
+                                              dateInstall_Four?.valid || dateInstall_Four?.untouched
+                                            ">
+                                        <label class="text-left" for="dateInstall_Four">4<sup>th</sup> Installment Date</label>
+                                        <input type="date" class="form-control" formControlName="dateInstall_Four" />
+                                    </div>
+                                </div>
+                                <!-- Status for Fourth Installment -->
+                                <div class="form-group">
+                                    <div [class.form]="status_Four?.valid || status_Four?.untouched">
+                                        <label class="status_Four" for="status_Four">Status</label>
+                                        <select name="status_Four" class="custom-select" formControlName="status_Four">
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn mx-auto d-block export mr-2" type="submit">
+                      Update Account Details
+                    </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Generate Payslip -->
+            <div class="tab-pane" id="generatepayslip" [ngClass]="{ active: activeTab === 'generatepayslip' }">
+                <!-- <div> -->
+                <div *ngIf="payslipActive">
+                    <div class="alert alert-success main_alert mx-0 mb-3" *ngIf="paySlipSuccess">
+                        {{ paySlipSuccess }}
+                    </div>
+                    <!-- Printable Payslip -->
+                    <div class="my-3 page" size="A4">
+                        <div class="p-4">
+                            <section class="top-content bb d-flex justify-content-between">
+                                <div class="logo">
+                                    <img src="../../../../assets/logo.png" alt="" class="img-fluid" />
+                                </div>
+                                <div class="top-left">
+                                    <div class="graphic-path">
+                                        <p><b>GSTIN</b></p>
+                                    </div>
+                                    <div class="position-relative gst">
+                                        <p>08ABPFA9274N1ZI</p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="store-user mt-3">
+                                <div class="col-12">
+                                    <div class="row bb pb-3">
+                                        <div class="col-7">
+                                            <h6>
+                                                <b>Student Name :</b> {{ paySlipAccount.student.fullName }}
+                                            </h6>
+
+                                            <h6>
+                                                <b>Father Name :</b> {{ paySlipAccount.student.fatherName }}
+                                            </h6>
+
+                                            <h6>
+                                                <b>Course :</b> NEET {{ paySlipAccount.student.class }} - {{ paySlipAccount.student.batch.batch }}
+                                            </h6>
+
+                                            <h6>
+                                                <b>Address :</b> {{ paySlipAccount.student.address }}
+                                            </h6>
+                                        </div>
+                                        <div class="col-5">
+                                            <h6><b>Roll No :</b> {{ paySlipAccount.rollNo }}</h6>
+
+                                            <h6><b>Receipt No :</b> ACA{{ receiptNo }}</h6>
+
+                                            <h6>
+                                                <b>Receipt Date :</b> {{ todayDate | date: "longDate" }}
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class="extra-info">
+                                        <p>
+                                            Payment Method:
+                                            <span>{{ paySlipAccount.modeOfPayment }}</span>
+                                        </p>
+                                        <p>Note: <span>Cheque Subject to Realization</span></p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="product-area mt-4">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <td>Sr No.</td>
+                                            <td>Particulars</td>
+                                            <td>SAC Code</td>
+                                            <td>Amount</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1.</td>
+                                            <td>Tuition Fees</td>
+                                            <td>999293</td>
+                                            <td>
+                                                <span>₹ </span>{{ paySlipAmount / 1.18 | number: "1.1-2" }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </section>
+                            <section class="balance-info2">
+                                <div class="row">
+                                    <div class="col-7"></div>
+                                    <div class="col-5 table">
+                                        <table class="table border-0 table-hover">
+                                            <tr>
+                                                <td>Sub Total:</td>
+                                                <td>
+                                                    <span>₹ </span>{{ paySlipAmount / 1.18 | number: "1.1-2" }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>CGST @ 9%:</td>
+                                                <td>
+                                                    <span>₹ </span>{{ (0.09 * paySlipAmount) / 1.18 | number: "1.1-2" }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>SGST @ 9%:</td>
+                                                <td>
+                                                    <span>₹ </span>{{ (0.09 * paySlipAmount) / 1.18 | number: "1.1-2" }}
+                                                </td>
+                                            </tr>
+                                            <tfoot>
+                                                <tr>
+                                                    <td>Total:</td>
+                                                    <td>
+                                                        <span>₹ </span>{{ paySlipAmount | number: "1.0-0" }}.00
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <footer class="mb-3">
+                                <div class="signature">
+                                    <img src="../../../../assets/signature.png" class="img-fluid" alt="" />
+                                    <p class="m-0">Authorized Signature</p>
+                                </div>
+                                <div>
+                                    Your next payment due date is : {{ nextDueDate(paySlipAccount) | date: "dd/MM/yyyy" }}
+                                </div>
+                                <hr class="aca-footer" />
+                                <p class="m-0 text-center aca-footer">
+                                    <b>Aayaam Career Academy -</b> A New Dimension Of Success
+                                </p>
+                                <div class="social text-center pt-4 aca-footer">
+                                    <span class="pr-3">
+                    <i class="fa fa-mobile"></i>
+                    <span> +91-7300335555</span>
+                                    </span>
+                                    <span class="pr-3">
+                    <i class="fa fa-envelope"></i>
+                    <span> info@aayaamacademy.com</span>
+                                    </span>
+                                    <span class="pr-3">
+                    <i class="fa fa-map-marker"></i>
+                    <span> Jyoti Nagar,Piprali Road,Sikar,332001</span>
+                                    </span>
+                                </div>
+                            </footer>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-success mx-auto d-block mt-3" printSectionId="print-payslip-id" (click)="logBeforePrint()" [useExistingCss]="true" ngxPrint>
+            <i class="fa fa-print mr-2"></i>
+            Print Pay Slip
+          </button>
+                    <!--Printable Payslip ends-->
+                </div>
+            </div>
+            <!-- Generate Fees Card -->
+            <!-- <div
+        class="tab-pane feescard"
+        id="feescard"
+        [ngClass]="{ active: activeTab === 'feescard' }"
+      >
+        <div class="alert alert-danger main_alert mb-3" *ngIf="referenceAlert">
+          {{ referenceAlert }}
+        </div>
+        <div class="alert alert-success main_alert mb-3" *ngIf="successAlert">
+          <strong>Voila!</strong> {{ successAlert }}
+        </div>
+
+        <div class="conatiner reference_card">
+          <div class="card flip_card" [class.flipped]="flipped">
+            <div class="card front">
+              <div class="card-header">
+                <img
+                  class="mx-auto d-block"
+                  src="../../../../assets/logo.png"
+                  alt="logo"
+                />
+              </div>
+              <div class="card-body">
+                <form [formGroup]="idCardForm" (ngSubmit)="onRollNo()">
+                  <div class="form-group">
+                    <div
+                      [class.form]="roll_no?.valid || roll_no?.untouched"
+                      [class.is-invalid]="roll_no?.invalid && roll_no?.touched"
+                    >
+                      <label for="roll_no">Roll No</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [class.is-invalid]="
+                          roll_no?.invalid && roll_no?.touched
+                        "
+                        formControlName="roll_no"
+                      />
+                    </div>
+                    <div
+                      *ngIf="
+                        roll_no?.invalid && (roll_no?.dirty || roll_no?.touched)
+                      "
+                    >
+                      <div
+                        class="alert alert-danger"
+                        *ngIf="roll_no?.errors?.required"
+                      >
+                        Reference No. is required.
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    class="btn flip_button float-right mt-3"
+                    type="submit"
+                  >
+                    Generate
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div class="card back" id="back">
+              <div class="card-header">
+                <img
+                  class="mx-auto d-block"
+                  src="../../../../assets/logo.png"
+                  alt="logo"
+                />
+              </div>
+              <div class="fees-card">
+                <div class="photo">
+                  <img
+                    [src]="idUrl ? idUrl : '../../../../assets/avatar.png'"
+                    alt="avatar"
+                  />
+                </div>
+                <div class="cardbody">
+                  <p class="reference_detail">
+                    <span>Name</span> : {{ account.student.fullName }}
+                  </p>
+                  <p class="reference_detail">
+                    <span>Roll No</span> : {{ account.rollNo }}
+                  </p>
+                  <p class="reference_detail">
+                    <span>Batch</span> : {{ account.student.batch.batch }}
+                  </p>
+                  <p class="reference_detail">
+                    <span>Contact</span> : {{ account.student.studentContact }}
+                  </p>
+                  <p class="reference_detail">
+                    <span>Valid Upto</span> :
+                    {{ feeDueDate | date: "dd/MM/yyyy" }}
+                  </p>
+                  <small class="float-right mt-2">Fees Card</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-success mx-auto d-block mt-3 {{ printButton }}"
+          printSectionId="demo-id"
+          [useExistingCss]="true"
+          ngxPrint
+        >
+          <i class="fa fa-print mr-2"></i>
+          Print Fees Card
+        </button>
+      </div> -->
+
+            <!-- Fees Logger -->
+            <div class="tab-pane" id="feeslogger" [ngClass]="{ active: activeTab === 'feeslogger' }">
+                <div class="card">
+                    <div class="container p-3">
+                        <div class="row">
+                            <div class="col-lg-5 col-md-6 col-sm-12">
+                                <form class="form-inline">
+                                    <input class="form-control mr-sm-2" type="text" placeholder="Roll No. / Student Name" [(ngModel)]="filterTerm_B" name="filter" />
+                                    <button class="btn" type="submit">Search</button>
+                                </form>
+                            </div>
+                            <div class="col-lg-4 col-md-6 col-sm-12"></div>
+                            <div class="col-lg-3 col-md-6 col-sm-12">
+                                <button type="button" class="btn btn-block btn-outline export" (click)="passwd_allLogAccounts()">
+                  <i class="fa fa-external-link"></i>
+                  Export to Excel
+                  <i class="fa fa-lock fa-lg pl-2" aria-hidden="true"></i>
+                </button>
+                            </div>
+                        </div>
+                        <div class="container mt-3 px-0">
+                            <div class="table-responsive">
+                                <table class="
+                                table table-striped table-bordered table-hover table-sm
+                              ">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th [class.active]="order_B === 'rollNo_B'" (click)="setOrder_B('rollNo_B')">
+                                                <button type="button" class="btn btn btn-block">
+                          Payment Time
+                          <span [hidden]="reverse_B"><i class="fa fa-arrow-down"></i></span><span
+                            [hidden]="!reverse_B"><i class="fa fa-arrow-up"></i></span>
+                        </button>
+                                            </th>
+                                            <th>Roll No</th>
+                                            <th>Student Name</th>
+                                            <th>Father's Name</th>
+                                            <th>Batch</th>
+                                            <th>Payment Amount</th>
+                                            <th>Mode of Payment</th>
+                                            <!-- <th *ngIf="user.role == 'Admin'">Action</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-center">
+                                        <tr *ngFor="
+                                    let logs of accountantLogs
+                                      | filter: filterTerm_B
+                                      | orderBy: order_B:reverse_B
+                                      | paginate
+                                        : {
+                                            id: 'listing_pagination_B',
+                                            itemsPerPage: 10,
+                                            currentPage: page_B,
+                                            totalItems: totalRecords_B
+                                          }
+                                  ">
+                                            <td>
+                                                {{ logs.paymentDate | date: "MMM d, y, h:mm:ss a" }}
+                                            </td>
+                                            <td>{{ logs.rollNo }}</td>
+                                            <td>{{ logs.studentFullName }}</td>
+                                            <td>{{ logs.studentFatherName }}</td>
+                                            <td>{{ logs.batch }}</td>
+                                            <td>{{ logs.paymentAmount }}</td>
+                                            <td>{{ logs.modeOfPayment }}</td>
+                                            <!-- <td *ngIf="user.role == 'Admin'">
+                                  <button
+                                    class="btn btn-outline-danger ml-2 btn-sm"
+                                  >
+                                    <i class="fa fa-trash"></i>
+                                  </button>
+                                </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="container table_paginations p-0">
+                                <pagination-controls id="listing_pagination_A" (pageChange)="page_A = $event"></pagination-controls>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Cheque Status -->
+            <div class="tab-pane" id="chequeStatus" [ngClass]="{ active: activeTab === 'chequeStatus' }">
+                <form [formGroup]="onChequeStatusForm" (ngSubmit)="onChequeStatus()">
+                    <div class="form-inline fetch">
+                        <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="chequeStatusRollNoError">
+                            {{ chequeStatusRollNoError }}
+                        </div>
+                        <!-- Roll No -->
+                        <div class="form-group">
+                            <div [class.form]="
+                              chequeStatusRollNo?.valid || chequeStatusRollNo?.untouched
+                            " [class.is-invalid]="
+                              chequeStatusRollNo?.invalid && chequeStatusRollNo?.touched
+                            ">
+                                <label class="chequeStatusRollNo" for="chequeStatusRollNo">
+                  Enter Roll No
+                  <small> (for Cheque Status Entry)</small>
+                </label>
+                                <input type="number" class="form-control" [class.is-invalid]="
+                                chequeStatusRollNo?.invalid && chequeStatusRollNo?.touched
+                              " formControlName="chequeStatusRollNo" />
+                            </div>
+                            <div *ngIf="
+                              chequeStatusRollNo?.invalid &&
+                              (chequeStatusRollNo?.dirty || chequeStatusRollNo?.touched)
+                            ">
+                                <div class="alert alert-danger inner_alert" *ngIf="chequeStatusRollNo?.errors?.required">
+                                    Roll No is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-block">Fetch Account</button>
+                        </div>
+                    </div>
+                </form>
+                <hr />
+                <!-- *ngIf="displayChequeStatusToggle" -->
+                <div class="displayChequeStatus" *ngIf="displayChequeStatusDetails">
+                    <hr />
+                    <!-- *ngIf="displayChequeStatusToggle" -->
+                    <div class="displayChequeStatus">
+                        <div class="table-responsive mt-3">
+                            <table class="table table-striped table-bordered table-hover table-sm">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>S No.</th>
+                                        <th>Submission Date</th>
+                                        <th>Approved Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                    <tr *ngFor="let details of chequeDetails; index as i;">
+                                        <td>{{i+1}}</td>
+                                        <td>{{details.submissionDate | date: "dd/MM/yyyy"}}</td>
+                                        <td>{{(details.approvedDate) ? (details.approvedDate | date: "dd/MM/yyyy") : "Not Approved Still"}}
+                                        </td>
+                                        <td>{{details.paymentAmount}}</td>
+                                        <td>{{details.status | titlecase}}</td>
+                                        <td>
+                                            <button class="btn btn-outline-info btn-sm ml-2" (click)="openChequeStatusModal()">
+                        Change Status
+                      </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <!-- The Cheque Status Modal -->
+                            <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: chequeStatusDisplay }">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Change Cheque Status</h4>
+                                            <button type="button" class="close" aria-label="Close" (click)="onCloseChequeStatus()">
+                        <span class="text-light" aria-hidden="true">&times;</span>
+                      </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="paySlipError">
+                                                {{ paySlipError }}
+                                            </div>
+                                            <form [formGroup]="onUpdateChequeStatusForm" (ngSubmit)="onUpdateChequeStatus()">
+                                                <div [class.form]="
+                          chequeApprovedDate?.valid ||
+                          chequeApprovedDate?.untouched
+                        " [class.is-invalid]="
+                          chequeApprovedDate?.invalid &&
+                          chequeApprovedDate?.touched
+                        ">
+                                                    <label class="text-left" for="chequeApprovedDate">Cheque Approved Date</label>
+                                                    <input type="date" class="form-control" [class.is-invalid]="
+                            chequeApprovedDate?.invalid &&
+                            chequeApprovedDate?.touched
+                          " formControlName="chequeApprovedDate" />
+                                                </div>
+                                                <div [class.form]="
+                          changeChequeStatusDropDown?.valid ||
+                          changeChequeStatusDropDown?.untouched
+                        " [class.is-invalid]="
+                          changeChequeStatusDropDown?.invalid &&
+                          changeChequeStatusDropDown?.touched
+                        ">
+                                                    <label class="changeChequeStatusDropDown mt-3" for="changeChequeStatusDropDown">Status</label>
+                                                    <select name="changeChequeStatusDropDown" class="custom-select" formControlName="changeChequeStatusDropDown" [class.is-invalid]="
+                            changeChequeStatusDropDown?.invalid &&
+                            changeChequeStatusDropDown?.touched
+                          ">
+                            <option value="paid">Paid</option>
+                            <option value="due">Due</option>
+                          </select>
+                                                </div>
+                                                <button class="btn mx-auto d-block export mt-4" type="submit">
+                          Update Cheque Status
+                        </button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" (click)="onCloseChequeStatus()">
+                        Close
+                      </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Fees Card Print Section-->
+    <!-- <div class="hidddenPrint">
+  <div class="print_container" id="demo-id">
+    <div class="conatiner reference_card">
+      <div class="card back">
+        <div class="card back" id="back">
+          <div class="card-header">
+            <img
+              class="mx-auto d-block"
+              src="../../../../assets/logo.png"
+              alt="logo"
+            />
+          </div>
+          <div class="fees-card">
+            <div class="photo">
+              <img src="../../../../assets/avatar.png" alt="Cinque Terre" />
+            </div>
+            <div class="cardbody">
+              <p class="reference_detail">
+                <span>Name</span> : {{ account.student.fullName }}
+              </p>
+              <p class="reference_detail">
+                <span>Roll No</span> : {{ account.rollNo }}
+              </p>
+              <p class="reference_detail">
+                <span>Batch</span> : {{ account.student.batch.batch }}
+              </p>
+              <p class="reference_detail">
+                <span>Contact</span> : {{ account.student.studentContact }}
+              </p>
+              <p class="reference_detail">
+                <span>Valid Upto</span> :
+                {{ feeDueDate | date: "dd/MM/yyyy" }}
+              </p>
+              <small class="float-right mt-2">Fees Card</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+    <!--Print Payslip Section-->
+    <div class="hidddenPrint" id="print-payslip-id">
+        <div class="print_container">
+            <div class="my-3 page" size="A4">
+                <div class="p-4">
+                    <section class="top-content bb d-flex justify-content-between">
+                        <div class="logo">
+                            <img src="../../../../assets/logo.png" alt="" class="img-fluid" />
+                        </div>
+                        <div class="top-left">
+                            <div class="graphic-path">
+                                <p><b>GSTIN</b></p>
+                            </div>
+                            <div class="position-relative gst">
+                                <p>08ABPFA9274N1ZI</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="store-user mt-3">
+                        <div class="col-12">
+                            <div class="row bb pb-3">
+                                <div class="col-7">
+                                    <h6>
+                                        <b>Student Name :</b> {{ paySlipAccount.student.fullName }}
+                                    </h6>
+
+                                    <h6>
+                                        <b>Father Name :</b> {{ paySlipAccount.student.fatherName }}
+                                    </h6>
+
+                                    <h6>
+                                        <b>Course :</b> NEET {{ paySlipAccount.student.class }} - {{ paySlipAccount.student.batch.batch }}
+                                    </h6>
+
+                                    <h6><b>Address :</b> {{ paySlipAccount.student.address }}</h6>
+                                </div>
+                                <div class="col-5">
+                                    <h6><b>Roll No :</b> {{ paySlipAccount.rollNo }}</h6>
+
+                                    <h6><b>Receipt No :</b> ACA{{ receiptNo }}</h6>
+
+                                    <h6>
+                                        <b>Receipt Date :</b> {{ todayDate | date: "longDate" }}
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="extra-info">
+                                <p>
+                                    Payment Method:
+                                    <span>{{ paySlipAccount.modeOfPayment }}</span>
+                                </p>
+                                <p>Note: <span>Cheque Subject to Realization</span></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="product-area mt-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>Sr No.</td>
+                                        <td>Particulars</td>
+                                        <td>SAC Code</td>
+                                        <td>Amount</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Tuition Fees</td>
+                                        <td>999293</td>
+                                        <td>
+                                            <span>₹ </span>{{ paySlipAmount / 1.18 | number: "1.1-2" }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section class="balance-info2">
+                        <div class="row">
+                            <div class="col-7"></div>
+                            <div class="col-5 table">
+                                <div class="table-responsive">
+                                    <table class="table border-0 table-hover">
+                                        <tr>
+                                            <td>Sub Total:</td>
+                                            <td>
+                                                <span>₹ </span>{{ paySlipAmount / 1.18 | number: "1.1-2" }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CGST @ 9%:</td>
+                                            <td>
+                                                <span>₹ </span>{{ (0.09 * paySlipAmount) / 1.18 | number: "1.1-2" }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>SGST @ 9%:</td>
+                                            <td>
+                                                <span>₹ </span>{{ (0.09 * paySlipAmount) / 1.18 | number: "1.1-2" }}
+                                            </td>
+                                        </tr>
+                                        <tfoot>
+                                            <tr>
+                                                <td>Total:</td>
+                                                <td>
+                                                    <span>₹ </span>{{ paySlipAmount | number: "1.0-0" }}.00
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <footer class="mb-3">
+                        <div class="signature">
+                            <img src="../../../../assets/signature.png" class="img-fluid" alt="" />
+                            <p class="m-0">Authorized Signature</p>
+                        </div>
+                        <div>
+                            Your next payment due date is : {{ nextDueDate(paySlipAccount) | date: "dd/MM/yyyy" }}
+                        </div>
+                        <hr class="aca-footer" />
+                        <p class="m-0 text-center aca-footer">
+                            <b>Aayaam Career Academy -</b> A New Dimension Of Success
+                        </p>
+                        <div class="social text-center pt-4 aca-footer">
+                            <span class="pr-3">
+                <i class="fa fa-mobile"></i>
+                <span> +91-7300335555</span>
+                            </span>
+                            <span class="pr-3">
+                <i class="fa fa-envelope"></i>
+                <span> info@aayaamacademy.com</span>
+                            </span>
+                            <span class="pr-3">
+                <i class="fa fa-map-marker"></i>
+                <span> Jyoti Nagar,Piprali Road,Sikar,332001</span>
+                            </span>
+                        </div>
+                        <hr class="aca-footer" />
+                    </footer>
+                </div>
+                <p class="text-right">
+                    <strong>Student Copy</strong>
+                </p>
+            </div>
+        </div>
+        <div class="print_container">
+            <div class="my-3 page" size="A4">
+                <div class="p-4">
+                    <section class="top-content bb d-flex justify-content-between">
+                        <div class="logo">
+                            <img src="../../../../assets/logo.png" alt="" class="img-fluid" />
+                        </div>
+                        <div class="top-left">
+                            <div class="graphic-path">
+                                <p><b>GSTIN</b></p>
+                            </div>
+                            <div class="position-relative gst">
+                                <p>08ABPFA9274N1ZI</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="store-user mt-3">
+                        <div class="col-12">
+                            <div class="row bb pb-3">
+                                <div class="col-7">
+                                    <h6>
+                                        <b>Student Name :</b> {{ paySlipAccount.student.fullName }}
+                                    </h6>
+
+                                    <h6>
+                                        <b>Father Name :</b> {{ paySlipAccount.student.fatherName }}
+                                    </h6>
+
+                                    <h6>
+                                        <b>Course :</b> NEET {{ paySlipAccount.student.class }} - {{ paySlipAccount.student.batch.batch }}
+                                    </h6>
+
+                                    <h6><b>Address :</b> {{ paySlipAccount.student.address }}</h6>
+                                </div>
+                                <div class="col-5">
+                                    <h6><b>Roll No :</b> {{ paySlipAccount.rollNo }}</h6>
+
+                                    <h6><b>Receipt No :</b> ACA{{ receiptNo }}</h6>
+
+                                    <h6>
+                                        <b>Receipt Date :</b> {{ todayDate | date: "longDate" }}
+                                    </h6>
+                                </div>
+                            </div>
+                            <div class="extra-info">
+                                <p>
+                                    Payment Method:
+                                    <span>{{ paySlipAccount.modeOfPayment }}</span>
+                                </p>
+                                <p>Note: <span>Cheque Subject to Realization</span></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="product-area mt-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <td>Sr No.</td>
+                                        <td>Particulars</td>
+                                        <td>SAC Code</td>
+                                        <td>Amount</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Tuition Fees</td>
+                                        <td>999293</td>
+                                        <td>
+                                            <span>₹ </span>{{ paySlipAmount / 1.18 | number: "1.1-2" }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section class="balance-info2">
+                        <div class="row">
+                            <div class="col-7"></div>
+                            <div class="col-5 table">
+                                <div class="table-responsive">
+                                    <table class="table border-0 table-hover">
+                                        <tr>
+                                            <td>Sub Total:</td>
+                                            <td>
+                                                <span>₹ </span>{{ paySlipAmount / 1.18 | number: "1.1-2" }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CGST @ 9%:</td>
+                                            <td>
+                                                <span>₹ </span>{{ (0.09 * paySlipAmount) / 1.18 | number: "1.1-2" }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>SGST @ 9%:</td>
+                                            <td>
+                                                <span>₹ </span>{{ (0.09 * paySlipAmount) / 1.18 | number: "1.1-2" }}
+                                            </td>
+                                        </tr>
+                                        <tfoot>
+                                            <tr>
+                                                <td>Total:</td>
+                                                <td>
+                                                    <span>₹ </span>{{ paySlipAmount | number: "1.0-0" }}.00
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <footer class="mb-3">
+                        <div class="signature">
+                            <img src="../../../../assets/signature.png" class="img-fluid" alt="" />
+                            <p class="m-0">Authorized Signature</p>
+                        </div>
+                        <div>
+                            Your next payment due date is : {{ nextDueDate(paySlipAccount) | date: "dd/MM/yyyy" }}
+                        </div>
+                        <hr class="aca-footer" />
+                        <p class="m-0 text-center aca-footer">
+                            <b>Aayaam Career Academy -</b> A New Dimension Of Success
+                        </p>
+                        <div class="social text-center pt-4 aca-footer">
+                            <span class="pr-3">
+                <i class="fa fa-mobile"></i>
+                <span> +91-7300335555</span>
+                            </span>
+                            <span class="pr-3">
+                <i class="fa fa-envelope"></i>
+                <span> info@aayaamacademy.com</span>
+                            </span>
+                            <span class="pr-3">
+                <i class="fa fa-map-marker"></i>
+                <span> Jyoti Nagar,Piprali Road,Sikar,332001</span>
+                            </span>
+                        </div>
+                        <hr class="aca-footer" />
+                    </footer>
+                </div>
+                <p class="text-right">
+                    <strong>Office Copy</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal For Account DashBoard Table-1  Without Due fees -->
+    <div class="modal fade" id="exampleModalCenterTable_A_Without_DF" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                </div>
+                <div class="modal-body">
+                    Are Your Completely Sure, You Want to Delete the selected Student's Accounts Data?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary yes-button">
+            Yes, I am Sure.
+          </button>
+                    <button type="button" class="btn btn-primary no-button" data-dismiss="modal">
+            No, Let's Go Back.
+          </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal For Account DashBoard Table-2  With Due fees -->
+    <div class="modal fade" id="exampleModalCenterTable_B_With_DF" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                </div>
+                <div class="modal-body">
+                    Are Your Completely Sure, You Want to Delete the selected Student's Accounts Data?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary yes-button">
+            Yes, I am Sure.
+          </button>
+                    <button type="button" class="btn btn-primary no-button" data-dismiss="modal">
+            No, Let's Go Back.
+          </button>
+                </div>
+            </div>
+        </div>
+    </div>

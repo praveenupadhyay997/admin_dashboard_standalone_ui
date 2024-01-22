@@ -1,0 +1,33 @@
+.navbar {
+  background-color: #f2d189;
+}
+li {
+  margin: 0 24px;
+}
+.nav-item a {
+  font-weight: 500;
+  color: #000000;
+}
+.nav-item a:hover {
+  color: #aa2c2e;
+}
+.login a {
+  border: 2px solid #aa2c2e;
+  padding: 8px 16px;
+  border-radius: 3px;
+  color: #aa2c2e;
+}
+.login:hover a {
+  background-color: #aa2c2e;
+  color: white;
+}
+/* .login a {
+  color: #aa2c2e;
+}
+.login a:hover {
+  color: #f4f4f4;
+} */
+img.logo_main {
+  height: 60px;
+  width: 249px;
+}

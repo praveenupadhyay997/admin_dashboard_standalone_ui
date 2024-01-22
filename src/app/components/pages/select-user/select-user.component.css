@@ -1,0 +1,53 @@
+.container-fluid {
+  min-height: 100vh;
+  background-image: radial-gradient(
+    circle farthest-corner at 13.9% 28.2%,
+    rgba(235, 164, 73, 1) 0%,
+    rgba(252, 236, 138, 1) 90%
+  );
+}
+.bg_image {
+  width: 350px;
+  height: 400px;
+  background-color: #ffd880;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 6rem auto;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+  transition: all 0.2s ease-in-out;
+}
+.bg_image:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+h3 {
+  font-family: "Roboto Slab", serif;
+  color: #535461;
+  font-weight: 600;
+}
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.fa-arrow-circle-left {
+  font-size: 30px;
+  padding-top: 40px;
+  color: #535461;
+  padding-left: 35px;
+  position: fixed;
+}
+
+@media screen and (max-width: 768px) 
+{
+  .fa-arrow-circle-left{
+      padding-left: 0;
+      font-size: 35px;
+      position: relative;
+  }
+}
+
+.fa-arrow-circle-left:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}

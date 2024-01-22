@@ -1,0 +1,174 @@
+.student_form {
+  border: 2px solid #a62c2b;
+  border-radius: 8px;
+  padding: 0px 0px 16px 0px;
+}
+h5 {
+  font-family: "Roboto Slab", serif;
+  color: #a62c2b;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  transform: translateY(-16px);
+  background-color: #f1c47f;
+  margin: 0px 22rem;
+}
+/* Forms */
+.form-inline {
+  align-items: baseline;
+}
+.form-inline > .form-group {
+  width: 50%;
+  padding: 0px 8px;
+  margin-bottom: 16px;
+}
+.form-inline .form-group > div > label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #535461;
+  justify-content: start;
+  padding-left: 8px;
+}
+.form-inline .form-group > .is-invalid label {
+  color: #dc3545;
+}
+.form-inline .form-group > div,
+.form-inline .form-group > div > input,
+.form-inline .form-group > div > select,
+.form-inline .form-group > div > textarea {
+  width: 100%;
+  color: #535461;
+  font-weight: 600;
+}
+.form-inline .form-group > div > input,
+.form-inline .form-group > div > select,
+.form-inline .form-group > div > textarea {
+  border: 2px solid #535461;
+}
+.form-inline .form-group .form-control.is-invalid,
+.form-inline .form-group .custom-select.is-invalid {
+  border-color: #dc3545;
+}
+.custom-select.is-invalid,
+textarea.form-control.is-invalid {
+  /* border: 2px solid #dc3545; */
+  background: none;
+}
+/* Form Button */
+.btn-group {
+  padding: 16px 8px 0px 8px;
+}
+.btn-outline-danger {
+  border: 2px solid #dc3545;
+  font-weight: 600;
+}
+.btn-outline-success {
+  border: 2px solid #28a745;
+  font-weight: 600;
+}
+/* Alert */
+.main_alert {
+  font-weight: 500;
+  margin: 0px 8px;
+  padding: 8px 16px;
+}
+.inner_alert {
+  font-weight: 500 !important;
+}
+/* Reference Card */
+.reference_card {
+  position: relative;
+  margin: 0 auto;
+  width: 400px;
+  height: 280px;
+  margin-top: 16px;
+  -webkit-perspective: 800px;
+  -moz-perspective: 800px;
+  -o-perspective: 800px;
+  perspective: 800px;
+}
+.flip_card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  -webkit-transition: -webkit-transform 1s;
+  -moz-transition: -moz-transform 1s;
+  -o-transition: -o-transform 1s;
+  transition: transform 1s;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.flip_card .front,
+.back {
+  border-radius: 16px;
+  border: 2px solid #a62c2b;
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: #fff;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.card-header {
+  background-color: #f5db9e;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.flip_button {
+  border: 2px solid #e37d47;
+  font-weight: 500;
+  color: #e37d47;
+}
+.flip_button:hover {
+  background-color: #e37d47;
+  color: #fff;
+}
+.flip_card .back {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.flip_card.flipped {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.reference_detail {
+  margin-bottom: 1px;
+}
+.reference_detail > span {
+  color: #535461;
+  font-weight: 600;
+}
+
+/*Print*/
+.print_container {
+  height: 480px;
+  width: 640px;
+  margin: auto;
+}
+
+/* Print */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #back,
+  #back * {
+    visibility: visible;
+  }
+  #back {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+.disabled {
+  cursor: default;
+}

@@ -1,0 +1,507 @@
+/* Reference Form CSS */
+.reference_fields label {
+  color: #535461;
+  font-weight: 600;
+}
+.reference_fields input {
+  border: 2px solid #535461;
+  width: 60%;
+}
+/* Student Fetch From Details*/
+/* Forms */
+.form-batch {
+  display: flex;
+}
+.form-inline {
+  align-items: baseline;
+}
+.form-inline > .form-group {
+  width: 50%;
+  padding: 0px 8px;
+  margin-bottom: 16px;
+}
+.form-inline .form-group > div > label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #535461;
+  justify-content: start;
+  padding-left: 8px;
+}
+.form-inline .form-group > .is-invalid label {
+  color: #dc3545;
+}
+.form-inline .form-group > div,
+.form-inline .form-group > div > input,
+.form-inline .form-group > div > select,
+.form-inline .form-group > div > textarea {
+  width: 100%;
+  color: #535461;
+  font-weight: 600;
+}
+.form-inline .form-group > div > input,
+.form-inline .form-group > div > select,
+.form-inline .form-group > div > textarea {
+  border: 2px solid #535461;
+}
+.form-inline .form-group .form-control.is-invalid,
+.form-inline .form-group .custom-select.is-invalid {
+  border-color: #dc3545;
+}
+.custom-select.is-invalid,
+textarea.form-control.is-invalid {
+  /* border: 2px solid #dc3545; */
+  background: none;
+}
+/* Image + Name  */
+.imageName {
+  align-items: normal !important;
+}
+.imageName .form-group.name {
+  width: 80% !important;
+}
+/* Image */
+.profileImage img {
+  height: 100%;
+  width: 100%;
+  border-radius: 0.25rem;
+}
+.profileImage {
+  width: 20% !important;
+  align-items: baseline;
+}
+.imageName .form-group.profileImage .hoverable {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  height: 176px;
+  width: 168px;
+  padding: 0;
+  border: 2px solid #535461;
+  border-radius: 0.25rem;
+}
+.hoverable .background {
+  position: absolute;
+  display: none;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  text-align: center;
+  z-index: 1;
+}
+.hoverable .hover-text {
+  position: absolute;
+  display: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #535461;
+  font-weight: 600;
+  z-index: 2;
+}
+.hoverable:hover .hover-text {
+  display: block;
+}
+.hoverable:hover .background {
+  display: block;
+}
+
+#fileInput {
+  display: none;
+}
+/* ------------------------------ */
+.occupation .form-group,
+.address .form-group {
+  width: 33.33% !important;
+}
+.contacts .form-group,
+.personal_details .form-group,
+.year .form-group,
+.grades .form-group,
+.school_name .form-group,
+.addressess .form-group,
+.extras .form-group {
+  width: 25% !important;
+}
+
+/* ---------------- */
+
+.student_form {
+  border: 2px solid #a62c2b;
+  border-radius: 8px;
+  padding: 0px 0px 16px 0px;
+}
+h5 {
+  font-family: "Roboto Slab", serif;
+  color: #a62c2b;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  transform: translateY(-16px);
+  background-color: #f1c47f;
+  margin: 0px 22rem;
+}
+/* Forms */
+.form-inline {
+  align-items: baseline;
+}
+.form-inline > .form-group {
+  width: 50%;
+  padding: 0px 8px;
+  margin-bottom: 16px;
+}
+.form-inline .form-group > div > label {
+  font-weight: 600;
+  font-size: 14px;
+  color: #535461;
+  justify-content: start;
+  padding-left: 8px;
+}
+.form-inline .form-group > .is-invalid label {
+  color: #dc3545;
+}
+.form-inline .form-group > div,
+.form-inline .form-group > div > input,
+.form-inline .form-group > div > select,
+.form-inline .form-group > div > textarea {
+  width: 100%;
+  color: #535461;
+  font-weight: 600;
+}
+.form-inline .form-group > div > input,
+.form-inline .form-group > div > select,
+.form-inline .form-group > div > textarea {
+  border: 2px solid #535461;
+}
+.form-inline .form-group .form-control.is-invalid,
+.form-inline .form-group .custom-select.is-invalid {
+  border-color: #dc3545;
+}
+.custom-select.is-invalid,
+textarea.form-control.is-invalid {
+  /* border: 2px solid #dc3545; */
+  background: none;
+}
+/* Form Button */
+.btn-group {
+  padding: 16px 8px 0px 8px;
+}
+.btn-outline-danger {
+  border: 2px solid #dc3545;
+  font-weight: 600;
+}
+.btn-outline-success {
+  border: 2px solid #28a745;
+  font-weight: 600;
+}
+/* Alert */
+.main_alert {
+  font-weight: 500;
+  margin: 0px 8px;
+  padding: 8px 16px;
+}
+.inner_alert {
+  font-weight: 500 !important;
+}
+/* Generate Card */
+.front_id_card,
+.back_id_card {
+  border: 2px solid #a62c2b;
+  height: 375px;
+  width: 275px;
+}
+/* Front Card */
+.front_id_card .id_card_header {
+  background-color: #a62c2b;
+  height: 30%;
+}
+.front_id_card .id_card_header > img {
+  /* width: 50%;
+  margin-top: 2.5rem; */
+  width: 45%;
+  height: 120px;
+  margin-top: 2.5rem;
+}
+.front_id_card .id_card_body {
+  height: 70%;
+  background-color: #f0c27d;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  padding: 4.5rem 2rem 1rem;
+  color: #535461;
+  font-weight: 600;
+}
+.front_id_card .id_card_body > h6 {
+  font-family: "Roboto Slab", serif;
+  color: #535461;
+  font-weight: 600;
+}
+.front_id_card .id_card_body > img {
+  margin-top: 2rem;
+  width: 80%;
+}
+/* Back Card */
+.back_id_card {
+  background-color: #a62c2b;
+  color: #fff;
+}
+.back_id_card .id_card_header {
+  height: 10%;
+}
+.back_id_card .id_card_header > h6 {
+  font-size: 18px;
+}
+.back_id_card .id_card_body {
+  background-color: transparent !important;
+  height: 35%;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.back_id_card .id_card_body > h6 > span {
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: underline;
+}
+.back_id_card .id_card_body > h6 {
+  font-size: 16px;
+}
+.back_id_card .id_card_footer {
+  height: 30%;
+}
+.back_id_card .id_card_footer > img {
+  width: 28%;
+}
+.instructions {
+  line-height: 1.2;
+  font-size: 12px;
+  padding-bottom: 8px;
+}
+.instructions > small {
+  font-size: 10px;
+}
+.card-footer.id_card_footer {
+  margin-top: 12px;
+}
+/* Batch Generate CSS */
+.generateBatch {
+  display: inline-flex;
+  width: 100%;
+}
+.genBatch {
+  width: 80%;
+}
+.genBatch .form-group {
+  width: 33.33%;
+}
+.genBtnGroup {
+  width: 20%;
+}
+.genBtn {
+  margin-top: 19px;
+  border: 2px solid #535461;
+  color: #535461;
+  font-weight: 600;
+}
+.genBtn:hover {
+  background-color: #535461;
+  color: #fff;
+}
+/* Print */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #back,
+  #back * {
+    visibility: visible;
+  }
+  #back {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+
+/* Search */
+.form-batch input {
+  width: 64%;
+  background: #fff;
+}
+.form-batch button,
+.export {
+  font-weight: 500;
+  border: 2px solid #535461;
+  color: #535461;
+}
+.form-batch button:hover {
+  background-color: #535461;
+  color: #fff;
+}
+.export:hover {
+  background-color: #535461;
+  color: #fff;
+}
+
+/* Reference Card */
+.reference_card {
+  position: relative;
+  margin: 0 auto;
+  width: 400px;
+  height: 280px;
+  margin-top: 16px;
+  -webkit-perspective: 800px;
+  -moz-perspective: 800px;
+  -o-perspective: 800px;
+  perspective: 800px;
+}
+.flip_card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  -webkit-transition: -webkit-transform 1s;
+  -moz-transition: -moz-transform 1s;
+  -o-transition: -o-transform 1s;
+  transition: transform 1s;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  -o-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.flip_card .front,
+.back {
+  border-radius: 16px;
+  border: 2px solid #a62c2b;
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-color: #fff;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.card-header_democard {
+  background-color: #f5db9e;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+.flip_button {
+  border: 2px solid #e37d47;
+  font-weight: 500;
+  color: #e37d47;
+}
+.flip_button:hover {
+  background-color: #e37d47;
+  color: #fff;
+}
+.flip_card .back {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.flip_card.flipped {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+.reference_detail {
+  margin-bottom: 1px;
+}
+.reference_detail > span {
+  color: #535461;
+  font-weight: 600;
+}
+
+/*Print*/
+.print_container {
+  height: 480px;
+  width: 640px;
+  margin: auto;
+}
+
+/* Print */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #back,
+  #back * {
+    visibility: visible;
+  }
+  #back {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}
+.disabled {
+  cursor: default;
+}
+
+/*Fees card*/
+.fees-card {
+  box-sizing: border-box;
+}
+
+.photo {
+  float: left;
+  width: 35%;
+  padding: 20px;
+}
+
+.photo > img {
+  width: 120px;
+  height: 145px;
+}
+
+.cardbody {
+  float: right;
+  width: 65%;
+  padding-top: 12px;
+  padding-right: 10px;
+  padding-left: 25px;
+  margin-top: 5px;
+}
+
+.card-header_feescard {
+  background-color: #82f77e;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding: .75rem 1.25rem;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(0,0,0,.125);
+}
+
+.text-fees-card {
+  margin-top: 3px;
+  padding-right: 10px;
+  float: right;
+}
+
+/*****Modal Delete*****/
+button.btn.btn-secondary.yes-button, 
+button.btn.btn-primary.no-button {
+  color: #fff;
+  border: 2px solid #fff;
+}
+
+button.btn.btn-secondary.yes-button:hover {
+  background-color: red;
+}
+
+button.btn.btn-primary.no-button:hover {
+  background-color: green;
+}
+.modal-title-alert {
+  font-family: "Roboto Slab", serif;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+}

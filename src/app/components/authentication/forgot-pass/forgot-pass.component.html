@@ -1,0 +1,113 @@
+<div class="container-fluid">
+  <i class="fa fa-arrow-circle-left" (click)="goback()" aria-hidden="true"></i>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5 col-md-12 my-5 px-5">
+        <h1 class="text-center">Forgot Password</h1>
+        <p class="text-center mb-3">
+          (You will receive a new password on your email)
+        </p>
+
+        <div class="alert alert-danger" *ngIf="allAlert">
+          {{ allAlert }}
+        </div>
+        <form [formGroup]="forgotPassForm" (ngSubmit)="onForgot()">
+          <div class="d-block my-3">
+            <div
+              class="form-group custom-control custom-radio custom-control-inline"
+            >
+              <input
+                id="student"
+                type="radio"
+                class="custom-control-input"
+                value="student"
+                name="role"
+                formControlName="role"
+              />
+              <label class="custom-control-label" for="student">Student</label>
+            </div>
+            <div
+              class="form-group custom-control custom-radio custom-control-inline"
+            >
+              <input
+                id="staff"
+                type="radio"
+                class="custom-control-input"
+                value="staff"
+                name="role"
+                formControlName="role"
+              />
+              <label class="custom-control-label" for="staff">Staff</label>
+            </div>
+            <div *ngIf="role?.invalid && (role?.dirty || role?.touched)">
+              <div class="alert alert-danger" *ngIf="role?.errors?.required">
+                Please select either value
+              </div>
+            </div>
+          </div>
+          <!-- Roll NO Input Show If role is equal to Student -->
+          <div
+            class="form-group"
+            *ngIf="forgotPassForm.value.role == 'student'"
+          >
+            <div
+              [class.form]="rollNo?.valid || rollNo?.untouched"
+              [class.is-invalid]="rollNo?.invalid && rollNo?.touched"
+            >
+              <label for="rollNo">Roll No</label>
+              <input
+                type="number"
+                class="form-control"
+                [class.is-invalid]="rollNo?.invalid && rollNo?.touched"
+                formControlName="rollNo"
+              />
+            </div>
+            <div *ngIf="rollNo?.invalid && (rollNo?.dirty || rollNo?.touched)">
+              <div class="alert alert-danger" *ngIf="rollNo?.errors?.required">
+                Roll No is required.
+              </div>
+              <!-- <div class="alert alert-danger" *ngIf="rollNo?.errors?.rollNo">
+                      Invalid rollNo Format
+                    </div> -->
+            </div>
+          </div>
+          <!-- Email input Input Show If role is equal to staff -->
+          <div class="form-group" *ngIf="forgotPassForm.value.role == 'staff'">
+            <div
+              [class.form]="email?.valid || email?.untouched"
+              [class.is-invalid]="email?.invalid && email?.touched"
+            >
+              <label class="email" for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [class.is-invalid]="email?.invalid && email?.touched"
+                formControlName="email"
+              />
+            </div>
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+              <div
+                class="alert alert-danger inner_alert"
+                *ngIf="email?.errors?.required"
+              >
+                Email is required.
+              </div>
+              <div
+                class="alert alert-danger inner_alert"
+                *ngIf="email?.errors?.email"
+              >
+                Invalid Email Format.
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-block mt-3">
+            Change Password
+          </button>
+        </form>
+      </div>
+      <div class="col-lg-7 col-md-12 my-5">
+        <img src="../../../../assets/login.svg" alt="login" />
+      </div>
+    </div>
+  </div>
+</div>

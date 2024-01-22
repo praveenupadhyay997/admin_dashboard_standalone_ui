@@ -1,0 +1,186 @@
+.container-fluid {
+  background-color: #f2d189;
+  min-height: 100vh;
+}
+
+/* --------------------Dynamic CSS------------ */
+h1 {
+  font-size: 24px;
+  color: #535461;
+}
+/* ---------------SideNavbar------------------ */
+.nav-tabs {
+  border-bottom: none;
+  width: 100%;
+}
+.navbar {
+  display: block;
+  padding: 0 8px 0 0;
+}
+.navbar-nav {
+  display: block;
+}
+.navbar-brand {
+  width: 100%;
+}
+.navbar img {
+  width: 64%;
+  padding: 16px;
+}
+.nav-item {
+  width: 100%;
+  border-radius: 8px;
+  display: inline-flex;
+  cursor: pointer;
+}
+.nav-item:hover {
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  background: #f2d189;
+  -webkit-box-shadow: 12px 12px 24px #ceb274, -12px -12px 24px #fff09e;
+  box-shadow: 12px 12px 24px #ceb274, -12px -12px 24px #fff09e;
+}
+.nav-link {
+  border: none;
+}
+
+.active {
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  background: #f0c27d;
+  -webkit-box-shadow: 12px 12px 24px #ceb274, -12px -12px 24px #fff09e;
+  box-shadow: 12px 12px 24px #ceb274, -12px -12px 24px #fff09e;
+}
+.active > a {
+  color: #535461 !important;
+}
+.nav-item a {
+  display: block;
+  width: 100%;
+  padding: 12px 24px;
+  margin-bottom: 4px;
+  color: #535461;
+  font-size: 14px;
+  font-weight: 600;
+}
+.nav-item a:hover {
+  color: #535461;
+  font-size: 14px;
+  font-weight: 600;
+}
+.time {
+  margin: 9px 0px;
+  width: 100%;
+  padding: 8px 0px;
+  color: #535461;
+  font-size: 12px;
+  font-weight: 600;
+}
+.fa {
+  width: 30px;
+  color: #535461;
+  padding-top: 8px;
+}
+.settings {
+  font-size: 14px;
+  display: block;
+  padding: 8px 16px;
+}
+.fa-cog {
+  font-size: 18px;
+  margin-right: 16px;
+}
+/* Settings Dropdown */
+.dropdown-menu {
+  background: #f0c27d;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+}
+.dropdown-item {
+  color: #535461;
+  font-size: 14px;
+  font-weight: 600;
+}
+.dropdown-item:hover {
+  cursor: pointer;
+  background-color: #f2d189;
+}
+/* ------------------ Welcome Dash Navbar ------------------ */
+.welcome {
+  padding: 0;
+  width: 100%;
+  margin: 0;
+  display: -webkit-inline-box;
+  background: url(../../../assets/dash_card.svg) no-repeat,
+    url(../../../assets/dashboard_bg_wave.svg) no-repeat;
+  background-size: contain, cover;
+  background-position: center right, bottom;
+}
+.image {
+  width: 108px;
+}
+.welcome .avatar {
+  width: 100%;
+  height: 108px;
+  border: 3px solid #e37d47;
+  padding: 4px;
+}
+/* Change Password Form */
+.form-group {
+  margin-bottom: 8px;
+}
+.form-group input {
+  border: 2px solid #535461;
+}
+.form-group label {
+  padding-left: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #535461;
+}
+.form-group > .is-invalid label {
+  color: #dc3545;
+}
+.form-group .form-control.is-invalid {
+  border-color: #dc3545;
+}
+.modal-body button {
+  background-color: #535461;
+  color: #fff;
+  font-weight: 600;
+  opacity: 0.9;
+}
+.modal-body button:hover {
+  opacity: 1;
+  color: #fff;
+}
+@media only screen and (max-width: 992px) {
+  .navbar-brand .active {
+    background: none;
+    border-radius: none;
+    box-shadow: none;
+  }
+  .navbar-brand img {
+    width: 24%;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .navbar-brand {
+    width: 68%;
+  }
+  .navbar-brand img {
+    width: 80%;
+    margin: 0 !important;
+  }
+  .welcome {
+    background: url(../../../assets/dashboard_bg_wave.svg) no-repeat;
+    background-size: cover;
+    background-position: bottom;
+  }
+  .media {
+    display: block;
+    margin: auto;
+    text-align: center;
+  }
+}

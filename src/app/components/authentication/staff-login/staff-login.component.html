@@ -1,0 +1,99 @@
+<div class="container-fluid">
+  <i class="fa fa-arrow-circle-left" (click)="goback()" aria-hidden="true"></i>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-5 col-md-12 my-5 px-5">
+        <h1 class="text-center mb-3">Staff Login</h1>
+        <div class="alert alert-danger" *ngIf="allAlert">
+          {{ allAlert }}
+        </div>
+        <form [formGroup]="staffSigninForm" (ngSubmit)="onSignin()">
+          <div class="form-group">
+            <div
+              [class.form]="role?.valid || role?.untouched"
+              [class.is-invalid]="role?.invalid && role?.touched"
+            >
+              <label for="role">Role</label>
+              <select
+                name="roles"
+                id="role"
+                class="custom-select"
+                formControlName="role"
+                [class.is-invalid]="role?.invalid && role?.touched"
+              >
+                <option *ngFor="let role of roles" [value]="role.id">
+                  {{ role.name }}
+                </option>
+              </select>
+            </div>
+            <div
+              class="alert alert-danger"
+              *ngIf="role?.invalid && (role?.dirty || role?.touched)"
+            >
+              Please select your Role.
+            </div>
+          </div>
+          <div class="form-group">
+            <div
+              [class.form]="email?.valid || email?.untouched"
+              [class.is-invalid]="email?.invalid && email?.touched"
+            >
+              <label for="email">Email</label>
+              <input
+                type="email"
+                class="form-control"
+                [class.is-invalid]="email?.invalid && email?.touched"
+                formControlName="email"
+              />
+            </div>
+            <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+              <div class="alert alert-danger" *ngIf="email?.errors?.required">
+                Email is required.
+              </div>
+              <div class="alert alert-danger" *ngIf="email?.errors?.email">
+                Invalid Email Format
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div
+              [class.form]="password?.valid || password?.untouched"
+              [class.is-invalid]="password?.invalid && password?.touched"
+            >
+              <label for="password">Password</label>
+              <input
+                type="password"
+                class="form-control"
+                [class.is-invalid]="password?.invalid && password?.touched"
+                formControlName="password"
+              />
+            </div>
+            <div
+              *ngIf="
+                password?.invalid && (password?.dirty || password?.touched)
+              "
+            >
+              <div
+                class="alert alert-danger"
+                *ngIf="password?.errors?.required"
+              >
+                Password is required.
+              </div>
+              <div class="alert alert-danger" *ngIf="password?.errors?.pattern">
+                Must contain 1 Uppercase, 1 Lowercase, 1 Special Character, 1
+                Number and Minimum 8 characters
+              </div>
+            </div>
+          </div>
+          <a class="forgot" routerLink="/forgotPass" routerLinkActive="active"
+            >Forgot Password?</a
+          >
+          <button type="submit" class="btn btn-block mt-3">Sign In</button>
+        </form>
+      </div>
+      <div class="col-lg-7 col-md-12 my-5">
+        <img src="../../../../assets/login.svg" alt="login" />
+      </div>
+    </div>
+  </div>
+</div>

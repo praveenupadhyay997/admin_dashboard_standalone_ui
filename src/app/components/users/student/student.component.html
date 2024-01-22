@@ -1,0 +1,2384 @@
+<div class="card mt-3 p-3">
+  <div class="mt-3 p-0" *ngIf="user.role == 'Admin' && !rollNo">
+    <!------------ Chart-js Starts Here ------------>
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-3">
+        <div class="bgGlass">
+          <div class="header"><h5 class="text-center">Total Students</h5></div>
+          <hr />
+          <canvas
+            baseChart
+            [data]="polarAreaChartData"
+            [labels]="polarAreaChartLabels"
+            [legend]="polarAreaLegend"
+            [chartType]="polarAreaChartType"
+            [colors]="polarAreaChartColors"
+          >
+          </canvas>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 mb-3">
+        <div class="bgGlass">
+          <div class="header">
+            <h5 class="text-center">11 Avg. Score</h5>
+            <div class="dropdown dropleft">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+              >
+                Filter
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" (click)="forEleven('Physics')"
+                  >Physics</a
+                >
+                <a class="dropdown-item" (click)="forEleven('Chemistry')"
+                  >Chemistry</a
+                >
+                <a class="dropdown-item" (click)="forEleven('Botany')"
+                  >Botany</a
+                >
+                <a class="dropdown-item" (click)="forEleven('Zoology')"
+                  >Zoology</a
+                >
+              </div>
+            </div>
+          </div>
+          <hr />
+          <canvas
+            baseChart
+            [datasets]="elevenBarChartData"
+            [labels]="elevenBarChartLabels"
+            [options]="elevenBarChartOptions"
+            [legend]="elevenBarChartLegend"
+            [chartType]="elevenBarChartType"
+            [colors]="elevenBarChartColors"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-12 mb-3">
+        <div class="bgGlass">
+          <div class="header">
+            <h5>12 Avg. Score</h5>
+            <div class="dropdown dropleft">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+              >
+                Filter
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" (click)="forTwelve('Physics')"
+                  >Physics</a
+                >
+                <a class="dropdown-item" (click)="forTwelve('Chemistry')"
+                  >Chemistry</a
+                >
+                <a class="dropdown-item" (click)="forTwelve('Botany')"
+                  >Botany</a
+                >
+                <a class="dropdown-item" (click)="forTwelve('Zoology')"
+                  >Zoology</a
+                >
+              </div>
+            </div>
+          </div>
+          <hr />
+          <canvas
+            baseChart
+            [datasets]="twelveBarChartData"
+            [labels]="twelveBarChartLabels"
+            [options]="twelveBarChartOptions"
+            [legend]="twelveBarChartLegend"
+            [chartType]="twelveBarChartType"
+            [colors]="twelveBarChartColors"
+          ></canvas>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 mb-3">
+        <div class="bgGlass">
+          <div class="header">
+            <h5>Target Avg. Score</h5>
+            <div class="dropdown dropleft">
+              <button
+                type="button"
+                class="btn btn-secondary btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+              >
+                Filter
+              </button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" (click)="forTarget('Physics')"
+                  >Physics</a
+                >
+                <a class="dropdown-item" (click)="forTarget('Chemistry')"
+                  >Chemistry</a
+                >
+                <a class="dropdown-item" (click)="forTarget('Botany')"
+                  >Botany</a
+                >
+                <a class="dropdown-item" (click)="forTarget('Zoology')"
+                  >Zoology</a
+                >
+              </div>
+            </div>
+          </div>
+          <hr />
+          <canvas
+            baseChart
+            [datasets]="targetBarChartData"
+            [labels]="targetBarChartLabels"
+            [options]="targetBarChartOptions"
+            [legend]="targetBarChartLegend"
+            [chartType]="targetBarChartType"
+            [colors]="targetBarChartColors"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+    <!------------- Chart Ends Here ------------>
+  </div>
+  <div *ngIf="rollNo">
+    <div class="media p-3" *ngIf="user.role != 'Student'">
+      <div class="avtaar">
+        <img
+          [src]="url ? url : '../../../../assets/avatar.png'"
+          alt="John Doe"
+          class="mr-3 rounded-circle"
+        />
+      </div>
+      <div class="media-body">
+        <h4 class="mb-0">
+          {{ student.fullName }} <small>({{ student.rollNo }})</small>
+          <button
+            type="button"
+            class="btn float-right export"
+            (click)="openModal()"
+            *ngIf="user.role != 'Receptionist'"
+          >
+            Edit Student
+          </button>
+        </h4>
+        <p class="mb-0"><span class="display_sdata">Batch :</span> {{ student.batch.batch }}</p>
+        <p class="mb-0"><span class="display_sdata">SMS Contact No :</span> {{ student.studentContact }}</p>
+        <p class="mb-0"><span class="display_sdata">Email Address :</span> {{ student.email }}</p>
+      </div>
+    </div>
+    <div class="container mt-3 p-0" *ngIf="user.role != 'Student'">
+      <section class="personal_info">
+        <h6 class="text-light">Personal Information</h6>
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>Father's Name</dt>
+              <dd>- {{ student.fatherName }}</dd>
+              <dt>Adhaar No</dt>
+              <dd>- {{ student.aadhaarNo }}</dd>
+            </dl>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>Mother's Name</dt>
+              <dd>- {{ student.motherName }}</dd>
+              <dt>Date of Birth</dt>
+              <dd>- {{ student.dob | date: "longDate" }}</dd>
+            </dl>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>Domicile State</dt>
+              <dd>- {{ student.state }}</dd>
+              <dt>Category</dt>
+              <dd>- {{ student.category }}</dd>
+            </dl>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>Permanent Address</dt>
+              <dd>- {{ student.address }}</dd>
+              <dt>Father's Contact No</dt>
+              <dd>- {{ student.fatherContact }}</dd>
+              <dt>Local Guardian Address</dt>
+              <dd>- {{ student.localGuardAdd }}</dd>
+            </dl>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>Father's Occupation</dt>
+              <dd>- {{ student.fathersOccupation }}</dd>
+              <dt>Email id</dt>
+              <dd>- {{ student.email }}</dd>
+              <dt>Student Contact No</dt>
+              <dd>- {{ student.localGuardNo }}</dd>
+              <dt>Academic Year</dt>
+              <dd>- {{ student.acadYear }}</dd>
+            </dl>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>Mother's Occupation</dt>
+              <dd>- {{ student.mothersOccupation }}</dd>
+              <dt>Local Address</dt>
+              <dd>- {{ student.localAddress }}</dd>
+              <dt>Bag Provided</dt>
+              <dd>- {{ student.bag }}</dd>
+              <dt>Module Card Provided</dt>
+              <dd>- {{ student.moduleCard }}</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+      <section class="academic">
+        <h6 class="text-light">Academics & School</h6>
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>10th Passing Year</dt>
+              <dd>- {{ student.passYearX }}</dd>
+              <dt>10th Percentage/Grade</dt>
+              <dd>- {{ student.gradeInX }}</dd>
+              <dt>10th School Name</dt>
+              <dd>- {{ student.schoolNameX }}</dd>
+              <dt>10th School Address</dt>
+              <dd>- {{ student.schoolAddressX }}</dd>
+              <dt>Past NEET AIR</dt>
+              <dd>- {{ student.pastNeetAir }}</dd>
+            </dl>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>11th Passing Year</dt>
+              <dd>- {{ student.passYearXI }}</dd>
+              <dt>11th Percentage/Grade</dt>
+              <dd>- {{ student.gradeInXI }}</dd>
+              <dt>11th School Name</dt>
+              <dd>- {{ student.schoolNameXI }}</dd>
+              <dt>11th School Address</dt>
+              <dd>- {{ student.schoolAddressXI }}</dd>
+              <dt>Past NEET Marks</dt>
+              <dd>- {{ student.pastNeetMarks }}</dd>
+            </dl>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <dl>
+              <dt>12th Passing Year</dt>
+              <dd>- {{ student.passYearXII }}</dd>
+              <dt>12th Percentage/Grade</dt>
+              <dd>- {{ student.gradeInXII }}</dd>
+              <dt>12th School Name</dt>
+              <dd>- {{ student.schoolNameXII }}</dd>
+              <dt>12th School Address</dt>
+              <dd>- {{ student.schoolAddressXII }}</dd>
+              <dt>Past NEET Remarks</dt>
+              <dd>- {{ student.pastNeetRemarks }}</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+      <section class="coaching_status">
+        <h6 class="text-light">Coaching Test Status</h6>
+        <div class="row">
+          <div class="container p-3">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="File Name"
+                    [(ngModel)]="filterTerm"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12"></div>
+              <div class="col-lg-3 col-md-6 col-sm-12">
+                <button
+                  type="button"
+                  class="btn btn-block btn-outline export"
+                  (click)="export()"
+                >
+                  <i class="fa fa-external-link"></i>
+                  Export to Excel
+                </button>
+              </div>
+            </div>
+            <div class="container mt-3 px-0">
+              <table
+                class="table table-striped table-bordered table-hover table-sm"
+              >
+                <thead>
+                  <tr class="text-center">
+                    <th
+                      [class.active]="order === 'nameOfExam'"
+                      (click)="setOrder('nameOfExam')"
+                    >
+                      <button type="button" class="btn btn btn-block">
+                        Name Of Exam
+                        <span [hidden]="reverse"
+                          ><i class="fa fa-arrow-down"></i></span
+                        ><span [hidden]="!reverse"
+                          ><i class="fa fa-arrow-up"></i
+                        ></span>
+                      </button>
+                    </th>
+                    <th>Date of Exam</th>
+                    <th>Marks Obtained</th>
+                    <th>Test Attendance</th>
+                  </tr>
+                </thead>
+                <tbody class="text-center">
+                  <tr
+                    *ngFor="
+                      let upload of uploads
+                        | filter: filterTerm
+                        | orderBy: order:reverse
+                        | paginate
+                          : {
+                              id: 'listing_pagination',
+                              itemsPerPage: 10,
+                              currentPage: page,
+                              totalItems: totalRecords
+                            };
+                      index as i
+                    "
+                  >
+                    <td>{{ upload.examName }}</td>
+                    <td>{{ upload.examDate | date: "longDate" }}</td>
+                    <td>{{ marks[i] }}</td>
+                    <td>{{ isPresent[i] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="container table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination"
+                  (pageChange)="page = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="coaching_status">
+        <h6 class="text-light">Coaching Fees Status</h6>
+        <div class="row">
+          <div class="container p-3">
+            <h5 class="student_fees_status">Your <span class="span_fees_status">2nd</span> Installment is due on <span class="span_fees_status">28 August, 2021.</span></h5>
+          </div>
+        </div>
+      </section>
+      <button
+        type="button"
+        class="btn btn-success float-right mt-3 mx-auto d-block"
+        printSectionId="stu-id"
+        [useExistingCss]="true"
+        ngxPrint
+      >
+        <i class="fa fa-print mr-2"></i>
+        Print
+      </button>
+    </div>
+  </div>
+  <div *ngIf="user.role != 'Student'">
+    <div *ngIf="!rollNo">
+      <div class="alert alert-info">
+        <strong>Info!</strong> Please click on view button on dashboard of
+        respective student you wanna see details.
+      </div>
+    </div>
+  </div>
+  <div class="container mt-3 p-0" *ngIf="user.role == 'Student'">
+    <section class="personal_info">
+      <h6 class="text-light">Personal Information</h6>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>Father's Name</dt>
+            <dd>- {{ student.fatherName }}</dd>
+            <dt>Adhaar No</dt>
+            <dd>- {{ student.aadhaarNo }}</dd>
+          </dl>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>Mother's Name</dt>
+            <dd>- {{ student.motherName }}</dd>
+            <dt>Date of Birth</dt>
+            <dd>- {{ student.dob | date: "longDate" }}</dd>
+          </dl>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>Domicile State</dt>
+            <dd>- {{ student.state }}</dd>
+            <dt>Category</dt>
+            <dd>- {{ student.category }}</dd>
+          </dl>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>Permanent Address</dt>
+            <dd>- {{ student.address }}</dd>
+            <dt>Contact No</dt>
+            <dd>- {{ student.studentContact }}</dd>
+            <dt>Local Guardian Address</dt>
+            <dd>- {{ student.localGuardAdd }}</dd>
+          </dl>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>Father's Occupation</dt>
+            <dd>- {{ student.fathersOccupation }}</dd>
+            <dt>Email id</dt>
+            <dd>- {{ student.email }}</dd>
+            <dt>Student Contact No</dt>
+            <dd>- {{ student.localGuardNo }}</dd>
+            <dt>Academic Year</dt>
+            <dd>- {{ student.acadYear }}</dd>
+          </dl>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>Mother's Occupation</dt>
+            <dd>- {{ student.mothersOccupation }}</dd>
+            <dt>Local Address</dt>
+            <dd>- {{ student.localAddress }}</dd>
+            <dt>Bag Provided</dt>
+            <dd>- {{ student.bag }}</dd>
+            <dt>Module Card Provided</dt>
+            <dd>- {{ student.moduleCard }}</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+    <section class="academic">
+      <h6 class="text-light">Academics & School</h6>
+      <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>10th Passing Year</dt>
+            <dd>- {{ student.passYearX }}</dd>
+            <dt>10th Percentage/Grade</dt>
+            <dd>- {{ student.gradeInX }}</dd>
+            <dt>10th School Name</dt>
+            <dd>- {{ student.schoolNameX }}</dd>
+            <dt>10th School Address</dt>
+            <dd>- {{ student.schoolAddressX }}</dd>
+            <dt>Past NEET AIR</dt>
+            <dd>- {{ student.pastNeetAir }}</dd>
+          </dl>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>11th Passing Year</dt>
+            <dd>- {{ student.passYearXI }}</dd>
+            <dt>11th Percentage/Grade</dt>
+            <dd>- {{ student.gradeInXI }}</dd>
+            <dt>11th School Name</dt>
+            <dd>- {{ student.schoolNameXI }}</dd>
+            <dt>11th School Address</dt>
+            <dd>- {{ student.schoolAddressXI }}</dd>
+            <dt>Past NEET Marks</dt>
+            <dd>- {{ student.pastNeetMarks }}</dd>
+          </dl>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <dl>
+            <dt>12th Passing Year</dt>
+            <dd>- {{ student.passYearXII }}</dd>
+            <dt>12th Percentage/Grade</dt>
+            <dd>- {{ student.gradeInXII }}</dd>
+            <dt>12th School Name</dt>
+            <dd>- {{ student.schoolNameXII }}</dd>
+            <dt>12th School Address</dt>
+            <dd>- {{ student.schoolAddressXII }}</dd>
+            <dt>Past NEET Remarks</dt>
+            <dd>- {{ student.pastNeetRemarks }}</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+    <section class="coaching_status">
+      <h6 class="text-light">Coaching Test Status</h6>
+      <div class="row">
+        <div class="container p-3">
+          <div class="table-responsive">
+            <table
+              class="table table-striped table-bordered table-hover table-sm"
+            >
+              <thead>
+                <tr class="text-center">
+                  <th
+                    [class.active]="order === 'nameOfExam'"
+                    (click)="setOrder('nameOfExam')"
+                  >
+                    <button type="button" class="btn btn btn-block">
+                      Name Of Exam
+                      <span [hidden]="reverse"
+                        ><i class="fa fa-arrow-down"></i></span
+                      ><span [hidden]="!reverse"
+                        ><i class="fa fa-arrow-up"></i
+                      ></span>
+                    </button>
+                  </th>
+                  <th>Date of Exam</th>
+                  <th>Marks Obtained</th>
+                  <th>Test Attendance</th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <tr
+                  *ngFor="
+                    let upload of uploads
+                      | filter: filterTerm
+                      | orderBy: order:reverse
+                      | paginate
+                        : {
+                            id: 'listing_pagination',
+                            itemsPerPage: 10,
+                            currentPage: page,
+                            totalItems: totalRecords
+                          };
+                    index as i
+                  "
+                >
+                  <td>{{ upload.examName }}</td>
+                  <td>{{ upload.examDate | date: "longDate" }}</td>
+                  <td>{{ marks[i] }}</td>
+                  <td>{{ isPresent[i] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="container table_paginations p-0">
+              <pagination-controls
+                id="listing_pagination"
+                (pageChange)="page = $event"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="coaching_status">
+      <h6 class="text-light">Coaching Fees Status</h6>
+      <div class="row">
+        <div class="container p-3">
+          <h5 class="student_fees_status">Your <span class="span_fees_status">2nd</span> Installment is due on <span class="span_fees_status">28 August, 2021.</span></h5>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- Modal Starts here -->
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{ display: display }">
+  <div
+    class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
+    role="document"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Student</h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="onCloseHandled()"
+        >
+          <span class="text-light" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-danger" *ngIf="updateAlert">
+          {{ updateAlert }}
+        </div>
+        <div class="alert alert-success" *ngIf="updateSuccessAlert">
+          {{ updateSuccessAlert }}
+        </div>
+        <form [formGroup]="updateStudentForm" (ngSubmit)="onUpdate()">
+          <!-- Reference Id and Roll No -->
+          <div class="form-inline">
+            <!-- Reference ID -->
+            <div class="form-group">
+              <div
+                [class.form]="referenceid?.valid || referenceid?.untouched"
+                [class.is-invalid]="
+                  referenceid?.invalid && referenceid?.touched
+                "
+              >
+                <label class="referenceid" for="referenceid"
+                  >Reference Id</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="
+                    referenceid?.invalid && referenceid?.touched
+                  "
+                  formControlName="referenceid"
+                />
+              </div>
+              <div
+                *ngIf="
+                  referenceid?.invalid &&
+                  (referenceid?.dirty || referenceid?.touched)
+                "
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="referenceid?.errors?.required"
+                >
+                  Reference ID is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="referenceid?.errors?.pattern"
+                >
+                  Reference Id Must be some combination/digit.
+                </div>
+              </div>
+            </div>
+            <!-- Roll No -->
+            <div class="form-group">
+              <div
+                [class.form]="rollno?.valid || rollno?.untouched"
+                [class.is-invalid]="rollno?.invalid && rollno?.touched"
+              >
+                <label class="rollno" for="rollno">Roll No</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="rollno?.invalid && rollno?.touched"
+                  formControlName="rollno"
+                />
+              </div>
+              <div
+                *ngIf="rollno?.invalid && (rollno?.dirty || rollno?.touched)"
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="rollno?.errors?.required"
+                >
+                  Roll No is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="rollno?.errors?.pattern"
+                >
+                  Reference Id Must be some digit.
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- File Avataar Image + Names -->
+          <div class="form-inline imageName">
+            <div class="form-group name">
+              <!-- Student Name -->
+              <div
+                [class.form]="name?.valid || name?.untouched"
+                [class.is-invalid]="name?.invalid && name?.touched"
+              >
+                <label class="text-left" for="name">Student Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="name?.invalid && name?.touched"
+                  formControlName="name"
+                />
+              </div>
+              <div *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="name?.errors?.required"
+                >
+                  Name is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="name?.errors?.pattern"
+                >
+                  Invalid Name Format
+                </div>
+              </div>
+              <!-- Fathers Name -->
+              <div
+                [class.form]="fname?.valid || fname?.untouched"
+                [class.is-invalid]="fname?.invalid && fname?.touched"
+              >
+                <label class="fname" for="name">Father's Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="fname?.invalid && fname?.touched"
+                  formControlName="fname"
+                />
+              </div>
+              <div *ngIf="fname?.invalid && (fname?.dirty || fname?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="fname?.errors?.required"
+                >
+                  Father's Name is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="fname?.errors?.pattern"
+                >
+                  Invalid Format
+                </div>
+              </div>
+              <!-- Mothers Name -->
+              <div
+                [class.form]="mname?.valid || mname?.untouched"
+                [class.is-invalid]="mname?.invalid && mname?.touched"
+              >
+                <label class="mname" for="name">Mother's Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="mname?.invalid && mname?.touched"
+                  formControlName="mname"
+                />
+              </div>
+              <div *ngIf="mname?.invalid && (mname?.dirty || mname?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="mname?.errors?.required"
+                >
+                  Mother's Name is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="mname?.errors?.minLength"
+                >
+                  Invalid
+                </div>
+              </div>
+            </div>
+            <div class="form-group profileImage">
+              <div
+                class="custom-file"
+                [class.form]="file?.valid || file?.untouched"
+                [class.is-invalid]="file?.invalid && file?.touched"
+              >
+                <label class="hoverable" for="fileInput">
+                  <img
+                    [src]="url ? url : '../../../../assets/avatar.png'"
+                    alt="Avatar"
+                    class="rounded mx-auto d-block avatar"
+                  />
+                  <div class="hover-text">Choose file</div>
+                  <div class="background"></div>
+                </label>
+                <input
+                  id="fileInput"
+                  type="file"
+                  name="file"
+                  accept="image/x-png,image/jpg,image/jpeg"
+                  (change)="onFileChange($event)"
+                  [class.is-invalid]="file?.invalid && file?.touched"
+                />
+                <div *ngIf="file?.invalid && (file?.dirty || file?.touched)">
+                  <div
+                    class="mt-2 alert alert-danger"
+                    *ngIf="file?.errors?.required"
+                  >
+                    Image is required.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Email, Father's & Mother's Occupation -->
+          <div class="form-inline occupation">
+            <!-- Student Email -->
+            <div class="form-group">
+              <div
+                [class.form]="email?.valid || email?.untouched"
+                [class.is-invalid]="email?.invalid && email?.touched"
+              >
+                <label class="email" for="email">Student's Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  [class.is-invalid]="email?.invalid && email?.touched"
+                  formControlName="email"
+                />
+              </div>
+              <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="email?.errors?.required"
+                >
+                  Email is required in standard format.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="email?.errors?.email"
+                >
+                  Invalid Email Format.
+                </div>
+              </div>
+            </div>
+            <!-- Father Occupation -->
+            <div class="form-group">
+              <div
+                [class.form]="focc?.valid || focc?.untouched"
+                [class.is-invalid]="focc?.invalid && focc?.touched"
+              >
+                <label class="focc" for="name">Father's Occupation</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="focc?.invalid && focc?.touched"
+                  formControlName="focc"
+                />
+              </div>
+            </div>
+            <!-- Mother's Occupation -->
+            <div class="form-group">
+              <div
+                [class.form]="mocc?.valid || mocc?.untouched"
+                [class.is-invalid]="mocc?.invalid && mocc?.touched"
+              >
+                <label class="mocc" for="name">Mother's Occupation</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="mocc?.invalid && mocc?.touched"
+                  formControlName="mocc"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- Student, Fathers, Mother, Local Guardian Contact -->
+          <div class="form-inline contacts">
+            <!-- SMS Contact -->
+            <div class="form-group">
+              <div
+                [class.form]="contact?.valid || contact?.untouched"
+                [class.is-invalid]="contact?.invalid && contact?.touched"
+              >
+                <label class="contact" for="contact">SMS Contact No</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="contact?.invalid && contact?.touched"
+                  formControlName="contact"
+                />
+              </div>
+              <div
+                *ngIf="contact?.invalid && (contact?.dirty || contact?.touched)"
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="contact?.errors?.required"
+                >
+                  Contact No is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="contact?.errors?.pattern"
+                >
+                  Contact No Must be of 10 digit.
+                </div>
+              </div>
+            </div>
+            <!-- Fathers Contact -->
+            <div class="form-group">
+              <div>
+                <label class="fmno" for="fmno">Father's Contact No</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="fmno"
+                />
+              </div>
+            </div>
+            <!-- Mothers Contact -->
+            <div class="form-group">
+              <div [class.form]="mmno?.valid || mmno?.untouched">
+                <label class="mmno" for="mmno">Mother's Contact No</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="mmno"
+                />
+              </div>
+            </div>
+            <!-- Local Guardian Contact -->
+            <div class="form-group">
+              <div [class.form]="lgmno?.valid || lgmno?.untouched">
+                <label class="lgmno" for="lgmno">
+                  Student Contact No
+                </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="lgmno"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- DOB, Aadhar, Category, PWD -->
+          <div class="form-inline personal_details">
+            <!-- DOB -->
+            <div class="form-group">
+              <div
+                [class.form]="dob?.valid || dob?.untouched"
+                [class.is-invalid]="dob?.invalid && dob?.touched"
+              >
+                <label class="text-left" for="dob">Date of Birth</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  [class.is-invalid]="dob?.invalid && dob?.touched"
+                  formControlName="dob"
+                />
+              </div>
+              <div *ngIf="dob?.invalid && (dob?.dirty || dob?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="dob?.errors?.required"
+                >
+                  dob is required.
+                </div>
+              </div>
+            </div>
+            <!-- Aadhar -->
+            <div class="form-group">
+              <div
+                [class.form]="aadhaarno?.valid || aadhaarno?.untouched"
+                [class.is-invalid]="aadhaarno?.invalid && aadhaarno?.touched"
+              >
+                <label class="aadhaarno" for="aadhaarno">Aadhaar No</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="aadhaarno?.invalid && aadhaarno?.touched"
+                  formControlName="aadhaarno"
+                />
+              </div>
+              <div
+                *ngIf="
+                  aadhaarno?.invalid && (aadhaarno?.dirty || aadhaarno?.touched)
+                "
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="aadhaarno?.errors?.required"
+                >
+                  Aadhaar No is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="aadhaarno?.errors?.pattern"
+                >
+                  Aadhaar No Must be of 12 digits.
+                </div>
+              </div>
+            </div>
+            <!-- Category -->
+            <div class="form-group">
+              <div
+                [class.form]="category?.valid || category?.untouched"
+                [class.is-invalid]="category?.invalid && category?.touched"
+              >
+                <label class="category" for="category">Category</label>
+                <select
+                  name="category"
+                  class="custom-select"
+                  formControlName="category"
+                  [class.is-invalid]="category?.invalid && category?.touched"
+                >
+                  <option value="General">General</option>
+                  <option value="SC">SC</option>
+                  <option value="ST">ST</option>
+                  <option value="OBC">OBC</option>
+                  <option value="EWS">EWS</option>
+                </select>
+              </div>
+              <div
+                class="alert alert-danger inner_alert"
+                *ngIf="
+                  category?.invalid && (category?.dirty || category?.touched)
+                "
+              >
+                Please select your category.
+              </div>
+            </div>
+            <!-- PWD -->
+            <div class="form-group">
+              <div [class.form]="pwd?.valid || pwd?.untouched">
+                <label class="pwd" for="pwd">PWD</label>
+                <select
+                  name="pwd"
+                  id="pwd"
+                  class="custom-select"
+                  formControlName="pwd"
+                >
+                  <option *ngFor="let pwd of pwds" [value]="pwd.id">
+                    {{ pwd.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- Address, State & District -->
+          <div class="form-inline">
+            <!-- State & District -->
+            <div class="form-group">
+              <div
+                [class.form]="state?.valid || state?.untouched"
+                [class.is-invalid]="state?.invalid && state?.touched"
+              >
+                <label class="state" for="state">State</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="state?.invalid && state?.touched"
+                  formControlName="state"
+                />
+              </div>
+              <div *ngIf="state?.invalid && (state?.dirty || state?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="state?.errors?.required"
+                >
+                  State is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="state?.errors?.pattern"
+                >
+                  Invalid State Format
+                </div>
+              </div>
+              <div
+                [class.form]="district?.valid || district?.untouched"
+                [class.is-invalid]="district?.invalid && district?.touched"
+              >
+                <label class="district" for="district">District</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="district?.invalid && district?.touched"
+                  formControlName="district"
+                />
+              </div>
+              <div
+                *ngIf="
+                  district?.invalid && (district?.dirty || district?.touched)
+                "
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="district?.errors?.required"
+                >
+                  District is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="district?.errors?.pattern"
+                >
+                  Invalid District Pattern
+                </div>
+              </div>
+            </div>
+            <!-- Address -->
+            <div class="form-group">
+              <div
+                [class.form]="address?.valid || address?.untouched"
+                [class.is-invalid]="address?.invalid && address?.touched"
+              >
+                <label class="address" for="address">Address</label>
+                <textarea
+                  class="form-control"
+                  id="address"
+                  formControlName="address"
+                  rows="5"
+                  [class.is-invalid]="address?.invalid && address?.touched"
+                ></textarea>
+              </div>
+              <div
+                *ngIf="address?.invalid && (address?.dirty || address?.touched)"
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="address?.errors?.required"
+                >
+                  Address is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="address?.errors?.minLength"
+                >
+                  Address must be of length 10
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Local Address, Local Guar. Address, Reference Medium -->
+          <div class="form-inline address">
+            <!-- Local Address -->
+            <div class="form-group">
+              <div
+                [class.form]="localaddress?.valid || localaddress?.untouched"
+                [class.is-invalid]="
+                  localaddress?.invalid && localaddress?.touched
+                "
+              >
+                <label class="localaddress" for="localaddress"
+                  >Local Address</label
+                >
+                <textarea
+                  class="form-control"
+                  id="localaddress"
+                  formControlName="localaddress"
+                  rows="3"
+                  [class.is-invalid]="
+                    localaddress?.invalid && localaddress?.touched
+                  "
+                ></textarea>
+              </div>
+              <div
+                *ngIf="
+                  localaddress?.invalid &&
+                  (localaddress?.dirty || localaddress?.touched)
+                "
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="localaddress?.errors?.required"
+                >
+                  Local Address is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="localaddress?.errors?.minLength"
+                >
+                  Local Address must be of length 10
+                </div>
+              </div>
+            </div>
+            <!-- Local Guardian Address -->
+            <div class="form-group">
+              <div
+                [class.form]="lgaddress?.valid || lgaddress?.untouched"
+                [class.is-invalid]="lgaddress?.invalid && lgaddress?.touched"
+              >
+                <label class="lgaddress" for="lgaddress"
+                  >Local Guardian Address</label
+                >
+                <textarea
+                  class="form-control"
+                  id="lgaddress"
+                  formControlName="lgaddress"
+                  rows="3"
+                  [class.is-invalid]="lgaddress?.invalid && lgaddress?.touched"
+                ></textarea>
+              </div>
+              <div
+                *ngIf="
+                  lgaddress?.invalid && (lgaddress?.dirty || lgaddress?.touched)
+                "
+              ></div>
+            </div>
+            <!-- Reference Medium -->
+            <div class="form-group">
+              <div
+                [class.form]="
+                  reference_from?.valid || reference_from?.untouched
+                "
+                [class.is-invalid]="
+                  reference_from?.invalid && reference_from?.touched
+                "
+              >
+                <label class="reference_from" for="reference_from"
+                  >Reference Medium</label
+                >
+                <textarea
+                  class="form-control"
+                  id="reference_from"
+                  formControlName="reference_from"
+                  rows="3"
+                  [class.is-invalid]="
+                    reference_from?.invalid && reference_from?.touched
+                  "
+                ></textarea>
+              </div>
+              <div
+                *ngIf="
+                  reference_from?.invalid &&
+                  (reference_from?.dirty || reference_from?.touched)
+                "
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="reference_from?.errors?.required"
+                >
+                  Reference From is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="reference_from?.errors?.minLength"
+                >
+                  Reference From must be of length 10
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Class & Medium -->
+          <div class="form-inline">
+            <!-- Class -->
+            <div class="form-group">
+              <div
+                [class.form]="class?.valid || class?.untouched"
+                [class.is-invalid]="class?.invalid && class?.touched"
+              >
+                <label class="class" for="class">Class</label>
+                <select
+                  name="class"
+                  id="class"
+                  class="custom-select"
+                  formControlName="class"
+                  [class.is-invalid]="class?.invalid && class?.touched"
+                >
+                  <option *ngFor="let class of classes" [value]="class.id">
+                    {{ class.name }}
+                  </option>
+                </select>
+              </div>
+              <div
+                class="alert alert-danger inner_alert"
+                *ngIf="class?.invalid && (class?.dirty || class?.touched)"
+              >
+                Please select your class.
+              </div>
+            </div>
+            <!-- Medium -->
+            <div class="form-group">
+              <div
+                [class.form]="medium?.valid || medium?.untouched"
+                [class.is-invalid]="medium?.invalid && medium?.touched"
+              >
+                <label class="medium" for="medium">Medium</label>
+                <select
+                  name="medium"
+                  id="medium"
+                  class="custom-select"
+                  formControlName="medium"
+                  [class.is-invalid]="medium?.invalid && medium?.touched"
+                >
+                  <option *ngFor="let medium of mediums" [value]="medium.id">
+                    {{ medium.name }}
+                  </option>
+                </select>
+              </div>
+              <div
+                class="alert alert-danger inner_alert"
+                *ngIf="medium?.invalid && (medium?.dirty || medium?.touched)"
+              >
+                Please select your medium.
+              </div>
+            </div>
+          </div>
+          <!-- Counseller Name & Cabin -->
+          <div class="form-inline">
+            <div class="form-group">
+              <div
+                [class.form]="cname?.valid || cname?.untouched"
+                [class.is-invalid]="cname?.invalid && cname?.touched"
+              >
+                <label class="cname" for="cname">Couseller Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="cname?.invalid && cname?.touched"
+                  formControlName="cname"
+                />
+              </div>
+              <div *ngIf="cname?.invalid && (cname?.dirty || cname?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="cname?.errors?.required"
+                >
+                  Couseller Name is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="cname?.errors?.pattern"
+                >
+                  Invalid Name Format
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div
+                [class.form]="cabin?.valid || cabin?.untouched"
+                [class.is-invalid]="cabin?.invalid && cabin?.touched"
+              >
+                <label class="cabin" for="cabin">Couseller Cabin</label>
+                <select
+                  name="cabin"
+                  id="cabin"
+                  class="custom-select"
+                  formControlName="cabin"
+                  [class.is-invalid]="cabin?.invalid && cabin?.touched"
+                >
+                  <option *ngFor="let cabin of cabins" [value]="cabin.id">
+                    {{ cabin.name }}
+                  </option>
+                </select>
+              </div>
+              <div
+                class="alert alert-danger inner_alert"
+                *ngIf="cabin?.invalid && (cabin?.dirty || cabin?.touched)"
+              >
+                Please select Couseller Cabin.
+              </div>
+            </div>
+          </div>
+          <!------------------------ Academic Details ---------------------------->
+          <hr />
+          <div class="form-inline year">
+            <!-- 10th Passing Year-->
+            <div class="form-group">
+              <div
+                [class.form]="poyoX?.valid || poyoX?.untouched"
+                [class.is-invalid]="poyoX?.invalid && poyoX?.touched"
+              >
+                <label class="poyoX" for="poyoX"
+                  >Passing Out Year of 10th</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="poyoX?.invalid && poyoX?.touched"
+                  formControlName="poyoX"
+                />
+              </div>
+            </div>
+            <!-- 11th Passing Year -->
+            <div class="form-group">
+              <div
+                [class.form]="poyoXI?.valid || poyoXI?.untouched"
+                [class.is-invalid]="poyoXI?.invalid && poyoXI?.touched"
+              >
+                <label class="poyoXI" for="poyoXI"
+                  >Passing Out Year of 11th</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="poyoXI?.invalid && poyoXI?.touched"
+                  formControlName="poyoXI"
+                />
+              </div>
+            </div>
+            <!-- 12th Passing Year -->
+            <div class="form-group">
+              <div
+                [class.form]="poyoXII?.valid || poyoXII?.untouched"
+                [class.is-invalid]="poyoXII?.invalid && poyoXII?.touched"
+              >
+                <label class="poyoXII" for="poyoXII"
+                  >Passing Out Year of 12th</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="poyoXII?.invalid && poyoXII?.touched"
+                  formControlName="poyoXII"
+                />
+              </div>
+            </div>
+            <!-- Past NEET Marks -->
+            <div class="form-group">
+              <div
+                [class.form]="pastneetmarks?.valid || pastneetmarks?.untouched"
+                [class.is-invalid]="
+                  pastneetmarks?.invalid && pastneetmarks?.touched
+                "
+              >
+                <label class="pastneetmarks" for="pastneetmarks"
+                  >Past NEET Marks</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="
+                    pastneetmarks?.invalid && pastneetmarks?.touched
+                  "
+                  formControlName="pastneetmarks"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-inline grades">
+            <!-- 10th Grades-->
+            <div class="form-group">
+              <div
+                [class.form]="gradeX?.valid || gradeX?.untouched"
+                [class.is-invalid]="gradeX?.invalid && gradeX?.touched"
+              >
+                <label class="gradeX" for="gradeX">Grade in 10th</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="gradeX?.invalid && gradeX?.touched"
+                  formControlName="gradeX"
+                />
+              </div>
+            </div>
+            <!-- 11th Grades -->
+            <div class="form-group">
+              <div
+                [class.form]="gradeXI?.valid || gradeXI?.untouched"
+                [class.is-invalid]="gradeXI?.invalid && gradeXI?.touched"
+              >
+                <label class="gradeXI" for="gradeXI">Grade in 11th</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="gradeXI?.invalid && gradeXI?.touched"
+                  formControlName="gradeXI"
+                />
+              </div>
+            </div>
+            <!-- 12th Grades -->
+            <div class="form-group">
+              <div
+                [class.form]="gradeXII?.valid || gradeXII?.untouched"
+                [class.is-invalid]="gradeXII?.invalid && gradeXII?.touched"
+              >
+                <label class="gradeXII" for="gradeXII">Grade in 12th</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="gradeXII?.invalid && gradeXII?.touched"
+                  formControlName="gradeXII"
+                />
+              </div>
+            </div>
+            <!-- Past NEET AIR -->
+            <div class="form-group">
+              <div
+                [class.form]="pastneetair?.valid || pastneetair?.untouched"
+                [class.is-invalid]="
+                  pastneetair?.invalid && pastneetair?.touched
+                "
+              >
+                <label class="pastneetair" for="pastneetair"
+                  >Past NEET AIR</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="
+                    pastneetair?.invalid && pastneetair?.touched
+                  "
+                  formControlName="pastneetair"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-inline school_name">
+            <!-- 10th School Name -->
+            <div class="form-group">
+              <div
+                [class.form]="schoolnameX?.valid || schoolnameX?.untouched"
+                [class.is-invalid]="
+                  schoolnameX?.invalid && schoolnameX?.touched
+                "
+              >
+                <label class="schoolnameX" for="schoolnameX"
+                  >School Name of 10th</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="
+                    schoolnameX?.invalid && schoolnameX?.touched
+                  "
+                  formControlName="schoolnameX"
+                />
+              </div>
+            </div>
+            <!-- 11th School Name -->
+            <div class="form-group">
+              <div
+                [class.form]="schoolnameXI?.valid || schoolnameXI?.untouched"
+                [class.is-invalid]="
+                  schoolnameXI?.invalid && schoolnameXI?.touched
+                "
+              >
+                <label class="schoolnameXI" for="schoolnameXI"
+                  >School Name of 11th</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="
+                    schoolnameXI?.invalid && schoolnameXI?.touched
+                  "
+                  formControlName="schoolnameXI"
+                />
+              </div>
+            </div>
+            <!-- 12th School Name -->
+            <div class="form-group">
+              <div
+                [class.form]="schoolnameXII?.valid || schoolnameXII?.untouched"
+                [class.is-invalid]="
+                  schoolnameXII?.invalid && schoolnameXII?.touched
+                "
+              >
+                <label class="schoolnameXII" for="schoolnameXII"
+                  >School Name of 12th</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="
+                    schoolnameXII?.invalid && schoolnameXII?.touched
+                  "
+                  formControlName="schoolnameXII"
+                />
+              </div>
+            </div>
+            <!-- No. of Attempts in Neet -->
+            <div class="form-group">
+              <div
+                [class.form]="
+                  pastneetattemptsno?.valid || pastneetattemptsno?.untouched
+                "
+                [class.is-invalid]="
+                  pastneetattemptsno?.invalid && pastneetattemptsno?.touched
+                "
+              >
+                <label class="pastneetattemptsno" for="pastneetattemptsno"
+                  >No. of Attempts</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="
+                    pastneetattemptsno?.invalid && pastneetattemptsno?.touched
+                  "
+                  formControlName="pastneetattemptsno"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="form-inline addressess">
+            <!-- 10th School Address -->
+            <div class="form-group">
+              <div
+                [class.form]="schooladdX?.valid || schooladdX?.untouched"
+                [class.is-invalid]="schooladdX?.invalid && schooladdX?.touched"
+              >
+                <label class="schooladdX" for="schooladdX"
+                  >School Address of 10th</label
+                >
+                <textarea
+                  class="form-control"
+                  id="schooladdX"
+                  formControlName="schooladdX"
+                  rows="4"
+                  [class.is-invalid]="
+                    schooladdX?.invalid && schooladdX?.touched
+                  "
+                ></textarea>
+              </div>
+            </div>
+            <!-- 11th School Address -->
+            <div class="form-group">
+              <div
+                [class.form]="schooladdXI?.valid || schooladdXI?.untouched"
+                [class.is-invalid]="
+                  schooladdXI?.invalid && schooladdXI?.touched
+                "
+              >
+                <label class="schooladdXI" for="schooladdXI"
+                  >School Address of 11th</label
+                >
+                <textarea
+                  class="form-control"
+                  id="schooladdXI"
+                  formControlName="schooladdXI"
+                  rows="4"
+                  [class.is-invalid]="
+                    schooladdXI?.invalid && schooladdXI?.touched
+                  "
+                ></textarea>
+              </div>
+            </div>
+            <!-- 12th School Address -->
+            <div class="form-group">
+              <div
+                [class.form]="schooladdXII?.valid || schooladdXII?.untouched"
+                [class.is-invalid]="
+                  schooladdXII?.invalid && schooladdXII?.touched
+                "
+              >
+                <label class="schooladdXII" for="schooladdXII"
+                  >School Address of 12th</label
+                >
+                <textarea
+                  class="form-control"
+                  id="schooladdXII"
+                  formControlName="schooladdXII"
+                  rows="4"
+                  [class.is-invalid]="
+                    schooladdXII?.invalid && schooladdXII?.touched
+                  "
+                ></textarea>
+              </div>
+            </div>
+            <!-- Past NEET Remarks -->
+            <div class="form-group">
+              <div
+                [class.form]="
+                  pastneetremarks?.valid || pastneetremarks?.untouched
+                "
+                [class.is-invalid]="
+                  pastneetremarks?.invalid && pastneetremarks?.touched
+                "
+              >
+                <label class="pastneetremarks" for="pastneetremarks"
+                  >Past NEET Remarks</label
+                >
+                <textarea
+                  class="form-control"
+                  id="pastneetremarks"
+                  formControlName="pastneetremarks"
+                  rows="4"
+                  [class.is-invalid]="
+                    pastneetremarks?.invalid && pastneetremarks?.touched
+                  "
+                ></textarea>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="form-inline extras">
+            <div class="form-group">
+              <div
+                [class.form]="acadyear?.valid || acadyear?.untouched"
+                [class.is-invalid]="acadyear?.invalid && acadyear?.touched"
+              >
+                <label class="acadyear" for="acadyear">Academic Year</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  [class.is-invalid]="acadyear?.invalid && acadyear?.touched"
+                  formControlName="acadyear"
+                />
+              </div>
+              <div
+                *ngIf="
+                  acadyear?.invalid && (acadyear?.dirty || acadyear?.touched)
+                "
+              >
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="acadyear?.errors?.required"
+                >
+                  Academic Year is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="acadyear?.errors?.pattern"
+                >
+                  Academic Year Must be 4 digit least (1950-2050).
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div
+                [class.form]="batch?.valid || batch?.untouched"
+                [class.is-invalid]="batch?.invalid && batch?.touched"
+              >
+                <label class="batch" for="batch">Batch</label>
+                <select
+                  name="batch"
+                  id="batch"
+                  class="custom-select"
+                  formControlName="batch"
+                  [class.is-invalid]="batch?.invalid && batch?.touched"
+                >
+                  <option *ngFor="let batch of batches" [value]="batch._id">
+                    {{ batch.batch }}
+                  </option>
+                </select>
+                <!-- <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="batch?.invalid && batch?.touched"
+                  formControlName="batch"
+                /> -->
+              </div>
+              <div *ngIf="batch?.invalid && (batch?.dirty || batch?.touched)">
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="batch?.errors?.required"
+                >
+                  Batch is required.
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="batch?.errors?.pattern"
+                >
+                  Batch must follow pattern.
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div
+                [class.form]="bag?.valid || bag?.untouched"
+                [class.is-invalid]="bag?.invalid && bag?.touched"
+              >
+                <label class="bag" for="bag">Bag Provided</label>
+                <select
+                  name="bag"
+                  id="bag"
+                  class="custom-select"
+                  formControlName="bag"
+                  [class.is-invalid]="bag?.invalid && bag?.touched"
+                >
+                  <option *ngFor="let bag of bags" [value]="bag.id">
+                    {{ bag.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <div
+                [class.form]="modulecard?.valid || modulecard?.untouched"
+                [class.is-invalid]="modulecard?.invalid && modulecard?.touched"
+              >
+                <label class="modulecard" for="modulecard"
+                  >Module Card Provided</label
+                >
+                <select
+                  name="modulecard"
+                  id="modulecard"
+                  class="custom-select"
+                  formControlName="modulecard"
+                  [class.is-invalid]="
+                    modulecard?.invalid && modulecard?.touched
+                  "
+                >
+                  <option
+                    *ngFor="let modulecard of modulecards"
+                    [value]="modulecard.id"
+                  >
+                    {{ modulecard.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- Submit Buttons -->
+          <div class="btn-group btn-block">
+            <button
+              type="button"
+              (click)="updateStudentForm.reset()"
+              class="btn btn-outline-danger"
+            >
+              Reset
+            </button>
+            <button type="submit" class="ml-3 btn btn-outline-success">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-default"
+          (click)="onCloseHandled()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Student Detail Print Section-->
+
+<div class="hidddenPrint">
+  <div class="print_container" id="stu-id">
+    <div class="card mt-3 p-3">
+      <div class="mt-3 p-0" *ngIf="user.role == 'Admin' && !rollNo">
+        <!------------ Chart-js Starts Here ------------>
+        <div class="row">
+          <div class="col-lg-6 col-md-12 mb-3">
+            <div class="bgGlass">
+              <div class="header">
+                <h5 class="text-center">Total Students</h5>
+              </div>
+              <hr />
+              <canvas
+                baseChart
+                [data]="polarAreaChartData"
+                [labels]="polarAreaChartLabels"
+                [legend]="polarAreaLegend"
+                [chartType]="polarAreaChartType"
+                [colors]="polarAreaChartColors"
+              >
+              </canvas>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-12 mb-3">
+            <div class="bgGlass">
+              <div class="header">
+                <h5 class="text-center">11 Avg. Score</h5>
+                <div class="dropdown dropleft">
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm dropdown-toggle"
+                    data-toggle="dropdown"
+                  >
+                    Filter
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" (click)="forEleven('Physics')"
+                      >Physics</a
+                    >
+                    <a class="dropdown-item" (click)="forEleven('Chemistry')"
+                      >Chemistry</a
+                    >
+                    <a class="dropdown-item" (click)="forEleven('Botany')"
+                      >Botany</a
+                    >
+                    <a class="dropdown-item" (click)="forEleven('Zoology')"
+                      >Zoology</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <canvas
+                baseChart
+                [datasets]="elevenBarChartData"
+                [labels]="elevenBarChartLabels"
+                [options]="elevenBarChartOptions"
+                [legend]="elevenBarChartLegend"
+                [chartType]="elevenBarChartType"
+                [colors]="elevenBarChartColors"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-6 col-md-12 mb-3">
+            <div class="bgGlass">
+              <div class="header">
+                <h5>12 Avg. Score</h5>
+                <div class="dropdown dropleft">
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm dropdown-toggle"
+                    data-toggle="dropdown"
+                  >
+                    Filter
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" (click)="forTwelve('Physics')"
+                      >Physics</a
+                    >
+                    <a class="dropdown-item" (click)="forTwelve('Chemistry')"
+                      >Chemistry</a
+                    >
+                    <a class="dropdown-item" (click)="forTwelve('Botany')"
+                      >Botany</a
+                    >
+                    <a class="dropdown-item" (click)="forTwelve('Zoology')"
+                      >Zoology</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <canvas
+                baseChart
+                [datasets]="twelveBarChartData"
+                [labels]="twelveBarChartLabels"
+                [options]="twelveBarChartOptions"
+                [legend]="twelveBarChartLegend"
+                [chartType]="twelveBarChartType"
+                [colors]="twelveBarChartColors"
+              ></canvas>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12 mb-3">
+            <div class="bgGlass">
+              <div class="header">
+                <h5>Target Avg. Score</h5>
+                <div class="dropdown dropleft">
+                  <button
+                    type="button"
+                    class="btn btn-secondary btn-sm dropdown-toggle"
+                    data-toggle="dropdown"
+                  >
+                    Filter
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" (click)="forTarget('Physics')"
+                      >Physics</a
+                    >
+                    <a class="dropdown-item" (click)="forTarget('Chemistry')"
+                      >Chemistry</a
+                    >
+                    <a class="dropdown-item" (click)="forTarget('Botany')"
+                      >Botany</a
+                    >
+                    <a class="dropdown-item" (click)="forTarget('Zoology')"
+                      >Zoology</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <canvas
+                baseChart
+                [datasets]="targetBarChartData"
+                [labels]="targetBarChartLabels"
+                [options]="targetBarChartOptions"
+                [legend]="targetBarChartLegend"
+                [chartType]="targetBarChartType"
+                [colors]="targetBarChartColors"
+              ></canvas>
+            </div>
+          </div>
+        </div>
+        <!------------- Chart Ends Here ------------>
+      </div>
+      <div *ngIf="rollNo">
+        <div class="media p-3" *ngIf="user.role == 'Admin'">
+          <div class="avtaar">
+            <img
+              [src]="url ? url : '../../../../assets/avatar.png'"
+              alt="John Doe"
+              class="mr-3 rounded-circle"
+            />
+          </div>
+          <div class="media-body">
+            <h4 class="mb-0">
+              {{ student.fullName }} <small>({{ student.rollNo }})</small>
+              <!-- <button
+                type="button"
+                class="btn float-right export"
+                (click)="openModal()"
+                *ngIf="user.role == 'Admin'"
+              >
+                Edit Student
+              </button> -->
+            </h4>
+            <p class="mb-0"><span class="display_sdata">Batch :</span> {{ student.batch.batch }}</p>
+            <p class="mb-0"><span class="display_sdata">SMS Contact No :</span> {{ student.studentContact }}</p>
+            <p class="mb-0"><span class="display_sdata">Email Address :</span> {{ student.email }}</p>
+          </div>
+        </div>
+        <div class="container mt-3 p-0" *ngIf="user.role == 'Admin'">
+          <section class="personal_info">
+            <h6 class="text-light">Personal Information</h6>
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>Father's Name</dt>
+                  <dd>- {{ student.fatherName }}</dd>
+                  <dt>Adhaar No</dt>
+                  <dd>- {{ student.aadhaarNo }}</dd>
+                </dl>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>Mother's Name</dt>
+                  <dd>- {{ student.motherName }}</dd>
+                  <dt>Date of Birth</dt>
+                  <dd>- {{ student.dob | date: "longDate" }}</dd>
+                </dl>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>Domicile State</dt>
+                  <dd>- {{ student.state }}</dd>
+                  <dt>Category</dt>
+                  <dd>- {{ student.category }}</dd>
+                </dl>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>Permanent Address</dt>
+                  <dd>- {{ student.address }}</dd>
+                  <dt>Father's Contact No</dt>
+                  <dd>- {{ student.fatherContact }}</dd>
+                  <dt>Local Guardian Address</dt>
+                  <dd>- {{ student.localGuardAdd }}</dd>
+                </dl>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>Father's Occupation</dt>
+                  <dd>- {{ student.fathersOccupation }}</dd>
+                  <dt>Email id</dt>
+                  <dd>- {{ student.email }}</dd>
+                  <dt>Student Contact No</dt>
+                  <dd>- {{ student.localGuardNo }}</dd>
+                  <dt>Academic Year</dt>
+                  <dd>- {{ student.acadYear }}</dd>
+                </dl>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>Mother's Occupation</dt>
+                  <dd>- {{ student.mothersOccupation }}</dd>
+                  <dt>Local Address</dt>
+                  <dd>- {{ student.localAddress }}</dd>
+                  <dt>Bag Provided</dt>
+                  <dd>- {{ student.bag }}</dd>
+                  <dt>Module Card Provided</dt>
+                  <dd>- {{ student.moduleCard }}</dd>
+                </dl>
+              </div>
+            </div>
+          </section>
+          <section class="academic">
+            <h6 class="text-light">Academics & School</h6>
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>10th Passing Year</dt>
+                  <dd>- {{ student.passYearX }}</dd>
+                  <dt>10th Percentage/Grade</dt>
+                  <dd>- {{ student.gradeInX }}</dd>
+                  <dt>10th School Name</dt>
+                  <dd>- {{ student.schoolNameX }}</dd>
+                  <dt>10th School Address</dt>
+                  <dd>- {{ student.schoolAddressX }}</dd>
+                  <dt>Past NEET AIR</dt>
+                  <dd>- {{ student.pastNeetAir }}</dd>
+                </dl>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>11th Passing Year</dt>
+                  <dd>- {{ student.passYearXI }}</dd>
+                  <dt>11th Percentage/Grade</dt>
+                  <dd>- {{ student.gradeInXI }}</dd>
+                  <dt>11th School Name</dt>
+                  <dd>- {{ student.schoolNameXI }}</dd>
+                  <dt>11th School Address</dt>
+                  <dd>- {{ student.schoolAddressXI }}</dd>
+                  <dt>Past NEET Marks</dt>
+                  <dd>- {{ student.pastNeetMarks }}</dd>
+                </dl>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <dl>
+                  <dt>12th Passing Year</dt>
+                  <dd>- {{ student.passYearXII }}</dd>
+                  <dt>12th Percentage/Grade</dt>
+                  <dd>- {{ student.gradeInXII }}</dd>
+                  <dt>12th School Name</dt>
+                  <dd>- {{ student.schoolNameXII }}</dd>
+                  <dt>12th School Address</dt>
+                  <dd>- {{ student.schoolAddressXII }}</dd>
+                  <dt>Past NEET Remarks</dt>
+                  <dd>- {{ student.pastNeetRemarks }}</dd>
+                </dl>
+              </div>
+            </div>
+          </section>
+          <section class="coaching_status">
+            <h6 class="text-light">Coaching Test Status</h6>
+            <div class="row">
+              <div class="container p-3">
+                <div class="row">
+                  <div class="col-lg-5 col-md-6 col-sm-12">
+                    <form class="form-inline">
+                      <input
+                        class="form-control mr-sm-2"
+                        type="text"
+                        placeholder="File Name"
+                        [(ngModel)]="filterTerm"
+                        name="filter"
+                      />
+                      <button class="btn" type="submit">Search</button>
+                    </form>
+                  </div>
+                  <div class="col-lg-4 col-md-6 col-sm-12"></div>
+                  <div class="col-lg-3 col-md-6 col-sm-12">
+                    <!-- <button
+                      type="button"
+                      class="btn btn-block btn-outline export"
+                      (click)="export()"
+                    >
+                      <i class="fa fa-external-link"></i>
+                      Export to Excel
+                    </button> -->
+                  </div>
+                </div>
+                <div class="container mt-3 px-0">
+                  <table
+                    class="
+                      table table-striped table-bordered table-hover table-sm
+                    "
+                  >
+                    <thead>
+                      <tr class="text-center">
+                        <th
+                          [class.active]="order === 'nameOfExam'"
+                          (click)="setOrder('nameOfExam')"
+                        >
+                          <button type="button" class="btn btn btn-block">
+                            Name Of Exam
+                            <span [hidden]="reverse"
+                              ><i class="fa fa-arrow-down"></i></span
+                            ><span [hidden]="!reverse"
+                              ><i class="fa fa-arrow-up"></i
+                            ></span>
+                          </button>
+                        </th>
+                        <th>Date of Exam</th>
+                        <th>Marks Obtained</th>
+                        <th>Test Attendance</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-center">
+                      <tr
+                        *ngFor="
+                          let upload of uploads
+                            | filter: filterTerm
+                            | orderBy: order:reverse
+                            | paginate
+                              : {
+                                  id: 'listing_pagination',
+                                  itemsPerPage: 10,
+                                  currentPage: page,
+                                  totalItems: totalRecords
+                                };
+                          index as i
+                        "
+                      >
+                        <td>{{ upload.examName }}</td>
+                        <td>{{ upload.examDate | date: "longDate" }}</td>
+                        <td>{{ marks[i] }}</td>
+                        <td>{{ isPresent[i] }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="container table_paginations p-0">
+                    <pagination-controls
+                      id="listing_pagination"
+                      (pageChange)="page = $event"
+                    ></pagination-controls>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section class="coaching_status">
+            <h6 class="text-light">Coaching Fees Status</h6>
+            <div class="row">
+              <div class="container p-3">
+                <h5 class="student_fees_status">Your <span class="span_fees_status">2nd</span> Installment is due on <span class="span_fees_status">28 August, 2021.</span></h5>
+              </div>
+            </div>
+          </section>
+          <!-- <button
+            type="button"
+            class="btn btn-success float-right mt-3 mx-auto d-block"
+            printSectionId="stu-id"
+            [useExistingCss]="true"
+            ngxPrint
+          >
+            <i class="fa fa-print mr-2"></i>
+            Print
+          </button> -->
+        </div>
+      </div>
+      <div class="container mt-3 p-0" *ngIf="user.role == 'Student'">
+        <section class="personal_info">
+          <h6 class="text-light">Personal Information</h6>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>Father's Name</dt>
+                <dd>- {{ student.fatherName }}</dd>
+                <dt>Adhaar No</dt>
+                <dd>- {{ student.aadhaarNo }}</dd>
+              </dl>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>Mother's Name</dt>
+                <dd>- {{ student.motherName }}</dd>
+                <dt>Date of Birth</dt>
+                <dd>- {{ student.dob | date: "longDate" }}</dd>
+              </dl>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>Domicile State</dt>
+                <dd>- {{ student.state }}</dd>
+                <dt>Category</dt>
+                <dd>- {{ student.category }}</dd>
+              </dl>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>Permanent Address</dt>
+                <dd>- {{ student.address }}</dd>
+                <dt>Contact No</dt>
+                <dd>- {{ student.studentContact }}</dd>
+                <dt>Local Guardian Address</dt>
+                <dd>- {{ student.localGuardAdd }}</dd>
+              </dl>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>Father's Occupation</dt>
+                <dd>- {{ student.fathersOccupation }}</dd>
+                <dt>Email id</dt>
+                <dd>- {{ student.email }}</dd>
+                <dt>Student Contact No</dt>
+                <dd>- {{ student.localGuardNo }}</dd>
+                <dt>Academic Year</dt>
+                <dd>- {{ student.acadYear }}</dd>
+              </dl>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>Mother's Occupation</dt>
+                <dd>- {{ student.mothersOccupation }}</dd>
+                <dt>Local Address</dt>
+                <dd>- {{ student.localAddress }}</dd>
+                <dt>Bag Provided</dt>
+                <dd>- {{ student.bag }}</dd>
+                <dt>Module Card Provided</dt>
+                <dd>- {{ student.moduleCard }}</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+        <section class="academic">
+          <h6 class="text-light">Academics & School</h6>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>10th Passing Year</dt>
+                <dd>- {{ student.passYearX }}</dd>
+                <dt>10th Percentage/Grade</dt>
+                <dd>- {{ student.gradeInX }}</dd>
+                <dt>10th School Name</dt>
+                <dd>- {{ student.schoolNameX }}</dd>
+                <dt>10th School Address</dt>
+                <dd>- {{ student.schoolAddressX }}</dd>
+                <dt>Past NEET AIR</dt>
+                <dd>- {{ student.pastNeetAir }}</dd>
+              </dl>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>11th Passing Year</dt>
+                <dd>- {{ student.passYearXI }}</dd>
+                <dt>11th Percentage/Grade</dt>
+                <dd>- {{ student.gradeInXI }}</dd>
+                <dt>11th School Name</dt>
+                <dd>- {{ student.schoolNameXI }}</dd>
+                <dt>11th School Address</dt>
+                <dd>- {{ student.schoolAddressXI }}</dd>
+                <dt>Past NEET Marks</dt>
+                <dd>- {{ student.pastNeetMarks }}</dd>
+              </dl>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+              <dl>
+                <dt>12th Passing Year</dt>
+                <dd>- {{ student.passYearXII }}</dd>
+                <dt>12th Percentage/Grade</dt>
+                <dd>- {{ student.gradeInXII }}</dd>
+                <dt>12th School Name</dt>
+                <dd>- {{ student.schoolNameXII }}</dd>
+                <dt>12th School Address</dt>
+                <dd>- {{ student.schoolAddressXII }}</dd>
+                <dt>Past NEET Remarks</dt>
+                <dd>- {{ student.pastNeetRemarks }}</dd>
+              </dl>
+            </div>
+          </div>
+        </section>
+        <section class="coaching_status">
+          <h6 class="text-light">Coaching Test Status</h6>
+          <div class="row">
+            <div class="container px-3 pb-3">
+              <div class="container mt-3 px-0">
+                <table
+                  class="
+                    table table-striped table-bordered table-hover table-sm
+                  "
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th>Name of Exam</th>
+                      <th>Date of Exam</th>
+                      <th>Marks Obtained</th>
+                      <th>Test Attendance</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr *ngFor="let upload of uploads; index as i">
+                      <td>{{ upload.examName }}</td>
+                      <td>{{ upload.examDate | date: "longDate" }}</td>
+                      <td>{{ marks[i] }}</td>
+                      <td>{{ isPresent[i] }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="container table_paginations p-0">
+                  <ul class="pagination mb-0">
+                    <li class="page-item">
+                      <a class="page-link" href="#">Previous</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="#">Next</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="coaching_status">
+          <h6 class="text-light">Coaching Fees Status</h6>
+          <div class="row">
+            <div class="container p-3">
+              <h5 class="student_fees_status">Your <span class="span_fees_status">2nd</span> Installment is due on <span class="span_fees_status">28 August, 2021.</span></h5>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

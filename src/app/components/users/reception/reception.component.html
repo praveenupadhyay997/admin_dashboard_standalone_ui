@@ -1,0 +1,580 @@
+<div class="card mt-3 p-3">
+  <div id="tabs">
+    <ul class="nav nav-tabs">
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#demo"
+          [ngClass]="{ active: activeTab === 'demo' }"
+          (click)="demo('demo')"
+          data-toggle="tab"
+          >Student Form - A</a
+        >
+      </li>
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#card"
+          [ngClass]="{ active: activeTab === 'card' }"
+          data-toggle="tab"
+          (click)="card('card')"
+          >Generate Demo Card</a
+        >
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div
+        class="tab-pane"
+        id="demo"
+        [ngClass]="{ active: activeTab === 'demo' }"
+      >
+        <div class="container student_form mt-2">
+          <h5 class="text-center">Enter Student Form Details</h5>
+          <div class="alert alert-danger main_alert mb-3" *ngIf="allAlert">
+            {{ allAlert }}
+          </div>
+          <div
+            class="alert alert-success main_alert mb-3"
+            *ngIf="successDemoAlert"
+          >
+            <strong>Success </strong>{{ successDemoAlert }}
+            <strong>{{ refId }}</strong>
+          </div>
+          <form [formGroup]="studentForm" (ngSubmit)="onRegister()">
+            <div class="form-inline">
+              <div class="form-group">
+                <div
+                  [class.form]="name?.valid || name?.untouched"
+                  [class.is-invalid]="name?.invalid && name?.touched"
+                >
+                  <label class="text-left" for="name">Full Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="name?.invalid && name?.touched"
+                    formControlName="name"
+                  />
+                </div>
+                <div *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="name?.errors?.required"
+                  >
+                    Name is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="name?.errors?.pattern"
+                  >
+                    Invalid Name Format
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div
+                  [class.form]="fname?.valid || fname?.untouched"
+                  [class.is-invalid]="fname?.invalid && fname?.touched"
+                >
+                  <label class="fname" for="name">Father's Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="fname?.invalid && fname?.touched"
+                    formControlName="fname"
+                  />
+                </div>
+                <div *ngIf="fname?.invalid && (fname?.dirty || fname?.touched)">
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="fname?.errors?.required"
+                  >
+                    Father's Name is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="fname?.errors?.pattern"
+                  >
+                    Invalid Name Format
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-inline">
+              <div class="form-group">
+                <div
+                  [class.form]="category?.valid || category?.untouched"
+                  [class.is-invalid]="category?.invalid && category?.touched"
+                >
+                  <label class="category" for="category">Category</label>
+                  <select
+                    name="category"
+                    id="category"
+                    class="custom-select"
+                    formControlName="category"
+                    [class.is-invalid]="category?.invalid && category?.touched"
+                  >
+                    <option
+                      *ngFor="let category of categories"
+                      [value]="category.id"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="
+                    category?.invalid && (category?.dirty || category?.touched)
+                  "
+                >
+                  Please select your category.
+                </div>
+              </div>
+              <div class="form-group">
+                <div
+                  [class.form]="contact?.valid || contact?.untouched"
+                  [class.is-invalid]="contact?.invalid && contact?.touched"
+                >
+                  <label class="contact" for="contact">Contact</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="contact?.invalid && contact?.touched"
+                    formControlName="contact"
+                  />
+                </div>
+                <div
+                  *ngIf="
+                    contact?.invalid && (contact?.dirty || contact?.touched)
+                  "
+                >
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="contact?.errors?.required"
+                  >
+                    Contact is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="contact?.errors?.pattern"
+                  >
+                    Contact Must be of 10 digit.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-inline">
+              <div class="form-group">
+                <div
+                  [class.form]="class?.valid || class?.untouched"
+                  [class.is-invalid]="class?.invalid && class?.touched"
+                >
+                  <label class="class" for="class">Class</label>
+                  <select
+                    name="class"
+                    id="class"
+                    class="custom-select"
+                    formControlName="class"
+                    [class.is-invalid]="class?.invalid && class?.touched"
+                  >
+                    <option *ngFor="let class of classes" [value]="class.id">
+                      {{ class.name }}
+                    </option>
+                  </select>
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="class?.invalid && (class?.dirty || class?.touched)"
+                >
+                  Please select your class.
+                </div>
+              </div>
+              <div class="form-group">
+                <div
+                  [class.form]="medium?.valid || medium?.untouched"
+                  [class.is-invalid]="medium?.invalid && medium?.touched"
+                >
+                  <label class="medium" for="medium">Medium</label>
+                  <select
+                    name="medium"
+                    id="medium"
+                    class="custom-select"
+                    formControlName="medium"
+                    [class.is-invalid]="medium?.invalid && medium?.touched"
+                  >
+                    <option *ngFor="let medium of mediums" [value]="medium.id">
+                      {{ medium.name }}
+                    </option>
+                  </select>
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="medium?.invalid && (medium?.dirty || medium?.touched)"
+                >
+                  Please select your medium.
+                </div>
+              </div>
+            </div>
+            <div class="form-inline">
+              <div class="form-group">
+                <div
+                  [class.form]="state?.valid || state?.untouched"
+                  [class.is-invalid]="state?.invalid && state?.touched"
+                >
+                  <label class="state" for="state">State</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="state?.invalid && state?.touched"
+                    formControlName="state"
+                  />
+                </div>
+                <div *ngIf="state?.invalid && (state?.dirty || state?.touched)">
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="state?.errors?.required"
+                  >
+                    State is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="state?.errors?.pattern"
+                  >
+                    Invalid Format for state
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div
+                  [class.form]="district?.valid || district?.untouched"
+                  [class.is-invalid]="district?.invalid && district?.touched"
+                >
+                  <label class="district" for="district">District</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="district?.invalid && district?.touched"
+                    formControlName="district"
+                  />
+                </div>
+                <div
+                  *ngIf="
+                    district?.invalid && (district?.dirty || district?.touched)
+                  "
+                >
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="district?.errors?.required"
+                  >
+                    District is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="district?.errors?.pattern"
+                  >
+                    Invalid pattern for District
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-inline">
+              <div class="form-group">
+                <div
+                  [class.form]="address?.valid || address?.untouched"
+                  [class.is-invalid]="address?.invalid && address?.touched"
+                >
+                  <label class="address" for="address">Address</label>
+                  <textarea
+                    class="form-control"
+                    id="address"
+                    formControlName="address"
+                    rows="3"
+                    [class.is-invalid]="address?.invalid && address?.touched"
+                  ></textarea>
+                </div>
+                <div
+                  *ngIf="
+                    address?.invalid && (address?.dirty || address?.touched)
+                  "
+                >
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="address?.errors?.required"
+                  >
+                    Address is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="address?.errors?.minLength"
+                  >
+                    Address must be of length 10
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div
+                  [class.form]="
+                    reference_from?.valid || reference_from?.untouched
+                  "
+                  [class.is-invalid]="
+                    reference_from?.invalid && reference_from?.touched
+                  "
+                >
+                  <label class="reference_from" for="reference_from"
+                    >Reference Medium</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="reference_from"
+                    formControlName="reference_from"
+                    rows="3"
+                    [class.is-invalid]="
+                      reference_from?.invalid && reference_from?.touched
+                    "
+                  ></textarea>
+                </div>
+                <div
+                  *ngIf="
+                    reference_from?.invalid &&
+                    (reference_from?.dirty || reference_from?.touched)
+                  "
+                >
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="reference_from?.errors?.required"
+                  >
+                    Reference From is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="reference_from?.errors?.minLength"
+                  >
+                    Reference From must be of length 10
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-inline">
+              <div class="form-group">
+                <div
+                  [class.form]="cname?.valid || cname?.untouched"
+                  [class.is-invalid]="cname?.invalid && cname?.touched"
+                >
+                  <label class="cname" for="cname">Couseller Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="cname?.invalid && cname?.touched"
+                    formControlName="cname"
+                  />
+                </div>
+                <div *ngIf="cname?.invalid && (cname?.dirty || cname?.touched)">
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="cname?.errors?.required"
+                  >
+                    Couseller Name is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="cname?.errors?.pattern"
+                  >
+                    Couseller Name must be of length 4
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div
+                  [class.form]="cabin?.valid || cabin?.untouched"
+                  [class.is-invalid]="cabin?.invalid && cabin?.touched"
+                >
+                  <label class="cabin" for="cabin">Couseller Cabin</label>
+                  <select
+                    name="cabin"
+                    id="cabin"
+                    class="custom-select"
+                    formControlName="cabin"
+                    [class.is-invalid]="cabin?.invalid && cabin?.touched"
+                  >
+                    <option *ngFor="let cabin of cabins" [value]="cabin.id">
+                      {{ cabin.name }}
+                    </option>
+                  </select>
+                </div>
+                <div
+                  class="alert alert-danger inner_alert"
+                  *ngIf="cabin?.invalid && (cabin?.dirty || cabin?.touched)"
+                >
+                  Please select Couseller Cabin.
+                </div>
+              </div>
+            </div>
+            <div class="btn-group btn-block">
+              <button
+                type="button"
+                (click)="studentForm.reset()"
+                class="btn btn-outline-danger"
+              >
+                Reset
+              </button>
+              <button type="submit" class="ml-3 btn btn-outline-success">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div
+        class="tab-pane"
+        id="card"
+        [ngClass]="{ active: activeTab === 'card' }"
+      >
+        <app-refresh-button
+          (refreshClick)="refreshCurrentComponent()"
+        ></app-refresh-button>
+        <div class="alert alert-danger main_alert mb-3" *ngIf="referenceAlert">
+          {{ referenceAlert }}
+        </div>
+        <div class="alert alert-success main_alert mb-3" *ngIf="successAlert">
+          <strong>Voila!</strong> {{ successAlert }}
+        </div>
+
+        <div class="conatiner reference_card">
+          <div class="card flip_card" [class.flipped]="flipped">
+            <div class="card front">
+              <div class="card-header">
+                <img
+                  class="mx-auto d-block"
+                  src="../../../../assets/logo.png"
+                  alt="logo"
+                />
+              </div>
+              <div class="card-body">
+                <form [formGroup]="demoCardForm" (ngSubmit)="onReference()">
+                  <div class="form-group">
+                    <div
+                      [class.form]="
+                        reference_no?.valid || reference_no?.untouched
+                      "
+                      [class.is-invalid]="
+                        reference_no?.invalid && reference_no?.touched
+                      "
+                    >
+                      <label for="reference_no">Reference No</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        [class.is-invalid]="
+                          reference_no?.invalid && reference_no?.touched
+                        "
+                        formControlName="reference_no"
+                      />
+                    </div>
+                    <div
+                      *ngIf="
+                        reference_no?.invalid &&
+                        (reference_no?.dirty || reference_no?.touched)
+                      "
+                    >
+                      <div
+                        class="alert alert-danger"
+                        *ngIf="reference_no?.errors?.required"
+                      >
+                        Reference No. is required.
+                      </div>
+                    </div>
+                  </div>
+                  <button class="btn flip_button float-right mt-3">
+                    Generate
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div class="card back" id="back">
+              <div class="card-header">
+                <img
+                  class="mx-auto d-block"
+                  src="../../../../assets/logo.png"
+                  alt="logo"
+                />
+              </div>
+              <div class="card-body">
+                <p class="reference_detail">
+                  <span>Reference No</span> : {{ demoStudent.referenceId }}
+                </p>
+                <p class="reference_detail">
+                  <span>Name</span> : {{ demoStudent.fullName }}
+                </p>
+                <p class="reference_detail">
+                  <span>Father’s Name</span>: {{ demoStudent.fatherName }}
+                </p>
+                <p class="reference_detail">
+                  <span>Contact</span> : {{ demoStudent.studentContact }}
+                </p>
+                <p class="reference_detail">
+                  <span>Class</span> : {{ demoStudent.class }}
+                </p>
+                <p class="reference_detail">
+                  <span>Valid Upto</span> :
+                  {{ validUpto | date: "dd/MM/yyyy" }}
+                </p>
+                <small class="float-right">Demo Card</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="btn btn-success mx-auto d-block mt-3 {{ printButton }}"
+          printSectionId="demo-id"
+          [useExistingCss]="true"
+          ngxPrint
+        >
+          <i class="fa fa-print mr-2"></i>
+          Print Demo Card
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Demo Card Print Section-->
+
+<div class="hidddenPrint">
+  <div class="print_container" id="demo-id">
+    <div class="conatiner reference_card">
+      <div class="card back">
+        <div class="card-header">
+          <img
+            class="mx-auto d-block"
+            src="../../../../assets/logo.png"
+            alt="logo"
+          />
+        </div>
+        <div class="card-body">
+          <p class="reference_detail">
+            <span>Reference No</span> : {{ demoStudent.referenceId }}
+          </p>
+          <p class="reference_detail">
+            <span>Name</span> : {{ demoStudent.fullName }}
+          </p>
+          <p class="reference_detail">
+            <span>Father’s Name</span>: {{ demoStudent.fatherName }}
+          </p>
+          <p class="reference_detail">
+            <span>Contact</span> : {{ demoStudent.studentContact }}
+          </p>
+          <p class="reference_detail">
+            <span>Class</span> : {{ demoStudent.class }}
+          </p>
+          <p class="reference_detail">
+            <span>Valid Upto</span> :
+            {{ validUpto | date: "dd/MM/yyyy" }}
+          </p>
+          <small class="float-right">Demo Card</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

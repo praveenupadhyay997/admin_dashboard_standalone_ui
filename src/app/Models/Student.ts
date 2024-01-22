@@ -1,0 +1,56 @@
+import { Batch } from './Batch';
+
+export class Student {
+  _id: string = '';
+  role: string = 'Student';
+  referenceId: string = '';
+  rollNo: Number = 0;
+  fullName: string = '';
+  fatherName: string = '';
+  motherName: string = '';
+  email: string = '';
+  password: string = '';
+  fathersOccupation: string = '';
+  mothersOccupation: string = '';
+  studentContact: Number = 0;
+  fatherContact: Number = 0;
+  motherContact: Number = 0;
+  localGuardNo: Number = 0;
+  dob: Date = new Date();
+  aadhaarNo: Number = 0;
+  category: String = '';
+  pwd: String = '';
+  state: string = ''; // Students state
+  district: string = ''; // Students district
+  address: string = ''; //Students address
+  localAddress: string = ''; //Students address
+  localGuardAdd: string = ''; //Students address
+  referenceMedium: string = ''; // Student Referenced From
+  class: string = ''; // Students Class
+  medium: string = ''; // Students Medium
+  counsellorName: string = ''; // counseller name
+  counsellorCabin: string = '';
+  passYearX: Number = 0;
+  passYearXI: Number = 0;
+  passYearXII: Number = 0;
+  pastNeetMarks: Number = 0;
+  gradeInX: Number = 0;
+  gradeInXI: Number = 0;
+  gradeInXII: Number = 0;
+  pastNeetAir: Number = 0;
+  schoolNameX: string = '';
+  schoolNameXI: string = '';
+  schoolNameXII: string = '';
+  noOfAttemptsNeet: Number = 0;
+  schoolAddressX: string = '';
+  schoolAddressXI: string = '';
+  schoolAddressXII: string = '';
+  pastNeetRemarks: string = '';
+  acadYear: Number = 0;
+  batch: Batch = new Batch();
+  bag: string = '';
+  moduleCard: string = '';
+  profilePic: string = '';
+  profileOriginalName: string = '';
+  createdAt: Date = new Date();
+}

@@ -1,0 +1,5 @@
+.container-fluid {
+  height: 100vh;
+  background: url(../../../../assets/notfound.svg) no-repeat center;
+  background-size: contain;
+}

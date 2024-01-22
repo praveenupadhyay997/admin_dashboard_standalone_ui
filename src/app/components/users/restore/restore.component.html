@@ -1,0 +1,1454 @@
+<div class="alert alert-danger mb-4" *ngIf="deleteErrorAlert">
+  {{ deleteErrorAlert }}
+</div>
+<div class="alert alert-success mb-4" *ngIf="deleteSuccessAlert">
+  {{ deleteSuccessAlert }}
+</div>
+<div class="alert alert-danger mb-4" *ngIf="updateAlert">
+  {{ updateAlert }}
+</div>
+<div class="alert alert-success mb-4" *ngIf="updateSuccessAlert">
+  {{ updateSuccessAlert }}
+</div>
+<div class="card mt-3 p-3">
+  <h4 class="text_restore">Restore Point</h4>
+  <marquee width="100%" direction="left" height="25px">
+    The Data Deleted From here, will be permanently deleted. Please Be Cautious!
+  </marquee>
+  <div id="tabs">
+    <ul class="nav nav-tabs">
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#admitted"
+          [ngClass]="{ active: activeTab === 'admitted' }"
+          (click)="admitted('admitted')"
+          data-toggle="tab"
+          >Total Admitted Students</a
+        >
+      </li>
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#demoStudents"
+          [ngClass]="{ active: activeTab === 'demoStudents' }"
+          data-toggle="tab"
+          (click)="demoStudents('demoStudents')"
+          >Total Demo Students</a
+        >
+      </li>
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#card"
+          [ngClass]="{ active: activeTab === 'card' }"
+          data-toggle="tab"
+          (click)="card('card')"
+          >Exam Cell Message Section</a
+        >
+      </li>
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#dash"
+          [ngClass]="{ active: activeTab === 'dash' }"
+          (click)="dash('dash')"
+          data-toggle="tab"
+          >Accountant Dashboard</a
+        >
+      </li>
+      <!-- Generate Batch -->
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#genBatch"
+          [ngClass]="{ active: activeTab === 'genBatch' }"
+          data-toggle="tab"
+          (click)="genBatch('genBatch')"
+          >Generate Batch
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div
+        class="tab-pane"
+        id="admitted"
+        [ngClass]="{ active: activeTab === 'admitted' }"
+      >
+        <div class="container-fluid px-0">
+          <div class="row">
+            <div class="col-lg-5 col-md-6 col-sm-12">
+              <form class="form-inline mb-2">
+                <input
+                  class="form-control mr-sm-2"
+                  type="text"
+                  placeholder="Search"
+                  [(ngModel)]="filterTerm"
+                  name="filter"
+                />
+                <button class="btn" type="submit">Search</button>
+              </form>
+            </div>
+            <div class="col-lg-7 col-md-6 col-sm-12">
+              <app-refresh-button
+                (refreshClick)="refreshCurrentComponent()"
+              ></app-refresh-button>
+            </div>
+          </div>
+          <div class="container-fluid mt-3 px-0">
+            <div class="table-responsive">
+              <table
+                class="table table-striped table-bordered table-hover table-sm"
+              >
+                <thead>
+                  <tr class="text-center">
+                    <th
+                      [class.active]="order === 'referenceId'"
+                      (click)="setOrder('referenceId')"
+                    >
+                      <button type="button" class="btn btn btn-block">
+                        Reference No
+                        <span [hidden]="reverse"
+                          ><i class="fa fa-arrow-down"></i></span
+                        ><span [hidden]="!reverse"
+                          ><i class="fa fa-arrow-up"></i
+                        ></span>
+                        <!-- <i class="fa fa-arrow-down" aria-hidden="true"></i> -->
+                      </button>
+                    </th>
+                    <th>Roll No.</th>
+                    <th>Student Name</th>
+                    <th>Father's Name</th>
+
+                    <th>Batch</th>
+
+                    <th>Counsellor Name</th>
+                    <th *ngIf="user.role == 'Admin'">View Profile</th>
+                  </tr>
+                </thead>
+                <tbody class="text-center">
+                  <tr
+                    *ngFor="
+                      let student of students
+                        | filter: filterTerm
+                        | orderBy: order:reverse
+                        | paginate
+                          : {
+                              id: 'listing_pagination',
+                              itemsPerPage: 10,
+                              currentPage: page,
+                              totalItems: totalRecords
+                            }
+                    "
+                  >
+                    <td>{{ student.referenceId }}</td>
+                    <td>{{ student.rollNo }}</td>
+                    <td>{{ student.fullName }}</td>
+                    <td>{{ student.fatherName }}</td>
+                    <td>{{ student.batch.batch }}</td>
+                    <td>{{ student.counsellorName }}</td>
+                    <td *ngIf="user.role == 'Admin'">
+                      <button
+                        type="button"
+                        class="btn btn-outline-info btn-sm mb-2"
+                        (click)="restoreAdmittedStudent(student)"
+                      >
+                      <!-- data-toggle="modal"
+                        data-target="#exampleModalCenterRestoreAdmittedStudent" -->
+                        Restore
+                      </button>
+                      <!-- Restore Modal For Admitted Student-->
+                      <div
+                      class="modal fade"
+                      id="exampleModalCenterRestoreAdmittedStudent"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="exampleModalCenterTitle"
+                      aria-hidden="true"
+                      >
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+                            <button
+                              type="button"
+                              class="close"
+                              data-dismiss="modal"
+                              aria-label="Close"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are Your Sure, You Want to Restore the selected Admitted Student?
+                          </div>
+                          <div class="modal-footer">
+                            <button
+                              type="button"
+                              
+                              class="btn btn-primary yes-button"
+                              data-dismiss="modal"
+                            >
+                              Yes, Please.
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-seconday no-button"
+                              data-dismiss="modal"
+                            >
+                              No, Let's Go Back.
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger btn-sm ml-2 mb-2"
+                        (click)="deleteStudent(student)"
+                      >
+                      <!-- data-toggle="modal"
+                        data-target="#exampleModalCenterAdmittedStudent" -->
+                        Delete
+                      </button>
+                      <!-- Delete Modal For Admitted Student Confirmation 1-->
+                      <div
+                      class="modal fade"
+                      id="exampleModalCenterAdmittedStudent"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="exampleModalCenterTitle"
+                      aria-hidden="true"
+                      >
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+                            <button
+                              type="button"
+                              class="close"
+                              data-dismiss="modal"
+                              aria-label="Close"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <b
+                              >Once Deleted from Restore Point, the selected data will not be
+                              recovered.</b
+                            ><br />
+                            Are Your Completely Sure, You Want to Delete the selected Admitted
+                            Student?
+                          </div>
+                          <div class="modal-footer">
+                            <button
+                              type="button"
+                              class="btn btn-secondary yes-button"
+                              data-toggle="modal"
+                              data-target="#exampleModalCenterAdmittedStudent2"
+                              data-dismiss="modal"
+                            >
+                              Yes, I am Sure.
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-primary no-button"
+                              data-dismiss="modal"
+                            >
+                              No, Let's Go Back.
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                      <!-- Delete Modal For Admitted Student Confirmation 2-->
+                      <div
+                      class="modal fade"
+                      id="exampleModalCenterAdmittedStudent2"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="exampleModalCenterTitle"
+                      aria-hidden="true"
+                      >
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+                            <button
+                              type="button"
+                              class="close"
+                              data-dismiss="modal"
+                              aria-label="Close"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">Are Your Completely Sure, with your action?</div>
+                          <div class="modal-footer">
+                            <button type="button" 
+                            class="btn btn-secondary yes-button"
+                            
+                            data-dismiss="modal"
+                            >
+                              Yes, I am Sure.
+                            </button>
+                            <button
+                              type="button"
+                              class="btn btn-primary no-button"
+                              data-dismiss="modal"
+                            >
+                              No, Let's Go Back.
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="container-fluid table_paginations p-0">
+              <pagination-controls
+                id="listing_pagination"
+                (pageChange)="page = $event"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tab-pane"
+        id="demoStudents"
+        [ngClass]="{ active: activeTab === 'demoStudents' }"
+      >
+        <div class="container-fluid px-0">
+          <div class="row">
+            <div class="col-lg-5 col-md-6 col-sm-12">
+              <form class="form-inline mb-2">
+                <input
+                  class="form-control mr-sm-2"
+                  type="text"
+                  placeholder="Search"
+                  [(ngModel)]="filterTerm_A"
+                  name="filter"
+                />
+                <button class="btn" type="submit">Search</button>
+              </form>
+            </div>
+            <div class="col-lg-7 col-md-6 col-sm-12">
+              <app-refresh-button
+                (refreshClick)="refreshCurrentComponent()"
+              ></app-refresh-button>
+            </div>
+          </div>
+          <div class="container-fluid mt-3 px-0">
+            <div class="table-responsive">
+              <table
+                class="table table-striped table-bordered table-hover table-sm"
+              >
+                <thead>
+                  <tr class="text-center">
+                    <th
+                      [class.active]="order_A === 'referenceId_A'"
+                      (click)="setOrder_A('referenceId_A')"
+                    >
+                      <button type="button" class="btn btn btn-block">
+                        Reference No
+                        <span [hidden]="reverse_A"
+                          ><i class="fa fa-arrow-down"></i></span
+                        ><span [hidden]="!reverse_A"
+                          ><i class="fa fa-arrow-up"></i
+                        ></span>
+                        <!-- <i class="fa fa-arrow-down" aria-hidden="true"></i> -->
+                      </button>
+                    </th>
+                    <th>Student Name</th>
+                    <th>Father's Name</th>
+                    <th>Contact</th>
+                    <th>Class</th>
+                    <th>Counsellor Name</th>
+                    <th *ngIf="user.role == 'Admin'">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="text-center">
+                  <tr
+                    *ngFor="
+                      let student of demoStu
+                        | filter: filterTerm_A
+                        | orderBy: order_A:reverse_A
+                        | paginate
+                          : {
+                              id: 'listing_pagination_A',
+                              itemsPerPage: 10,
+                              currentPage: page_A,
+                              totalItems: totalRecords_A
+                            }
+                    "
+                  >
+                    <td>{{ student.referenceId }}</td>
+                    <td>{{ student.fullName }}</td>
+                    <td>{{ student.fatherName }}</td>
+                    <td>{{ student.studentContact }}</td>
+                    <td>{{ student.class }}</td>
+                    <td>{{ student.counsellorName }}</td>
+                    <td *ngIf="user.role == 'Admin'">
+                      <button
+                        type="button"
+                        class="btn btn-outline-info btn-sm ml-2 mb-2"
+                        (click)="restoreDemoStudent(student)"
+                      >
+                      <!-- data-toggle="modal"
+                        data-target="#exampleModalCenterRestoreDemoStudent" -->
+                        Restore
+                      </button>
+                      <button
+                        type="button"
+                        (click)="deleteDemoStudent(student)"
+                        class="btn btn-outline-danger btn-sm ml-2 mb-2"
+                      >
+                      <!-- data-toggle="modal"
+                        data-target="#exampleModalCenterDemoStudent1" -->
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="container-fluid table_paginations p-0">
+              <pagination-controls
+                id="listing_pagination_A"
+                (pageChange)="page_A = $event"
+              ></pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tab-pane"
+        id="card"
+        [ngClass]="{ active: activeTab === 'card' }"
+      >
+        <!-- <div class="alert alert-danger mb-4" *ngIf="deleteErrorAlert">
+          {{ deleteErrorAlert }}
+        </div>
+        <div class="alert alert-success mb-4" *ngIf="deleteSuccessAlert">
+          {{ deleteSuccessAlert }}
+        </div> -->
+        <div class="card">
+          <div class="container p-3">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="File Search"
+                    [(ngModel)]="filterTerm"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-7 col-md-6 col-sm-12">
+                <app-refresh-button
+                  (refreshClick)="refreshCurrentComponent()"
+                ></app-refresh-button>
+              </div>
+            </div>
+            <div class="container mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="
+                    table table-striped table-bordered table-hover table-sm
+                  "
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order === 'examName'"
+                        (click)="setOrder('examName')"
+                      >
+                        Name of Exam<span [hidden]="reverse">▼</span
+                        ><span [hidden]="!reverse">▲</span>
+                      </th>
+                      <th>Date of Exam</th>
+                      <th>Uploaded File</th>
+                      <th>Uploaded Date</th>
+                      <th>Batch</th>
+                      <!-- <th>Delivery Report</th> -->
+                      <th width="10%">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr
+                      *ngFor="
+                        let upload of uploadList
+                          | orderBy: order:reverse
+                          | filter: filterTerm
+                          | paginate
+                            : {
+                                id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRecords
+                              }
+                      "
+                    >
+                      <td>{{ upload.examName }}</td>
+                      <td>{{ upload.examDate | date: "dd/MM/yyyy" }}</td>
+                      <td>{{ upload.originalName }}</td>
+                      <td>{{ upload.createdAt | date: "dd/MM/yyyy" }}</td>
+                      <td>{{ upload.batch.batch }}</td>
+                      <td>
+                        <button
+                          class="btn btn-outline-info btn-sm mb-2"
+                          (click)="restoreExamCell(upload)"
+                          data-toggle="modal"
+                          
+                        >
+                        <!-- data-target="#exampleModalCenterRestoreExamData" -->
+                          Restore
+                        </button>
+
+                        <button
+                          class="btn btn-outline-danger btn-sm ml-0 mb-2"
+                          (click)="deleteUpload(upload)"
+                          
+                        >
+                        <!-- data-toggle="modal"
+                          data-target="#exampleModalCenterExamData1" -->
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination"
+                  (pageChange)="page = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tab-pane"
+        id="dash"
+        [ngClass]="{ active: activeTab === 'dash' }"
+      >
+        <div class="card">
+          <div class="container p-3">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="Roll No. / Student Name"
+                    [(ngModel)]="filterTerm_A"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <!-- <button
+                  type="button"
+                  class="btn btn-block btn-outline export"
+                  (click)="dueFeesStudent()"
+                >
+                  <i class="fa fa-eye"></i>
+                  See Student with Fees Dues
+                </button> -->
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-12">
+                <app-refresh-button
+                  (refreshClick)="refreshCurrentComponent()"
+                ></app-refresh-button>
+              </div>
+            </div>
+            <div class="container mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="
+                    table table-striped table-bordered table-hover table-sm
+                  "
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order_A === 'rollNo_A'"
+                        (click)="setOrder_A('rollNo_A')"
+                      >
+                        <button type="button" class="btn btn btn-block">
+                          Roll No.
+                          <span [hidden]="reverse_A"
+                            ><i class="fa fa-arrow-down"></i></span
+                          ><span [hidden]="!reverse_A"
+                            ><i class="fa fa-arrow-up"></i
+                          ></span>
+                        </button>
+                      </th>
+                      <th>Student Name</th>
+                      <th>Batch</th>
+                      <th>Total Installments</th>
+                      <th>Pending Installments</th>
+                      <th>Next Due Date</th>
+                      <th *ngIf="user.role == 'Admin'">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr
+                      *ngFor="
+                        let account of accounts
+                          | filter: filterTerm_A
+                          | orderBy: order_A:reverse_A
+                          | paginate
+                            : {
+                                id: 'listing_pagination_A',
+                                itemsPerPage: 10,
+                                currentPage: page_A,
+                                totalItems: totalRecords_A
+                              }
+                      "
+                    >
+                      <td>{{ account.rollNo }}</td>
+                      <td>{{ account.student.fullName }}</td>
+                      <td>{{ account.student.batch.batch }}</td>
+                      <td>
+                        {{ account.noOfInstallment }}
+                      </td>
+                      <td>{{ pendingInstallments(account) }}</td>
+                      <td class="editable_date">
+                        {{ nextDueDate(account) | date: "longDate" }}
+                      </td>
+                      <td *ngIf="user.role == 'Admin'">
+                        <button
+                          type="button"
+                          class="btn btn-outline-info btn-sm mb-2"
+                          (click)="restoreAccountant()"
+                          data-toggle="modal"
+                          data-target="#exampleModalCenterRestoreAccountData"
+                        >
+                          Restore
+                        </button>
+                        <button
+                          class="btn btn-outline-danger btn-sm ml-2 mb-2"
+                          (click)="onDelete(account)"
+                          data-toggle="modal"
+                          data-target="#exampleModalCenterTable_A_Without_DF1"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="container table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination_A"
+                  (pageChange)="page_A = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="card mt-3" *ngIf="dueFeesToggle">
+          <div class="container p-3">
+            <h3 class="text-center">Students with Due Fees</h3>
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="Roll No. / Student Name"
+                    [(ngModel)]="filterTerm"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+            </div>
+            <div class="container mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="
+                    table table-striped table-bordered table-hover table-sm
+                  "
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order === 'rollNo'"
+                        (click)="setOrder('rollNo')"
+                      >
+                        <button type="button" class="btn btn btn-block">
+                          Roll No.
+                          <span [hidden]="reverse"
+                            ><i class="fa fa-arrow-down"></i></span
+                          ><span [hidden]="!reverse"
+                            ><i class="fa fa-arrow-up"></i
+                          ></span>
+                        </button>
+                      </th>
+                      <th>Student Name</th>
+                      <th>Batch</th>
+                      <th>Total Installments</th>
+                      <th>Pending Installments</th>
+                      <th>Next Due Date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr
+                      *ngFor="
+                        let account of pendingAccounts
+                          | filter: filterTerm
+                          | orderBy: order:reverse
+                          | paginate
+                            : {
+                                id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRecords
+                              }
+                      "
+                    >
+                      <td>{{ account.rollNo }}</td>
+                      <td>{{ account.student.fullName }}</td>
+                      <td>{{ account.student.batch.batch }}</td>
+                      <td>{{ account.noOfInstallment }}</td>
+                      <td>{{ pendingInstallments(account) }}</td>
+                      <td class="editable_date">
+                        {{ nextDueDate(account) | date: "longDate" }}
+                      </td>
+                      <td>
+                      <button
+                        type="button"
+                        class="btn btn-outline-info btn-sm mb-2"
+                        (click)="restoreAccountantWithDueFees()"
+                      >
+                        Restore
+                      </button>
+                        <button
+                          class="btn btn-outline-danger btn-sm ml-2 mb-2"
+                          (click)="onDelete(account)"
+                          *ngIf="user.role == 'Admin'"
+                        >
+                        Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination"
+                  (pageChange)="page = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
+      <div
+        class="tab-pane"
+        id="genBatch"
+        [ngClass]="{ active: activeTab === 'genBatch' }"
+      >
+        <div
+          class="alert alert-danger main_alert mx-0 mb-3"
+          *ngIf="genBatchErrorAlert"
+        >
+          <strong>Oops! </strong>{{ genBatchErrorAlert }}
+        </div>
+        <div
+          class="alert alert-success main_alert mx-0 mb-3"
+          *ngIf="genBatchsuccessAlert"
+        >
+          <strong>Success... </strong>{{ genBatchsuccessAlert }}
+        </div>
+        <div class="card">
+          <div class="container p-3">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="Search"
+                    [(ngModel)]="filterTerm"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-7 col-md-6 col-sm-12">
+                <app-refresh-button
+                  (refreshClick)="refreshCurrentComponent()"
+                ></app-refresh-button>
+              </div>
+            </div>
+            <div class="container mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="
+                    table table-striped table-bordered table-hover table-sm
+                  "
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order === 'class'"
+                        (click)="setOrder('class')"
+                      >
+                        <button type="button" class="btn btn btn-block">
+                          Class
+                          <span [hidden]="reverse"
+                            ><i class="fa fa-arrow-down"></i></span
+                          ><span [hidden]="!reverse"
+                            ><i class="fa fa-arrow-up"></i
+                          ></span>
+                          <!-- <i class="fa fa-arrow-down" aria-hidden="true"></i> -->
+                        </button>
+                      </th>
+                      <th>Medium</th>
+                      <th>Batch Name</th>
+                      <th>Total Student's</th>
+                      <th *ngIf="user.role == 'Admin'">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr
+                      *ngFor="
+                        let batch of batchesJson
+                          | filter: filterTerm
+                          | orderBy: order:reverse
+                          | paginate
+                            : {
+                                id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRecords
+                              };
+                        index as i
+                      "
+                    >
+                      <td>{{ batch.class }}</td>
+                      <td>{{ batch.medium }}</td>
+                      <td>{{ batch.batch }}</td>
+                      <td>{{ batch.strength }}</td>
+                      <td *ngIf="user.role == 'Admin'">
+                        <button
+                          type="button"
+                          class="btn btn-outline-info btn-sm mb-2"
+                          (click)="restoreBatch()"
+                          data-toggle="modal"
+                          data-target="#exampleModalCenterRestoreBatch"
+                        >
+                          Restore
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm ml-2 mb-2"
+                          (click)="onDeleteBatch(batch)"
+                          data-toggle="modal"
+                          data-target="#exampleModalCenterBatchGenerate1"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination"
+                  (pageChange)="page = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-----------------------------------Modal Area Start For Admitted Student------------------------------------------>
+
+<!-----------------------------------Modal Area End For Admitted Student------------------------------------------>
+
+<!------------------------------------------------------------------------------------------------------------------>
+
+<!-----------------------------------Modal Area Start For Demo Student---------------------------------------------->
+<!-- Restore Modal For Demo Student-->
+<div
+  class="modal fade"
+  id="exampleModalCenterRestoreDemoStudent"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are Your Sure, You Want to Restore the selected Demo Student?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary yes-button"
+          data-toggle="modal"
+        >
+          Yes, Please.
+        </button>
+        <button
+          type="button"
+          class="btn btn-seconday no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Demo Student Confirmation 1-->
+<div
+  class="modal fade"
+  id="exampleModalCenterDemoStudent1"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b
+          >Once Deleted from Restore Point, the selected data will not be
+          recovered.</b
+        ><br />
+        Are Your Completely Sure, You Want to Delete the selected Demo Student?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary yes-button"
+          data-toggle="modal"
+          data-target="#exampleModalCenterDemoStudent2"
+        >
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Demo Student Confirmation 2-->
+<div
+  class="modal fade"
+  id="exampleModalCenterDemoStudent2"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Are Your Completely Sure, with your action?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary yes-button">
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-----------------------------------Modal Area End For Demo Student---------------------------------------------->
+
+<!------------------------------------------------------------------------------------------------------------------>
+
+<!-----------------------------------Modal Area Start For Exam Cell Message Section---------------------------------------------->
+
+<!-- Restore Modal For Exam Cell Message Section-->
+<div
+  class="modal fade"
+  id="exampleModalCenterRestoreExamData"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are Your Sure, You Want to Restore the selected Demo Student?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary yes-button"
+          data-toggle="modal"
+        >
+          Yes, Please.
+        </button>
+        <button
+          type="button"
+          class="btn btn-seconday no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Exam Data in Message Section Confirmation 1-->
+<div
+  class="modal fade"
+  id="exampleModalCenterExamData1"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b
+          >Once Deleted from Restore Point, the selected data will not be
+          recovered.</b
+        ><br />
+        Are Your Completely Sure, You Want to Delete the selected Exam Data?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary yes-button"
+          data-toggle="modal"
+          data-target="#exampleModalCenterExamData2"
+        >
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Exam Data in Message Section Confirmation 2-->
+<div
+  class="modal fade"
+  id="exampleModalCenterExamData2"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Are Your Completely Sure, with your action?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary yes-button">
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-----------------------------------Modal Area End For Exam Cell Message Section---------------------------------------------->
+
+<!------------------------------------------------------------------------------------------------------------------>
+
+<!-----------------------------------Modal Area Start For Accountant Dashboard---------------------------------------------->
+
+<!-- Restore Modal For Account Dashboard-->
+<div
+  class="modal fade"
+  id="exampleModalCenterRestoreAccountData"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are Your Sure, You Want to Restore the accounts section of the selected
+        Student?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary yes-button"
+          data-toggle="modal"
+        >
+          Yes, Please.
+        </button>
+        <button
+          type="button"
+          class="btn btn-seconday no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Account DashBoard Table-1 Confirmation -1-->
+<div
+  class="modal fade"
+  id="exampleModalCenterTable_A_Without_DF1"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b
+          >Once Deleted from Restore Point, the selected data will not be
+          recovered.</b
+        ><br />
+        Are Your Completely Sure, You Want to Delete the selected Student's
+        Accounts Data?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary yes-button"
+          data-toggle="modal"
+          data-target="#exampleModalCenterTable_A_Without_DF2"
+        >
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Account DashBoard Table-1 Confirmation -2-->
+<div
+  class="modal fade"
+  id="exampleModalCenterTable_A_Without_DF2"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Are Your Completely Sure, with your action?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary yes-button">
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-----------------------------------Modal Area End For Accountant Dashboard---------------------------------------------->
+
+<!------------------------------------------------------------------------------------------------------------------>
+
+<!-----------------------------------Modal Area Start For Batch Generate---------------------------------------------->
+
+<!-- Restore Modal For Batch Generate-->
+<div
+  class="modal fade"
+  id="exampleModalCenterRestoreBatch"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Alert!</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are Your Sure, You Want to Restore the selected Batch?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary yes-button"
+          data-toggle="modal"
+        >
+          Yes, Please.
+        </button>
+        <button
+          type="button"
+          class="btn btn-seconday no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Batch in Batch Generate Section -->
+<div
+  class="modal fade"
+  id="exampleModalCenterBatchGenerate1"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title-alert" id="exampleModalLongTitle">Alert!</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b
+          >If the selected batch is deleted, the associated students with this
+          batch will be deleted as well.</b
+        ><br />
+        Are Your Completely Sure, You Want to Delete the selected Batch?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary yes-button"
+          data-toggle="modal"
+          data-target="#exampleModalCenterBatchGenerate2"
+        >
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Batch in Batch Generate Section -->
+<div
+  class="modal fade"
+  id="exampleModalCenterBatchGenerate2"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title-alert" id="exampleModalLongTitle">Alert!</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">Are Your Completely Sure With Your Action?</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary yes-button">
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-----------------------------------Modal Area End For Batch Generate---------------------------------------------->

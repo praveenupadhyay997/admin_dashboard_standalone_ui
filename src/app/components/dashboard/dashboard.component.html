@@ -1,0 +1,335 @@
+<div class="container-fluid p-3">
+  <div class="row">
+    <div class="col-lg-2 col-md-12 sidenav pr-0 mb-4">
+      <nav class="navbar navbar-expand-sm navbar-light">
+        <a class="navbar-brand" routerLink="/dashboard">
+          <img
+            src="../../../assets/footer.png"
+            class="img-rounded img-responsive mx-auto d-block"
+            alt="logo"
+          />
+        </a>
+        <button
+          class="navbar-toggler float-right mb-5"
+          type="button"
+          data-toggle="collapse"
+          data-target="#collapsibleNavbar"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+          <div class="nav-tabs">
+            <ul class="navbar-nav navbar-left">
+              <li>
+                <div class="card time text-center">
+                  <div class="date">{{ todayDate | date: "fullDate" }}</div>
+                  <div class="time my-0 py-0">
+                    {{ todayDate | date: "mediumTime" }}
+                  </div>
+                </div>
+              </li>
+              <li
+                *ngIf="user.role != 'Student'"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+                class="nav-item"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/overview']">
+                  <i class="fa fa-tachometer" aria-hidden="true"></i>Dashboard
+                </a>
+              </li>
+              <li
+                *ngIf="user.role == 'Admin' || user.role == 'Receptionist'"
+                class="nav-item"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/reception']"
+                  ><i class="fa fa-handshake-o" aria-hidden="true"></i
+                  >Reception</a
+                >
+              </li>
+              <li
+                *ngIf="user.role == 'Admin' || user.role == 'Exam Cell'"
+                class="nav-item"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/exam_cell']">
+                  <i class="fa fa-pencil-square" aria-hidden="true"></i
+                  >Exam-Cell
+                </a>
+              </li>
+              <li
+                *ngIf="user.role == 'Admin' || user.role == 'IT Cell'"
+                class="nav-item"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/admission']"
+                  ><i class="fa fa-id-card" aria-hidden="true"></i>IT-Cell</a
+                >
+              </li>
+              <li
+                *ngIf="user.role == 'Admin' || user.role == 'Accountant'"
+                class="nav-item"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/accountant']"
+                  ><i class="fa fa-user" aria-hidden="true"></i>Accountant</a
+                >
+              </li>
+              <li
+                *ngIf="user.role == 'Admin' || user.role == 'Student'"
+                class="nav-item"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/student']"
+                  ><i class="fa fa-graduation-cap" aria-hidden="true"></i
+                  >Student</a
+                >
+              </li>
+              <li
+                *ngIf="user.role == 'Admin'"
+                class="nav-item"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/time-logger']"
+                  ><i class="fa fa-clock-o" aria-hidden="true"></i>Time Logger
+                </a
+                >
+              </li>
+              <li
+                *ngIf="user.role == 'Admin'"
+                class="nav-item"
+                [routerLinkActive]="['active']"
+                [routerLinkActiveOptions]="{ exact: true }"
+              >
+                <a class="nav-link" [routerLink]="['/dashboard/restore']"
+                  ><i class="fa fa-recycle" aria-hidden="true"></i>Restore
+                  Point</a
+                >
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-right">
+              <li>
+                <div class="dropup mt-3">
+                  <button
+                    type="button"
+                    class="btn card settings time mb-0"
+                    data-toggle="dropdown"
+                  >
+                    <i class="fa fa-cog mb-3" aria-hidden="true"></i>
+                    <span>Profile</span>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" (click)="openModal()">
+                      Change Password
+                    </a>
+
+                    <!-- Logout -->
+                    <a (click)="onLogoutClick()" class="dropdown-item" href="#"
+                      >Logout</a
+                    >
+                  </div>
+                  <!-- The Modal -->
+                  <div
+                    class="modal"
+                    tabindex="-1"
+                    role="dialog"
+                    [ngStyle]="{ display: display }"
+                  >
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Change Password</h4>
+                          <button
+                            type="button"
+                            class="close"
+                            aria-label="Close"
+                            (click)="onCloseHandled()"
+                          >
+                            <span class="text-light" aria-hidden="true"
+                              >&times;</span
+                            >
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <div class="alert alert-danger mb-2" *ngIf="allAlert">
+                            {{ allAlert }}
+                          </div>
+                          <div
+                            class="alert alert-success mb-2"
+                            *ngIf="successAlert"
+                          >
+                            {{ successAlert }}
+                          </div>
+                          <form
+                            [formGroup]="changePassForm"
+                            (ngSubmit)="onChange()"
+                          >
+                            <div class="form-group">
+                              <div
+                                [class.form]="
+                                  currentPass?.valid || currentPass?.untouched
+                                "
+                                [class.is-invalid]="
+                                  currentPass?.invalid && currentPass?.touched
+                                "
+                              >
+                                <label for="currentPass"
+                                  >Current Password</label
+                                >
+                                <input
+                                  type="password"
+                                  class="form-control"
+                                  [class.is-invalid]="
+                                    currentPass?.invalid && currentPass?.touched
+                                  "
+                                  formControlName="currentPass"
+                                />
+                              </div>
+                              <div
+                                *ngIf="
+                                  currentPass?.invalid &&
+                                  (currentPass?.dirty || currentPass?.touched)
+                                "
+                              >
+                                <div
+                                  class="alert alert-danger"
+                                  *ngIf="currentPass?.errors?.required"
+                                >
+                                  Current Password is required.
+                                </div>
+                                <div
+                                  class="alert alert-danger"
+                                  *ngIf="currentPass?.errors?.pattern"
+                                >
+                                  Must contain 1 Uppercase, 1 Lowercase, 1
+                                  Special Character, 1 Number and Minimum 8
+                                  characters
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div
+                                [class.form]="
+                                  newPass?.valid || newPass?.untouched
+                                "
+                                [class.is-invalid]="
+                                  newPass?.invalid && newPass?.touched
+                                "
+                              >
+                                <label for="newPass">New Password</label>
+                                <input
+                                  type="password"
+                                  class="form-control"
+                                  [class.is-invalid]="
+                                    newPass?.invalid && newPass?.touched
+                                  "
+                                  formControlName="newPass"
+                                />
+                              </div>
+                              <div
+                                *ngIf="
+                                  newPass?.invalid &&
+                                  (newPass?.dirty || newPass?.touched)
+                                "
+                              >
+                                <div
+                                  class="alert alert-danger"
+                                  *ngIf="newPass?.errors?.required"
+                                >
+                                  New Passowrd is required.
+                                </div>
+                                <div
+                                  class="alert alert-danger"
+                                  *ngIf="newPass?.errors?.pattern"
+                                >
+                                  Must contain 1 Uppercase, 1 Lowercase, 1
+                                  Special Character, 1 Number and Minimum 8
+                                  characters
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group">
+                              <div
+                                [class.form]="
+                                  confirmPass?.valid || confirmPass?.untouched
+                                "
+                                [class.is-invalid]="
+                                  confirmPass?.invalid && confirmPass?.touched
+                                "
+                              >
+                                <label for="confirmPass"
+                                  >Confirm Password</label
+                                >
+                                <input
+                                  type="password"
+                                  [class.is-invalid]="
+                                    changePassForm.errors?.misMatch
+                                  "
+                                  formControlName="confirmPass"
+                                  class="form-control"
+                                />
+                              </div>
+                              <div *ngIf="changePassForm.errors?.misMatch">
+                                <div class="alert alert-danger">
+                                  New Password & Confirm Password do not match
+                                </div>
+                              </div>
+                            </div>
+                            <button class="btn btn-block btn-outline">
+                              Change Password
+                            </button>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-default"
+                            (click)="onCloseHandled()"
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="col-lg-10 col-md-12 right">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 card welcome">
+            <div class="media p-3">
+              <div class="image mr-3">
+                <img
+                  [src]="url ? url : '../../../../assets/avatar.png'"
+                  class="rounded-circle avatar"
+                />
+              </div>
+              <div class="media-body">
+                <h1>{{ section }}</h1>
+                <h1 class="mb-0">
+                  Welcome <br />
+                  {{ user.name }}
+                </h1>
+                <small class="role text-muted">{{ user.role }}</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

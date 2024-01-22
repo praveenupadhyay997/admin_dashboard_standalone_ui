@@ -1,0 +1,179 @@
+<div class="alert alert-danger mb-4" *ngIf="deleteErrorAlert">
+    {{ deleteErrorAlert }}
+</div>
+<div class="alert alert-success mb-4" *ngIf="deleteSuccessAlert">
+    {{ deleteSuccessAlert }}
+</div>
+<div class="alert alert-danger mb-4" *ngIf="updateAlert">
+    {{ updateAlert }}
+</div>
+<div class="alert alert-success mb-4" *ngIf="updateSuccessAlert">
+    {{ updateSuccessAlert }}
+</div>
+
+<div class="card mt-3 p-3">
+    <div id="tabs">
+        <ul class="nav nav-tabs">
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#attendance" [ngClass]="{ active: activeTab === 'attendance' }" (click)="attendance('attendance')" data-toggle="tab">Live Attendance</a
+          >
+        </li>
+        <li class="nav-item tab_item">
+          <a
+            class="nav-link"
+            href="#studentLogger"
+            [ngClass]="{ active: activeTab === 'studentLogger' }"
+            data-toggle="tab"
+            (click)="studentLogger('studentLogger')"
+            >Student Logger</a
+          >
+        </li>
+      </ul>
+  
+      <div class="tab-content">
+        <div
+          class="tab-pane"
+          id="attendance"
+          [ngClass]="{ active: activeTab === 'attendance' }"
+        >
+          <div class="container-fluid px-0">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline mb-2">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="Search"
+                    [(ngModel)]="filterTerm"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-7 col-md-6 col-sm-12">
+              </div>
+            </div>
+            <div class="container-fluid mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="table table-striped table-bordered table-hover table-sm"
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order === 'rollNo'"
+                        (click)="setOrder('rollNo')"
+                      >
+                        <button type="button" class="btn btn btn-block">
+                          Roll No
+                          <span [hidden]="reverse"
+                            ><i class="fa fa-arrow-down"></i></span
+                          ><span [hidden]="!reverse"
+                            ><i class="fa fa-arrow-up"></i
+                          ></span>
+                          <!-- <i class="fa fa-arrow-down" aria-hidden="true"></i> -->
+                        </button>
+                      </th>
+                      <th>Entry Time</th>
+                      <th>Exit Time</th>
+                  </thead>
+                  <tbody class="text-center">
+                    <!-- <tr
+                      *ngFor="
+                            filter: filterTerm
+                          | orderBy: order:reverse
+                          | paginate
+                            : {
+                                id: 'listing_pagination',
+                                itemsPerPage: 20,
+                                currentPage: page,
+                                totalItems: totalRecords
+                              }
+                      "
+                    > -->
+                      <tr>
+                      <td>1</td>
+                      <td>2</td>
+                      <td>3</td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container-fluid table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination"
+                  (pageChange)="page = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!------------------Student Logger-------------------->
+        <div
+          class="tab-pane"
+          id="studentLogger"
+          [ngClass]="{ active: activeTab === 'studentLogger' }"
+        >
+          <div class="container-fluid px-0">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-inline mb-2">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="Search"
+                    [(ngModel)]="filterTerm_A"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-7 col-md-6 col-sm-12">
+              </div>
+            </div>
+            <div class="container-fluid mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="table table-striped table-bordered table-hover table-sm"
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order_A === 'rollNo_A'"
+                        (click)="setOrder_A('rollNo_A')"
+                      >
+                        <button type="button" class="btn btn btn-block">
+                          Time Stamp
+                          <span [hidden]="reverse_A"
+                            ><i class="fa fa-arrow-down"></i></span
+                          ><span [hidden]="!reverse_A"
+                            ><i class="fa fa-arrow-up"></i
+                          ></span>
+                          <!-- <i class="fa fa-arrow-down" aria-hidden="true"></i> -->
+                        </button>
+                      </th>
+                      <th>Roll No.</th>
+                      <th>Admin Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr *ngFor="let logs of studentLogs">
+                      <td>{{logs.timeStamp  | date:'MMM d, y, h:mm:ss a'}}</td>
+                      <td>{{logs.rollNo}}</td>
+                      <td>{{logs.logText}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container-fluid table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination_A"
+                  (pageChange)="page_A = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

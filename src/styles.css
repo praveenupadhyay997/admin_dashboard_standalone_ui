@@ -1,0 +1,217 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap");
+/* White - F4F4F4 */
+/* bg color -DFAB80 */
+/* logo color = #e37d47 */
+/*  Logo red -aa2c2e */
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+/* Remove Arrows/Spinners */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+body {
+  margin: 0px;
+  padding: 0px;
+  font-family: "Montserrat", sans-serif;
+}
+/* Heading */
+h1 {
+  font-family: "Roboto Slab", serif;
+  color: #535461;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+}
+/* ------Forms --------*/
+/* Select Arrow Keys Remove */
+.custom-select {
+  background: none;
+}
+.form-group {
+  margin-bottom: 0;
+}
+.form-group label {
+  color: #e37d47;
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+.custom-select,
+.form-control {
+  border: 2px solid #e37d47;
+  background: none;
+}
+.custom-select:focus,
+.form-control:focus {
+  border: 2px solid #e37d47;
+  box-shadow: 0 0 0 0.2rem #f2d189a8;
+}
+.is-invalid label {
+  color: #dc3545;
+}
+/* Alert Message */
+.alert {
+  padding: 0.2rem 0.5rem;
+  margin-bottom: 0;
+  margin-top: 8px;
+}
+/* Button Focus */
+.btn:focus {
+  box-shadow: none;
+}
+/* ------------- Default Neumorphism of Cards ------------ */
+.card {
+  order: none;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  background: #f2d189;
+  -webkit-box-shadow: 12px 12px 24px #ceb274, -12px -12px 24px #fff09e;
+  box-shadow: 12px 12px 24px #ceb274, -12px -12px 24px #fff09e;
+}
+table {
+  border: none;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+  background: #f2d189;
+}
+/* ----------------Tabs CSS - Dashboard Child Components----------------------- */
+/* Tab Nav */
+.nav-tabs {
+  border-bottom: 1px solid #a62c2b;
+}
+/* .tab_item {
+  width: 22.09rem;
+} */
+.tab_item .nav-link {
+  text-align: center;
+  color: #535461;
+  font-size: 16px;
+  font-weight: 500;
+}
+.tab_item .nav-link.active {
+  background-color: #f1c47f;
+  border-bottom-color: #f1c47f;
+  border: 1px solid;
+  border-color: #a62c2b #a62c2b #f1c47e;
+}
+.tab_item .nav-link:hover {
+  background-color: #f1c47f;
+  border: 1px solid;
+  border-color: #f1c47f #f1c47f #f1c47f;
+  border: #a62c2b;
+}
+/* Tab Content */
+.tab-content {
+  padding: 16px;
+  background-color: #f1c47f;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: 1px solid;
+  border-top: transparent;
+  border-color: #a62c2b #a62c2b #a62c2b;
+}
+/* Table Global CSS */
+thead {
+  background-color: #e37d47;
+}
+.table-bordered {
+  border: 2px solid #f2d189;
+}
+.table-bordered > tbody > tr > td {
+  border: 2px solid #a62c2b;
+}
+.table-bordered > tbody > tr > td button {
+  font-weight: 600;
+  border: 2px solid;
+}
+.table-bordered > thead > tr > th {
+  vertical-align: middle;
+  padding: 0px;
+  border: 2px solid #a62c2b;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+}
+.table-bordered > thead > tr > th > .btn {
+  background-color: #e37d47;
+  color: #fff;
+  font-weight: 500;
+  font-size: 16px;
+}
+.table-bordered > thead > tr > th > .btn:hover {
+  background-color: #e37d47;
+}
+/* -------------------pagination------------------- */
+
+.ngx-pagination li {
+  border: 2px solid #e37d47;
+  border-right: 0;
+  background-color: #f2d189;
+  color: #535461;
+  font-size: 16px;
+  font-weight: 600;
+  margin-right: 0 !important;
+}
+.ngx-pagination .pagination-next:last-child {
+  border-right: 2px solid #e37d47;
+}
+.ngx-pagination .pagination-previous {
+  border-top-left-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}
+.ngx-pagination .pagination-next {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+.ngx-pagination a:hover {
+  background-color: #e37d47 !important;
+  color: #fff;
+}
+.ngx-pagination .current {
+  background-color: #535461 !important;
+  color: #fff;
+}
+.ngx-pagination .disabled {
+  color: #f2d189 !important;
+  background-color: #e37d47 !important;
+}
+/* --------------Modal------------------ */
+.modal {
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal-header,
+.modal-footer {
+  background-color: #535461;
+}
+.modal-header .modal-title {
+  font-family: "Roboto Slab", serif;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+}
+
+.modal-footer button {
+  border: 2px solid #e37d47;
+  color: #e37d47;
+  font-size: 16px;
+  font-weight: 600;
+}
+.modal-footer button:hover {
+  background-color: #e37d47;
+  color: #fff;
+}
+/* Hidden Print CSS */
+.hidddenPrint {
+  display: none;
+}

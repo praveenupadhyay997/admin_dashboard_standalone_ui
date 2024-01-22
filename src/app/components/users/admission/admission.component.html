@@ -1,0 +1,1686 @@
+<div class="card mt-3 p-3">
+    <div id="tabs">
+        <ul class="nav nav-tabs">
+            <!-- Admission Form -->
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#demo" [ngClass]="{ active: activeTab === 'demo' }" (click)="demo('demo')" data-toggle="tab">Student Admission Form</a
+        >
+      </li>
+      <!-- Generate Card -->
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#card"
+          [ngClass]="{ active: activeTab === 'card' }"
+          data-toggle="tab"
+          (click)="card('card')"
+          >Generate ID Card</a
+        >
+      </li>
+      <!-- Generate Demo Card -->
+      <li class="nav-item tab_item">
+        <a
+          class="nav-link"
+          href="#genDemoCard"
+          [ngClass]="{ active: activeTab === 'genDemoCard' }"
+          data-toggle="tab"
+          (click)="genDemoCard('genDemoCard')"
+          >Generate Demo Card
+        </a>
+            </li>
+            <!-- Generate Fees Card -->
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#feeCard" [ngClass]="{ active: activeTab === 'feeCard' }" data-toggle="tab" (click)="feeCard('feeCard')">Generate Fees Card
+        </a>
+            </li>
+            <!-- Generate Batch -->
+            <li class="nav-item tab_item">
+                <a class="nav-link" href="#genBatch" [ngClass]="{ active: activeTab === 'genBatch' }" data-toggle="tab" (click)="genBatch('genBatch')">Generate Batch
+        </a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Fetch details for Admission Form & Admission Form -->
+            <div class="tab-pane" id="demo" [ngClass]="{ active: activeTab === 'demo' }">
+                <!-- Enter Reference ID to fetch details -->
+                <div class="container pl-0">
+                    <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="fetchErrorAlert">
+                        {{ fetchErrorAlert }}
+                    </div>
+                    <div class="alert alert-success main_alert mx-0 mb-3" *ngIf="fetchSuccessAlert">
+                        {{ fetchSuccessAlert }}
+                    </div>
+                    <form [formGroup]="fetchReferenceForm" (ngSubmit)="fetchReference()">
+                        <div class="container mb-5">
+                            <div class="row">
+                                <div class="col-lg-5 col-md-8 col-sm-12 px-0">
+                                    <div class="form-group form-inline reference_fields">
+                                        <label for="selection">Reference Id</label>
+                                        <input type="text" class="form-control ml-3" [class.is-invalid]="
+                        reference_no?.invalid && reference_no?.touched
+                      " formControlName="reference_no" />
+                                    </div>
+                                    <div *ngIf="
+                      reference_no?.invalid &&
+                      (reference_no?.dirty || reference_no?.touched)
+                    ">
+                                        <div class="alert alert-danger inner_alert" *ngIf="reference_no?.errors?.required">
+                                            Reference ID is required to fetch the details.
+                                        </div>
+                                        <div class="alert alert-danger inner_alert" *ngIf="reference_no?.errors?.pattern">
+                                            Reference Id Must be some combination/digit.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-4 col-sm-12 px-0">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-outline-success">
+                      Fetch Details
+                    </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Al Fetched Details in Student Form -->
+                <div class="container student_form mt-2">
+                    <h5 class="text-center">Enter Student Form Details</h5>
+                    <div class="alert alert-danger main_alert mb-3" *ngIf="registerErrorAlert">
+                        {{ registerErrorAlert }}
+                    </div>
+
+                    <form [formGroup]="studentForm" (ngSubmit)="onRegister()">
+                        <!-- Reference Id and Roll No -->
+                        <div class="form-inline">
+                            <!-- Reference ID -->
+                            <div class="form-group">
+                                <div [class.form]="referenceid?.valid || referenceid?.untouched" [class.is-invalid]="
+                    referenceid?.invalid && referenceid?.touched
+                  ">
+                                    <label class="referenceid" for="referenceid">Reference Id</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="
+                      referenceid?.invalid && referenceid?.touched
+                    "
+                    formControlName="referenceid"
+                  />
+                </div>
+                <div
+                  *ngIf="
+                    referenceid?.invalid &&
+                    (referenceid?.dirty || referenceid?.touched)
+                  "
+                >
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="referenceid?.errors?.required"
+                  >
+                    Reference ID is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="referenceid?.errors?.pattern"
+                  >
+                    Reference Id Must be some combination/digit.
+                  </div>
+                </div>
+              </div>
+              <!-- Roll No -->
+              <div class="form-group">
+                <div
+                  [class.form]="rollno?.valid || rollno?.untouched"
+                  [class.is-invalid]="rollno?.invalid && rollno?.touched"
+                >
+                  <label class="rollno" for="rollno">Roll No</label>
+                                    <input type="number" class="form-control" [class.is-invalid]="rollno?.invalid && rollno?.touched" formControlName="rollno" />
+                                </div>
+                                <div *ngIf="rollno?.invalid && (rollno?.dirty || rollno?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="rollno?.errors?.required">
+                                        Roll No is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="rollno?.errors?.pattern">
+                                        Reference Id Must be some digit.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- File Avataar Image + Names -->
+                        <div class="form-inline imageName">
+                            <div class="form-group name">
+                                <!-- Student Name -->
+                                <div [class.form]="name?.valid || name?.untouched" [class.is-invalid]="name?.invalid && name?.touched">
+                                    <label class="text-left" for="name">Student Name</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="name?.invalid && name?.touched" formControlName="name" />
+                                </div>
+                                <div *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="name?.errors?.required">
+                                        Name is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="name?.errors?.pattern">
+                                        Invalid Name Format
+                                    </div>
+                                </div>
+                                <!-- Fathers Name -->
+                                <div [class.form]="fname?.valid || fname?.untouched" [class.is-invalid]="fname?.invalid && fname?.touched">
+                                    <label class="fname" for="name">Father's Name</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="fname?.invalid && fname?.touched" formControlName="fname" />
+                                </div>
+                                <div *ngIf="fname?.invalid && (fname?.dirty || fname?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="fname?.errors?.required">
+                                        Father's Name is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="fname?.errors?.pattern">
+                                        Invalid Format
+                                    </div>
+                                </div>
+                                <!-- Mothers Name -->
+                                <div [class.form]="mname?.valid || mname?.untouched" [class.is-invalid]="mname?.invalid && mname?.touched">
+                                    <label class="mname" for="name">Mother's Name</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="mname?.invalid && mname?.touched" formControlName="mname" />
+                                </div>
+                                <div *ngIf="mname?.invalid && (mname?.dirty || mname?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="mname?.errors?.required">
+                                        Mother's Name is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="mname?.errors?.minLength">
+                                        Invalid
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group profileImage">
+                                <div class="custom-file" [class.form]="file?.valid || file?.untouched" [class.is-invalid]="file?.invalid && file?.touched">
+                                    <label class="hoverable" for="fileInput">
+                    <img
+                      [src]="url ? url : '../../../../assets/avatar.png'"
+                      alt="Avatar"
+                      class="rounded mx-auto d-block avatar"
+                    />
+                    <div class="hover-text">Choose file</div>
+                    <div class="background"></div>
+                  </label>
+                                    <input id="fileInput" type="file" name="file" accept="image/x-png,image/jpg,image/jpeg" (change)="onFileChange($event)" [class.is-invalid]="file?.invalid && file?.touched" />
+                                    <div *ngIf="file?.invalid && (file?.dirty || file?.touched)">
+                                        <div class="mt-2 alert alert-danger" *ngIf="file?.errors?.required">
+                                            Image is required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Email, Father's & Mother's Occupation -->
+                        <div class="form-inline occupation">
+                            <!-- Student Email -->
+                            <div class="form-group">
+                                <div [class.form]="email?.valid || email?.untouched" [class.is-invalid]="email?.invalid && email?.touched">
+                                    <label class="email" for="email">Student's Email</label>
+                                    <input type="email" class="form-control" [class.is-invalid]="email?.invalid && email?.touched" formControlName="email" />
+                                </div>
+                                <div *ngIf="email?.invalid && (email?.dirty || email?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="email?.errors?.required">
+                                        Email is required in standard format.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="email?.errors?.email">
+                                        Invalid Email Format.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Father Occupation -->
+                            <div class="form-group">
+                                <div [class.form]="focc?.valid || focc?.untouched" [class.is-invalid]="focc?.invalid && focc?.touched">
+                                    <label class="focc" for="name">Father's Occupation</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="focc?.invalid && focc?.touched" formControlName="focc" />
+                                </div>
+                            </div>
+                            <!-- Mother's Occupation -->
+                            <div class="form-group">
+                                <div [class.form]="mocc?.valid || mocc?.untouched" [class.is-invalid]="mocc?.invalid && mocc?.touched">
+                                    <label class="mocc" for="name">Mother's Occupation</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="mocc?.invalid && mocc?.touched" formControlName="mocc" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Student, Fathers, Mother, Local Guardian Contact -->
+                        <div class="form-inline contacts">
+                            <!-- SMS Contact -->
+                            <div class="form-group">
+                                <div [class.form]="contact?.valid || contact?.untouched" [class.is-invalid]="contact?.invalid && contact?.touched">
+                                    <label class="contact" for="contact">SMS Contact No</label>
+                                    <input type="number" class="form-control" [class.is-invalid]="contact?.invalid && contact?.touched" formControlName="contact" />
+                                </div>
+                                <div *ngIf="
+                    contact?.invalid && (contact?.dirty || contact?.touched)
+                  ">
+                                    <div class="alert alert-danger inner_alert" *ngIf="contact?.errors?.required">
+                                        Contact No is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="contact?.errors?.pattern">
+                                        Contact No Must be of 10 digit.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Fathers Contact -->
+                            <div class="form-group">
+                                <div>
+                                    <label class="fmno" for="fmno">Father's Contact No</label>
+                                    <input type="number" class="form-control" formControlName="fmno" />
+                                </div>
+                            </div>
+                            <!-- Mothers Contact -->
+                            <div class="form-group">
+                                <div [class.form]="mmno?.valid || mmno?.untouched">
+                                    <label class="mmno" for="mmno">Mother's Contact No</label>
+                                    <input type="number" class="form-control" formControlName="mmno" />
+                                </div>
+                            </div>
+                            <!-- Student Contact -->
+                            <div class="form-group">
+                                <div [class.form]="lgmno?.valid || lgmno?.untouched">
+                                    <label class="lgmno" for="lgmno"> Student Contact No </label>
+                                    <input type="number" class="form-control" formControlName="lgmno" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- DOB, Aadhar, Category, PWD -->
+                        <div class="form-inline personal_details">
+                            <!-- DOB -->
+                            <div class="form-group">
+                                <div [class.form]="dob?.valid || dob?.untouched" [class.is-invalid]="dob?.invalid && dob?.touched">
+                                    <label class="text-left" for="dob">Date of Birth</label>
+                                    <input type="date" class="form-control" [class.is-invalid]="dob?.invalid && dob?.touched" formControlName="dob" />
+                                </div>
+                                <div *ngIf="dob?.invalid && (dob?.dirty || dob?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="dob?.errors?.required">
+                                        dob is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Aadhar -->
+                            <div class="form-group">
+                                <div [class.form]="aadhaarno?.valid || aadhaarno?.untouched" [class.is-invalid]="aadhaarno?.invalid && aadhaarno?.touched">
+                                    <label class="aadhaarno" for="aadhaarno">Aadhaar No</label>
+                                    <input type="number" class="form-control" [class.is-invalid]="
+                      aadhaarno?.invalid && aadhaarno?.touched
+                    " formControlName="aadhaarno" />
+                                </div>
+                                <div *ngIf="
+                    aadhaarno?.invalid &&
+                    (aadhaarno?.dirty || aadhaarno?.touched)
+                  ">
+                                    <div class="alert alert-danger inner_alert" *ngIf="aadhaarno?.errors?.required">
+                                        Aadhaar No is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="aadhaarno?.errors?.pattern">
+                                        Aadhaar No Must be of 12 digits.
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Category -->
+                            <div class="form-group">
+                                <div [class.form]="category?.valid || category?.untouched" [class.is-invalid]="category?.invalid && category?.touched">
+                                    <label class="category" for="category">Category</label>
+                                    <select name="category" class="custom-select" formControlName="category" [class.is-invalid]="category?.invalid && category?.touched">
+                    <option value="General">General</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="OBC">OBC</option>
+                    <option value="EWS">EWS</option>
+                  </select>
+                                </div>
+                                <div class="alert alert-danger inner_alert" *ngIf="
+                    category?.invalid && (category?.dirty || category?.touched)
+                  ">
+                                    Please select your category.
+                                </div>
+                            </div>
+                            <!-- PWD -->
+                            <div class="form-group">
+                                <div [class.form]="pwd?.valid || pwd?.untouched">
+                                    <label class="pwd" for="pwd">PWD</label>
+                                    <select name="pwd" id="pwd" class="custom-select" formControlName="pwd">
+                    <option *ngFor="let pwd of pwds" [value]="pwd.id">
+                      {{ pwd.name }}
+                    </option>
+                  </select>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Address, State & District -->
+                        <div class="form-inline">
+                            <!-- State & District -->
+                            <div class="form-group">
+                                <div [class.form]="state?.valid || state?.untouched" [class.is-invalid]="state?.invalid && state?.touched">
+                                    <label class="state" for="state">State</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="state?.invalid && state?.touched" formControlName="state" />
+                                </div>
+                                <div *ngIf="state?.invalid && (state?.dirty || state?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="state?.errors?.required">
+                                        State is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="state?.errors?.pattern">
+                                        Invalid State Format
+                                    </div>
+                                </div>
+                                <div [class.form]="district?.valid || district?.untouched" [class.is-invalid]="district?.invalid && district?.touched">
+                                    <label class="district" for="district">District</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="district?.invalid && district?.touched" formControlName="district" />
+                                </div>
+                                <div *ngIf="
+                    district?.invalid && (district?.dirty || district?.touched)
+                  ">
+                                    <div class="alert alert-danger inner_alert" *ngIf="district?.errors?.required">
+                                        District is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="district?.errors?.pattern">
+                                        Invalid District Pattern
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Address -->
+                            <div class="form-group">
+                                <div [class.form]="address?.valid || address?.untouched" [class.is-invalid]="address?.invalid && address?.touched">
+                                    <label class="address" for="address">Address</label>
+                                    <textarea class="form-control" id="address" formControlName="address" rows="5" [class.is-invalid]="address?.invalid && address?.touched"></textarea>
+                                </div>
+                                <div *ngIf="
+                    address?.invalid && (address?.dirty || address?.touched)
+                  ">
+                                    <div class="alert alert-danger inner_alert" *ngIf="address?.errors?.required">
+                                        Address is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="address?.errors?.minLength">
+                                        Address must be of length 10
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Local Address, Local Guar. Address, Reference Medium -->
+                        <div class="form-inline address">
+                            <!-- Local Address -->
+                            <div class="form-group">
+                                <div [class.form]="localaddress?.valid || localaddress?.untouched" [class.is-invalid]="
+                    localaddress?.invalid && localaddress?.touched
+                  ">
+                                    <label class="localaddress" for="localaddress">Local Address</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="localaddress"
+                    formControlName="localaddress"
+                    rows="3"
+                    [class.is-invalid]="
+                      localaddress?.invalid && localaddress?.touched
+                    "
+                  ></textarea>
+                </div>
+                <div
+                  *ngIf="
+                    localaddress?.invalid &&
+                    (localaddress?.dirty || localaddress?.touched)
+                  "
+                >
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="localaddress?.errors?.required"
+                  >
+                    Local Address is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="localaddress?.errors?.minLength"
+                  >
+                    Local Address must be of length 10
+                  </div>
+                </div>
+              </div>
+              <!-- Local Guardian Address -->
+              <div class="form-group">
+                <div
+                  [class.form]="lgaddress?.valid || lgaddress?.untouched"
+                  [class.is-invalid]="lgaddress?.invalid && lgaddress?.touched"
+                >
+                  <label class="lgaddress" for="lgaddress"
+                    >Local Guardian Address</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="lgaddress"
+                    formControlName="lgaddress"
+                    rows="3"
+                    [class.is-invalid]="
+                      lgaddress?.invalid && lgaddress?.touched
+                    "
+                  ></textarea>
+                </div>
+                <div
+                  *ngIf="
+                    lgaddress?.invalid &&
+                    (lgaddress?.dirty || lgaddress?.touched)
+                  "
+                ></div>
+              </div>
+              <!-- Reference Medium -->
+              <div class="form-group">
+                <div
+                  [class.form]="
+                    reference_from?.valid || reference_from?.untouched
+                  "
+                  [class.is-invalid]="
+                    reference_from?.invalid && reference_from?.touched
+                  "
+                >
+                  <label class="reference_from" for="reference_from"
+                    >Reference Medium</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="reference_from"
+                    formControlName="reference_from"
+                    rows="3"
+                    [class.is-invalid]="
+                      reference_from?.invalid && reference_from?.touched
+                    "
+                  ></textarea>
+                </div>
+                <div
+                  *ngIf="
+                    reference_from?.invalid &&
+                    (reference_from?.dirty || reference_from?.touched)
+                  "
+                >
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="reference_from?.errors?.required"
+                  >
+                    Reference From is required.
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="reference_from?.errors?.minLength"
+                  >
+                    Reference From must be of length 10
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Class & Medium -->
+            <div class="form-inline">
+              <!-- Class -->
+              <div class="form-group">
+                <div
+                  [class.form]="class?.valid || class?.untouched"
+                  [class.is-invalid]="class?.invalid && class?.touched"
+                >
+                  <label class="class" for="class">Class</label>
+                                    <select name="class" id="class" class="custom-select" formControlName="class" [class.is-invalid]="class?.invalid && class?.touched">
+                    <option *ngFor="let class of classes" [value]="class.id">
+                      {{ class.name }}
+                    </option>
+                  </select>
+                                </div>
+                                <div class="alert alert-danger inner_alert" *ngIf="class?.invalid && (class?.dirty || class?.touched)">
+                                    Please select your class.
+                                </div>
+                            </div>
+                            <!-- Medium -->
+                            <div class="form-group">
+                                <div [class.form]="medium?.valid || medium?.untouched" [class.is-invalid]="medium?.invalid && medium?.touched">
+                                    <label class="medium" for="medium">Medium</label>
+                                    <select name="medium" id="medium" class="custom-select" formControlName="medium" [class.is-invalid]="medium?.invalid && medium?.touched">
+                    <option *ngFor="let medium of mediums" [value]="medium.id">
+                      {{ medium.name }}
+                    </option>
+                  </select>
+                                </div>
+                                <div class="alert alert-danger inner_alert" *ngIf="medium?.invalid && (medium?.dirty || medium?.touched)">
+                                    Please select your medium.
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Counseller Name & Cabin -->
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <div [class.form]="cname?.valid || cname?.untouched" [class.is-invalid]="cname?.invalid && cname?.touched">
+                                    <label class="cname" for="cname">Couseller Name</label>
+                                    <input type="text" class="form-control" [class.is-invalid]="cname?.invalid && cname?.touched" formControlName="cname" />
+                                </div>
+                                <div *ngIf="cname?.invalid && (cname?.dirty || cname?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="cname?.errors?.required">
+                                        Couseller Name is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="cname?.errors?.pattern">
+                                        Invalid Name Format
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div [class.form]="cabin?.valid || cabin?.untouched" [class.is-invalid]="cabin?.invalid && cabin?.touched">
+                                    <label class="cabin" for="cabin">Couseller Cabin</label>
+                                    <select name="cabin" id="cabin" class="custom-select" formControlName="cabin" [class.is-invalid]="cabin?.invalid && cabin?.touched">
+                    <option *ngFor="let cabin of cabins" [value]="cabin.id">
+                      {{ cabin.name }}
+                    </option>
+                  </select>
+                                </div>
+                                <div class="alert alert-danger inner_alert" *ngIf="cabin?.invalid && (cabin?.dirty || cabin?.touched)">
+                                    Please select Couseller Cabin.
+                                </div>
+                            </div>
+                        </div>
+                        <!------------------------ Academic Details ---------------------------->
+                        <hr />
+                        <div class="form-inline year">
+                            <!-- 10th Passing Year-->
+                            <div class="form-group">
+                                <div [class.form]="poyoX?.valid || poyoX?.untouched" [class.is-invalid]="poyoX?.invalid && poyoX?.touched">
+                                    <label class="poyoX" for="poyoX">Passing Out Year of 10th</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="poyoX?.invalid && poyoX?.touched"
+                    formControlName="poyoX"
+                  />
+                </div>
+              </div>
+              <!-- 11th Passing Year -->
+              <div class="form-group">
+                <div
+                  [class.form]="poyoXI?.valid || poyoXI?.untouched"
+                  [class.is-invalid]="poyoXI?.invalid && poyoXI?.touched"
+                >
+                  <label class="poyoXI" for="poyoXI"
+                    >Passing Out Year of 11th</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="poyoXI?.invalid && poyoXI?.touched"
+                    formControlName="poyoXI"
+                  />
+                </div>
+              </div>
+              <!-- 12th Passing Year -->
+              <div class="form-group">
+                <div
+                  [class.form]="poyoXII?.valid || poyoXII?.untouched"
+                  [class.is-invalid]="poyoXII?.invalid && poyoXII?.touched"
+                >
+                  <label class="poyoXII" for="poyoXII"
+                    >Passing Out Year of 12th</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="poyoXII?.invalid && poyoXII?.touched"
+                    formControlName="poyoXII"
+                  />
+                </div>
+              </div>
+              <!-- Past NEET Marks -->
+              <div class="form-group">
+                <div
+                  [class.form]="
+                    pastneetmarks?.valid || pastneetmarks?.untouched
+                  "
+                  [class.is-invalid]="
+                    pastneetmarks?.invalid && pastneetmarks?.touched
+                  "
+                >
+                  <label class="pastneetmarks" for="pastneetmarks"
+                    >Past NEET Marks</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="
+                      pastneetmarks?.invalid && pastneetmarks?.touched
+                    "
+                    formControlName="pastneetmarks"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-inline grades">
+              <!-- 10th Grades-->
+              <div class="form-group">
+                <div
+                  [class.form]="gradeX?.valid || gradeX?.untouched"
+                  [class.is-invalid]="gradeX?.invalid && gradeX?.touched"
+                >
+                  <label class="gradeX" for="gradeX">Grade in 10th</label>
+                                    <input type="number" class="form-control" [class.is-invalid]="gradeX?.invalid && gradeX?.touched" formControlName="gradeX" />
+                                </div>
+                            </div>
+                            <!-- 11th Grades -->
+                            <div class="form-group">
+                                <div [class.form]="gradeXI?.valid || gradeXI?.untouched" [class.is-invalid]="gradeXI?.invalid && gradeXI?.touched">
+                                    <label class="gradeXI" for="gradeXI">Grade in 11th</label>
+                                    <input type="number" class="form-control" [class.is-invalid]="gradeXI?.invalid && gradeXI?.touched" formControlName="gradeXI" />
+                                </div>
+                            </div>
+                            <!-- 12th Grades -->
+                            <div class="form-group">
+                                <div [class.form]="gradeXII?.valid || gradeXII?.untouched" [class.is-invalid]="gradeXII?.invalid && gradeXII?.touched">
+                                    <label class="gradeXII" for="gradeXII">Grade in 12th</label>
+                                    <input type="number" class="form-control" [class.is-invalid]="gradeXII?.invalid && gradeXII?.touched" formControlName="gradeXII" />
+                                </div>
+                            </div>
+                            <!-- Past NEET AIR -->
+                            <div class="form-group">
+                                <div [class.form]="pastneetair?.valid || pastneetair?.untouched" [class.is-invalid]="
+                    pastneetair?.invalid && pastneetair?.touched
+                  ">
+                                    <label class="pastneetair" for="pastneetair">Past NEET AIR</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="
+                      pastneetair?.invalid && pastneetair?.touched
+                    "
+                    formControlName="pastneetair"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-inline school_name">
+              <!-- 10th School Name -->
+              <div class="form-group">
+                <div
+                  [class.form]="schoolnameX?.valid || schoolnameX?.untouched"
+                  [class.is-invalid]="
+                    schoolnameX?.invalid && schoolnameX?.touched
+                  "
+                >
+                  <label class="schoolnameX" for="schoolnameX"
+                    >School Name of 10th</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="
+                      schoolnameX?.invalid && schoolnameX?.touched
+                    "
+                    formControlName="schoolnameX"
+                  />
+                </div>
+              </div>
+              <!-- 11th School Name -->
+              <div class="form-group">
+                <div
+                  [class.form]="schoolnameXI?.valid || schoolnameXI?.untouched"
+                  [class.is-invalid]="
+                    schoolnameXI?.invalid && schoolnameXI?.touched
+                  "
+                >
+                  <label class="schoolnameXI" for="schoolnameXI"
+                    >School Name of 11th</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="
+                      schoolnameXI?.invalid && schoolnameXI?.touched
+                    "
+                    formControlName="schoolnameXI"
+                  />
+                </div>
+              </div>
+              <!-- 12th School Name -->
+              <div class="form-group">
+                <div
+                  [class.form]="
+                    schoolnameXII?.valid || schoolnameXII?.untouched
+                  "
+                  [class.is-invalid]="
+                    schoolnameXII?.invalid && schoolnameXII?.touched
+                  "
+                >
+                  <label class="schoolnameXII" for="schoolnameXII"
+                    >School Name of 12th</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="
+                      schoolnameXII?.invalid && schoolnameXII?.touched
+                    "
+                    formControlName="schoolnameXII"
+                  />
+                </div>
+              </div>
+              <!-- No. of Attempts in Neet -->
+              <div class="form-group">
+                <div
+                  [class.form]="
+                    pastneetattemptsno?.valid || pastneetattemptsno?.untouched
+                  "
+                  [class.is-invalid]="
+                    pastneetattemptsno?.invalid && pastneetattemptsno?.touched
+                  "
+                >
+                  <label class="pastneetattemptsno" for="pastneetattemptsno"
+                    >No. of Attempts</label
+                  >
+                  <input
+                    type="number"
+                    class="form-control"
+                    [class.is-invalid]="
+                      pastneetattemptsno?.invalid && pastneetattemptsno?.touched
+                    "
+                    formControlName="pastneetattemptsno"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-inline addressess">
+              <!-- 10th School Address -->
+              <div class="form-group">
+                <div
+                  [class.form]="schooladdX?.valid || schooladdX?.untouched"
+                  [class.is-invalid]="
+                    schooladdX?.invalid && schooladdX?.touched
+                  "
+                >
+                  <label class="schooladdX" for="schooladdX"
+                    >School Address of 10th</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="schooladdX"
+                    formControlName="schooladdX"
+                    rows="4"
+                    [class.is-invalid]="
+                      schooladdX?.invalid && schooladdX?.touched
+                    "
+                  ></textarea>
+                </div>
+              </div>
+              <!-- 11th School Address -->
+              <div class="form-group">
+                <div
+                  [class.form]="schooladdXI?.valid || schooladdXI?.untouched"
+                  [class.is-invalid]="
+                    schooladdXI?.invalid && schooladdXI?.touched
+                  "
+                >
+                  <label class="schooladdXI" for="schooladdXI"
+                    >School Address of 11th</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="schooladdXI"
+                    formControlName="schooladdXI"
+                    rows="4"
+                    [class.is-invalid]="
+                      schooladdXI?.invalid && schooladdXI?.touched
+                    "
+                  ></textarea>
+                </div>
+              </div>
+              <!-- 12th School Address -->
+              <div class="form-group">
+                <div
+                  [class.form]="schooladdXII?.valid || schooladdXII?.untouched"
+                  [class.is-invalid]="
+                    schooladdXII?.invalid && schooladdXII?.touched
+                  "
+                >
+                  <label class="schooladdXII" for="schooladdXII"
+                    >School Address of 12th</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="schooladdXII"
+                    formControlName="schooladdXII"
+                    rows="4"
+                    [class.is-invalid]="
+                      schooladdXII?.invalid && schooladdXII?.touched
+                    "
+                  ></textarea>
+                </div>
+              </div>
+              <!-- Past NEET Remarks -->
+              <div class="form-group">
+                <div
+                  [class.form]="
+                    pastneetremarks?.valid || pastneetremarks?.untouched
+                  "
+                  [class.is-invalid]="
+                    pastneetremarks?.invalid && pastneetremarks?.touched
+                  "
+                >
+                  <label class="pastneetremarks" for="pastneetremarks"
+                    >Past NEET Remarks</label
+                  >
+                  <textarea
+                    class="form-control"
+                    id="pastneetremarks"
+                    formControlName="pastneetremarks"
+                    rows="4"
+                    [class.is-invalid]="
+                      pastneetremarks?.invalid && pastneetremarks?.touched
+                    "
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="form-inline extras">
+              <div class="form-group">
+                <div
+                  [class.form]="acadyear?.valid || acadyear?.untouched"
+                  [class.is-invalid]="acadyear?.invalid && acadyear?.touched"
+                >
+                  <label class="acadyear" for="acadyear">Academic Year</label>
+                                    <input type="number" class="form-control" [class.is-invalid]="acadyear?.invalid && acadyear?.touched" formControlName="acadyear" />
+                                </div>
+                                <div *ngIf="
+                    acadyear?.invalid && (acadyear?.dirty || acadyear?.touched)
+                  ">
+                                    <div class="alert alert-danger inner_alert" *ngIf="acadyear?.errors?.required">
+                                        Academic Year is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="acadyear?.errors?.pattern">
+                                        Academic Year Must be 4 digit least (1950-2050).
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div [class.form]="batch?.valid || batch?.untouched" [class.is-invalid]="batch?.invalid && batch?.touched">
+                                    <label class="batch" for="batch">Batch</label>
+                                    <select name="batch" id="batch" class="custom-select" formControlName="batch" [class.is-invalid]="batch?.invalid && batch?.touched">
+                    <option *ngFor="let batch of batches" [value]="batch._id">
+                      {{ batch.batch }}
+                    </option>
+                  </select>
+                                    <!-- <input
+                    type="text"
+                    class="form-control"
+                    [class.is-invalid]="batch?.invalid && batch?.touched"
+                    formControlName="batch"
+                  /> -->
+                                </div>
+                                <div *ngIf="batch?.invalid && (batch?.dirty || batch?.touched)">
+                                    <div class="alert alert-danger inner_alert" *ngIf="batch?.errors?.required">
+                                        Batch is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="batch?.errors?.pattern">
+                                        Batch must follow pattern.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div [class.form]="bag?.valid || bag?.untouched" [class.is-invalid]="bag?.invalid && bag?.touched">
+                                    <label class="bag" for="bag">Bag Provided</label>
+                                    <select name="bag" id="bag" class="custom-select" formControlName="bag" [class.is-invalid]="bag?.invalid && bag?.touched">
+                    <option *ngFor="let bag of bags" [value]="bag.id">
+                      {{ bag.name }}
+                    </option>
+                  </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div [class.form]="modulecard?.valid || modulecard?.untouched" [class.is-invalid]="
+                    modulecard?.invalid && modulecard?.touched
+                  ">
+                                    <label class="modulecard" for="modulecard">Module Card Provided</label
+                  >
+                  <select
+                    name="modulecard"
+                    id="modulecard"
+                    class="custom-select"
+                    formControlName="modulecard"
+                    [class.is-invalid]="
+                      modulecard?.invalid && modulecard?.touched
+                    "
+                  >
+                    <option
+                      *ngFor="let modulecard of modulecards"
+                      [value]="modulecard.id"
+                    >
+                      {{ modulecard.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- Submit Buttons -->
+            <div class="btn-group btn-block">
+              <button
+                type="button"
+                (click)="studentForm.reset()"
+                class="btn btn-outline-danger"
+              >
+                Reset
+              </button>
+              <button type="submit" class="ml-3 btn btn-outline-success">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Genearate Card -->
+      <div
+        class="tab-pane"
+        id="card"
+        [ngClass]="{ active: activeTab === 'card' }"
+      >
+        <app-refresh-button
+          (refreshClick)="refreshCurrentComponent()"
+        ></app-refresh-button>
+        <div class="container pl-0">
+          <div
+            class="alert alert-danger main_alert mx-0 mb-3"
+            *ngIf="referenceAlert"
+          >
+            {{ referenceAlert }}
+          </div>
+          <div
+            class="alert alert-success main_alert mx-0 mb-3"
+            *ngIf="successAlert"
+          >
+            {{ successAlert }}
+          </div>
+          <div
+            class="alert alert-success main_alert mb-3"
+            *ngIf="registerSuccessAlert"
+          >
+            {{ registerSuccessAlert }}
+          </div>
+          <form [formGroup]="idCardForm" (ngSubmit)="onGenerate()">
+            <div class="container">
+              <div class="row">
+                <div class="col-lg-4 col-md-8 col-sm-12 px-0">
+                  <div class="form-group form-inline reference_fields">
+                    <label for="selection">Roll No</label>
+                                    <input type="number" class="form-control ml-3" [class.is-invalid]="roll_no?.invalid && roll_no?.touched" formControlName="roll_no" />
+                                </div>
+                                <div *ngIf="
+                      roll_no?.invalid && (roll_no?.dirty || roll_no?.touched)
+                    ">
+                                    <div class="alert alert-danger inner_alert" *ngIf="roll_no?.errors?.required">
+                                        Roll No. is required.
+                                    </div>
+                                    <div class="alert alert-danger inner_alert" *ngIf="roll_no?.errors?.pattern">
+                                        Invalid Roll No format.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-12 px-0">
+                                <div class="form-group">
+                                    <button class="btn btn-outline-success">Generate</button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                </form>
+            </div>
+            <div class="container" *ngIf="genCardToggle">
+                <hr class="my-3" />
+                <div class="row">
+                    <div class="col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <div class="card front_id_card mx-auto d-block">
+                            <div class="card-header id_card_header">
+                                <img [src]="idUrl ? idUrl : '../../../../assets/avatar.png'" class="rounded mx-auto d-block" alt="Cinque Terre" />
+                            </div>
+                            <div class="card-body id_card_body text-center">
+                                <h6>{{ student.fullName }}</h6>
+                                <h6>Roll No: {{ student.rollNo }}</h6>
+                                <h6>Class: {{ student.class }}</h6>
+                                <h6>NEET - {{ student.batch.batch }}</h6>
+                                <img class="mx-auto d-block" src="../../../../assets/logo.png" alt="logo" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <div class="card back_id_card mx-auto d-block">
+                            <div class="card-header id_card_header text-center">
+                                <h6>Student Information</h6>
+                            </div>
+                            <div class="card-body id_card_body">
+                                <h6>
+                                    <span>Father's Name:</span>&nbsp;<small>{{
+                      student.fatherName
+                    }}</small>
+                                </h6>
+                                <h6>
+                                    <span>Address:</span>&nbsp;<small>{{
+                      student.localAddress
+                    }}</small>
+                                </h6>
+                                <h6>
+                                    <span>Contact:</span>&nbsp;<small>{{
+                      student.studentContact
+                    }}</small>
+                                </h6>
+                            </div>
+                            <div class="card-footer id_card_footer">
+                                <p class="mb-0 text-justify instructions">
+                                    <small class="badge badge-light">1.</small>&nbsp;Loss of the card should be reported immediately to the AAYAAM office.
+                                </p>
+                                <p class="mb-0 text-justify instructions">
+                                    <small class="badge badge-light">2.</small>&nbsp;Please bring the card whenever you visit the premises.
+                                </p>
+                                <p class="mb-0 text-justify instructions">
+                                    <small class="badge badge-light">3.</small>&nbsp;This card is not transferable.
+                                </p>
+
+                                <img class="rounded-circle mx-auto d-block" src="../../../../assets/footer.png" alt="footer" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-2" />
+                <button id="printPageButton" type="button" class="btn btn-success mx-auto d-block mt-3" printSectionId="id-card-print" (click)="logModuleRelease('modulecard')" [useExistingCss]="true" ngxPrint>
+            <i class="fa fa-print mr-2"></i>
+            Print
+          </button>
+            </div>
+        </div>
+        <!-- Genearate Demo Card -->
+        <div class="tab-pane" id="genDemoCard" [ngClass]="{ active: activeTab === 'genDemoCard' }">
+            <app-refresh-button (refreshClick)="refreshCurrentComponent()"></app-refresh-button>
+            <div class="alert alert-danger main_alert mb-3" *ngIf="referenceDemoAlert">
+                {{ referenceDemoAlert }}
+            </div>
+            <div class="alert alert-success main_alert mb-3" *ngIf="successDemoAlert">
+                <strong>Voila!</strong> {{ successDemoAlert }}
+            </div>
+
+            <div class="conatiner reference_card">
+                <div class="card flip_card" [class.flipped]="flipped_demo">
+                    <div class="card front">
+                        <div class="card-header_democard">
+                            <img class="mx-auto d-block" src="../../../../assets/logo.png" alt="logo" />
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup]="demoCardForm" (ngSubmit)="onReference()">
+                                <div class="form-group">
+                                    <div [class.form]="
+                        reference_no?.valid || reference_no?.untouched
+                      " [class.is-invalid]="
+                        reference_no?.invalid && reference_no?.touched
+                      ">
+                                        <label for="reference_no">Reference No</label>
+                                        <input type="text" class="form-control" [class.is-invalid]="
+                          reference_no?.invalid && reference_no?.touched
+                        " formControlName="reference_no" />
+                                    </div>
+                                    <div *ngIf="
+                        reference_no?.invalid &&
+                        (reference_no?.dirty || reference_no?.touched)
+                      ">
+                                        <div class="alert alert-danger" *ngIf="reference_no?.errors?.required">
+                                            Reference No. is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn flip_button float-right mt-3">
+                    Generate
+                  </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card back" id="back">
+                        <div class="card-header_democard">
+                            <img class="mx-auto d-block" src="../../../../assets/logo.png" alt="logo" />
+                        </div>
+                        <div class="card-body">
+                            <p class="reference_detail">
+                                <span>Reference No</span> : {{ demoStudent.referenceId }}
+                            </p>
+                            <p class="reference_detail">
+                                <span>Name</span> : {{ demoStudent.fullName }}
+                            </p>
+                            <p class="reference_detail">
+                                <span>Father’s Name</span>: {{ demoStudent.fatherName }}
+                            </p>
+                            <p class="reference_detail">
+                                <span>Contact</span> : {{ demoStudent.studentContact }}
+                            </p>
+                            <p class="reference_detail">
+                                <span>Class</span> : {{ demoStudent.class }}
+                            </p>
+                            <p class="reference_detail">
+                                <span>Valid Upto</span> : {{ validUpto | date: "dd/MM/yyyy" }}
+                            </p>
+                            <small class="float-right">Demo Card</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success mx-auto d-block mt-3 {{
+            printButton_democard
+          }}" printSectionId="demo-id" [useExistingCss]="true" ngxPrint>
+          <i class="fa fa-print mr-2"></i>
+          Print Demo Card
+        </button>
+        </div>
+        <!-- Genearate Fees Card -->
+        <div class="tab-pane" id="feeCard" [ngClass]="{ active: activeTab === 'feeCard' }">
+            <app-refresh-button (refreshClick)="refreshCurrentComponent()"></app-refresh-button>
+            <div class="alert alert-danger main_alert mb-3" *ngIf="referenceFeesCardAlert">
+                {{ referenceFeesCardAlert }}
+            </div>
+            <div class="alert alert-success main_alert mb-3" *ngIf="successFeesCardAlert">
+                <strong>Voila!</strong> {{ successFeesCardAlert }}
+            </div>
+
+            <div class="conatiner reference_card">
+                <div class="card flip_card" [class.flipped]="flipped_feescard">
+                    <div class="card front">
+                        <div class="card-header_feescard">
+                            <img class="mx-auto d-block" src="../../../../assets/logo.png" alt="logo" />
+                        </div>
+                        <div class="card-body">
+                            <form [formGroup]="feesCardForm" (ngSubmit)="onRollNo()">
+                                <div class="form-group">
+                                    <div [class.form]="
+                        roll_no_feescard?.valid || roll_no_feescard?.untouched
+                      " [class.is-invalid]="
+                        roll_no_feescard?.invalid && roll_no_feescard?.touched
+                      ">
+                                        <label for="roll_no_feescard">Roll No</label>
+                                        <input type="text" class="form-control" [class.is-invalid]="
+                          roll_no_feescard?.invalid && roll_no_feescard?.touched
+                        " formControlName="roll_no_feescard" />
+                                    </div>
+                                    <div *ngIf="
+                        roll_no_feescard?.invalid &&
+                        (roll_no_feescard?.dirty || roll_no_feescard?.touched)
+                      ">
+                                        <div class="alert alert-danger" *ngIf="roll_no_feescard?.errors?.required">
+                                            Roll No. for Fees Card is required.
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="btn flip_button float-right mt-3" type="submit">
+                    Generate
+                  </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card back" id="back">
+                        <div class="card-header_feescard">
+                            <img class="mx-auto d-block" src="../../../../assets/logo.png" alt="logo" />
+                        </div>
+                        <div class="fees-card">
+                            <div class="photo">
+                                <img [src]="idUrl ? idUrl : '../../../../assets/avatar.png'" alt="avatar" />
+                            </div>
+                            <div class="cardbody">
+                                <p class="reference_detail">
+                                    <span>Name</span> : {{ account.student.fullName }}
+                                </p>
+                                <p class="reference_detail">
+                                    <span>Roll No</span> : {{ account.rollNo }}
+                                </p>
+                                <p class="reference_detail">
+                                    <span>Batch</span> : {{ account.student.batch.batch }}
+                                </p>
+                                <p class="reference_detail">
+                                    <span>Contact</span> : {{ account.student.studentContact }}
+                                </p>
+                                <p class="reference_detail">
+                                    <span>Valid Upto</span> : {{ feeDueDate | date: "dd/MM/yyyy" }}
+                                </p>
+                                <small class="text-fees-card">Fees Card</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-success mx-auto d-block mt-3 {{
+            printButton_feescard
+          }}" printSectionId="feescard-id" [useExistingCss]="true" ngxPrint>
+          <i class="fa fa-print mr-2"></i>
+          Print Fees Card
+        </button>
+        </div>
+        <!-- Generate Batch -->
+        <div class="tab-pane" id="genBatch" [ngClass]="{ active: activeTab === 'genBatch' }">
+            <div class="container px-0">
+                <div class="alert alert-danger main_alert mx-0 mb-3" *ngIf="genBatchErrorAlert">
+                    <strong>Oops! </strong>{{ genBatchErrorAlert }}
+                </div>
+                <div class="alert alert-success main_alert mx-0 mb-3" *ngIf="genBatchsuccessAlert">
+                    <strong>Success... </strong>{{ genBatchsuccessAlert }}
+                </div>
+                <form [formGroup]="genBatchForm" (ngSubmit)="onGenBatch()">
+                    <!-- Class + Medium + Self Text -->
+                    <div class="generateBatch">
+                        <div class="form-inline genBatch">
+                            <!-- Class Group -->
+                            <div class="form-group">
+                                <div [class.form]="
+                      genBatchClass?.valid || genBatchClass?.untouched
+                    " [class.is-invalid]="
+                      genBatchClass?.invalid && genBatchClass?.touched
+                    ">
+                                    <label class="genBatchClass" for="genBatchClass">Class</label
+                    >
+                    <select
+                      name="genBatchClass"
+                      class="custom-select"
+                      formControlName="genBatchClass"
+                      [class.is-invalid]="
+                        genBatchClass?.invalid && genBatchClass?.touched
+                      "
+                    >
+                      <option *ngFor="let class of classes" [value]="class.id">
+                        {{ class.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="
+                      genBatchClass?.invalid &&
+                      (genBatchClass?.dirty || genBatchClass?.touched)
+                    "
+                  >
+                    Class is required.
+                  </div>
+                </div>
+                <!-- Medium -->
+                <div class="form-group">
+                  <div
+                    [class.form]="
+                      genBatchMedium?.valid || genBatchMedium?.untouched
+                    "
+                    [class.is-invalid]="
+                      genBatchMedium?.invalid && genBatchMedium?.touched
+                    "
+                  >
+                    <label class="genBatchMedium" for="genBatchMedium"
+                      >Medium</label
+                    >
+                    <select
+                      name="genBatchMedium"
+                      class="custom-select"
+                      formControlName="genBatchMedium"
+                      [class.is-invalid]="
+                        genBatchMedium?.invalid && genBatchMedium?.touched
+                      "
+                    >
+                      <option
+                        *ngFor="let medium of mediums"
+                        [value]="medium.id"
+                      >
+                        {{ medium.name }}
+                      </option>
+                    </select>
+                  </div>
+                  <div
+                    class="alert alert-danger inner_alert"
+                    *ngIf="
+                      genBatchMedium?.invalid &&
+                      (genBatchMedium?.dirty || genBatchMedium?.touched)
+                    "
+                  >
+                    Medium is required.
+                  </div>
+                </div>
+                <!-- Self Text -->
+                <div class="form-group">
+                  <div
+                    [class.form]="
+                      genBatchText?.valid || genBatchText?.untouched
+                    "
+                    [class.is-invalid]="
+                      genBatchText?.invalid && genBatchText?.touched
+                    "
+                  >
+                    <label class="genBatchText" for="genBatchText"
+                      >Batch Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      [class.is-invalid]="
+                        genBatchText?.invalid && genBatchText?.touched
+                      "
+                      formControlName="genBatchText"
+                    />
+                  </div>
+                  <div
+                    *ngIf="
+                      genBatchText?.invalid &&
+                      (genBatchText?.dirty || genBatchText?.touched)
+                    "
+                  >
+                    <div
+                      class="alert alert-danger inner_alert"
+                      *ngIf="genBatchText?.errors?.required"
+                    >
+                      Batch Name is required.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Generate Button -->
+              <div class="form-group genBtnGroup">
+                <button type="submit" class="btn btn-block genBtn">
+                  Generate Batch
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <br />
+        <div class="card">
+          <div class="container p-3">
+            <div class="row">
+              <div class="col-lg-5 col-md-6 col-sm-12">
+                <form class="form-batch">
+                  <input
+                    class="form-control mr-sm-2"
+                    type="text"
+                    placeholder="Search"
+                    [(ngModel)]="filterTerm"
+                    name="filter"
+                  />
+                  <button class="btn" type="submit">Search</button>
+                </form>
+              </div>
+              <div class="col-lg-4 col-md-6 col-sm-12">
+                <app-refresh-button
+                  (refreshClick)="refreshCurrentComponent()"
+                ></app-refresh-button>
+              </div>
+              <div class="col-lg-3 col-md-6 col-sm-12">
+                <button
+                  type="button"
+                  class="btn btn-block btn-outline export"
+                  (click)="export()"
+                >
+                  <i class="fa fa-external-link"></i>
+                  Export to Excel
+                </button>
+              </div>
+            </div>
+            <div class="container mt-3 px-0">
+              <div class="table-responsive">
+                <table
+                  class="
+                    table table-striped table-bordered table-hover table-sm
+                  "
+                >
+                  <thead>
+                    <tr class="text-center">
+                      <th
+                        [class.active]="order === 'class'"
+                        (click)="setOrder('class')"
+                      >
+                        <button type="button" class="btn btn btn-block">
+                          Class
+                          <span [hidden]="reverse"
+                            ><i class="fa fa-arrow-down"></i></span
+                          ><span [hidden]="!reverse"
+                            ><i class="fa fa-arrow-up"></i
+                          ></span>
+                          <!-- <i class="fa fa-arrow-down" aria-hidden="true"></i> -->
+                        </button>
+                      </th>
+                      <th>Medium</th>
+                      <th>Batch Name</th>
+                      <th>Total Student's</th>
+                      <th *ngIf="user.role == 'Admin'">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    <tr
+                      *ngFor="
+                        let batch of batchesJson
+                          | filter: filterTerm
+                          | orderBy: order:reverse
+                          | paginate
+                            : {
+                                id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRecords
+                              };
+                        index as i
+                      "
+                    >
+                      <td>{{ batch.class }}</td>
+                      <td>{{ batch.medium }}</td>
+                      <td>{{ batch.batch }}</td>
+                      <td>{{ batch.strength }}</td>
+                      <td *ngIf="user.role == 'Admin'">
+                        <button
+                          type="button"
+                          class="btn btn-outline-danger btn-sm"
+                          (click)="onDeactivateBatch(batch)"
+                          
+                        >
+                        <!-- data-toggle="modal"
+                          data-target="#exampleModalCenterBatchGenerate" -->
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container table_paginations p-0">
+                <pagination-controls
+                  id="listing_pagination"
+                  (pageChange)="page = $event"
+                ></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Hidden ID Card for Print-->
+  <div class="hidddenPrint">
+    <div class="row" id="id-card-print">
+      <div class="col-lg-6 col-md-12 col-sm-12 mb-2">
+        <div class="card front_id_card mx-auto d-block">
+          <div class="card-header id_card_header">
+            <img
+              [src]="idUrl ? idUrl : '../../../../assets/avatar.png'"
+              class="rounded mx-auto d-block"
+              alt="Cinque Terre"
+            />
+          </div>
+          <div class="card-body id_card_body text-center">
+            <h6>{{ student.fullName }}</h6>
+            <h6>Roll No: {{ student.rollNo }}</h6>
+            <h6>Class: {{ student.class }}</h6>
+            <h6>NEET - {{ student.batch.batch }}</h6>
+            <img
+              class="mx-auto d-block"
+              src="../../../../assets/logo.png"
+              alt="logo"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 col-sm-12 mb-2" style="margin-top: 100px">
+        <div class="card back_id_card mx-auto d-block">
+          <div class="card-header id_card_header text-center">
+            <h6>Student Information</h6>
+          </div>
+          <div class="card-body id_card_body">
+            <h6>
+              <span>Father's Name:</span>&nbsp;<small>{{
+                student.fatherName
+              }}</small>
+            </h6>
+            <h6>
+              <span>Address:</span>&nbsp;<small>{{
+                student.localAddress
+              }}</small>
+            </h6>
+            <h6>
+              <span>Contact:</span>&nbsp;<small>{{
+                student.studentContact
+              }}</small>
+            </h6>
+          </div>
+          <div class="card-footer id_card_footer">
+            <p class="mb-0 text-justify instructions">
+              <small class="badge badge-light">1.</small>&nbsp;Loss of the card
+              should be reported immediately to the AAYAAM office.
+            </p>
+            <p class="mb-0 text-justify instructions">
+              <small class="badge badge-light">2.</small>&nbsp;Please bring the
+              card whenever you visit the premises.
+            </p>
+            <p class="mb-0 text-justify instructions">
+              <small class="badge badge-light">3.</small>&nbsp;This card is not
+              transferable.
+            </p>
+
+            <img
+              class="rounded-circle mx-auto d-block"
+              src="../../../../assets/footer.png"
+              alt="footer"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Demo Card Print Section-->
+  <div class="hidddenPrint">
+    <div class="print_container" id="demo-id">
+      <div class="conatiner reference_card">
+        <div class="card back">
+          <div class="card-header_democard">
+            <img
+              class="mx-auto d-block"
+              src="../../../../assets/logo.png"
+              alt="logo"
+            />
+          </div>
+          <div class="card-body">
+            <p class="reference_detail">
+              <span>Reference No</span> : {{ demoStudent.referenceId }}
+            </p>
+            <p class="reference_detail">
+              <span>Name</span> : {{ demoStudent.fullName }}
+            </p>
+            <p class="reference_detail">
+              <span>Father’s Name</span>: {{ demoStudent.fatherName }}
+            </p>
+            <p class="reference_detail">
+              <span>Contact</span> : {{ demoStudent.studentContact }}
+            </p>
+            <p class="reference_detail">
+              <span>Class</span> : {{ demoStudent.class }}
+            </p>
+            <p class="reference_detail">
+              <span>Valid Upto</span> :
+              {{ validUpto | date: "dd/MM/yyyy" }}
+            </p>
+            <small class="float-right">Demo Card</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Fees Card Print Section-->
+  <div class="hidddenPrint">
+    <div class="print_container" id="feescard-id">
+      <div class="conatiner reference_card">
+        <div class="card back">
+          <div class="card back" id="back">
+            <div class="card-header_feescard">
+              <img
+                class="mx-auto d-block"
+                src="../../../../assets/logo.png"
+                alt="logo"
+              />
+            </div>
+            <div class="fees-card">
+              <div class="photo">
+                <img src="../../../../assets/avatar.png" alt="Cinque Terre" />
+              </div>
+              <div class="cardbody">
+                <p class="reference_detail">
+                  <span>Name</span> : {{ account.student.fullName }}
+                </p>
+                <p class="reference_detail">
+                  <span>Roll No</span> : {{ account.rollNo }}
+                </p>
+                <p class="reference_detail">
+                  <span>Batch</span> : {{ account.student.batch.batch }}
+                </p>
+                <p class="reference_detail">
+                  <span>Contact</span> : {{ account.student.studentContact }}
+                </p>
+                <p class="reference_detail">
+                  <span>Valid Upto</span> :
+                  {{ feeDueDate | date: "dd/MM/yyyy" }}
+                </p>
+                <small class="text-fees-card">Fees Card</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal For Batch in Batch Generate Section -->
+<div
+  class="modal fade"
+  id="exampleModalCenterBatchGenerate"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title-alert" id="exampleModalLongTitle">Alert!</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b
+          >If the selected batch is deleted, the associated students with this
+          batch will be deleted as well.</b
+        ><br />
+        Are Your Completely Sure, You Want to Delete the selected Batch?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary yes-button">
+          Yes, I am Sure.
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary no-button"
+          data-dismiss="modal"
+        >
+          No, Let's Go Back.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

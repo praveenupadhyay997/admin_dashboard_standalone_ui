@@ -1,0 +1,11 @@
+button.btn.btn-info.float-right {
+    background-color: transparent;
+    font-weight: 500;
+    border: 2px solid #535461;
+    color: #535461;
+}
+
+button.btn.btn-info.float-right:hover {
+    background-color: #535461;
+    color: #fff;
+}
